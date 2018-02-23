@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input } from 'semantic-ui-react';
+import { Button, Divider, Header, Input } from 'semantic-ui-react';
 
 class Home extends Component {
 
@@ -11,21 +11,27 @@ class Home extends Component {
 
   onKeyPress = ({ key }) => {
     if (key === 'Enter') {
-      console.log('enterPressed');
+      this.joinSession();
     }
   }
 
   render () {
     return (
       <div>
-        <p>Welcome to the Clicker web app! We're excited to get started.</p>
+        <Header size='tiny' color='grey'>Join a different session</Header>
         <Input
-          size='large'
-          action={{ primary: true, content: 'Join' }}
           placeholder='Enter a Session Code'
+          size='large'
+          action={{
+            primary: this.state.sessionInput !== '',
+            content: 'Join',
+            disabled: this.state.sessionInput === ''
+          }}
           onChange={this.sessionInputChanged}
           onKeyPress={this.onKeyPress}
         />
+        <Divider hidden />
+        <Button content='Create New Session' size='big' primary fluid />
       </div>
     );
   }

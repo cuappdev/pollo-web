@@ -2,4 +2,4 @@
          Site Settings
 *******************************/
 
-@primaryColor   : @green;
+@primaryColor   : #29c09e;
