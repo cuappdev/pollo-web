@@ -8,11 +8,7 @@ In using Semantic UI, we wish to customize the theming, so naturally we cannot u
 Now build Semantic UI with gulp by running `gulp build` under the `./semantic` directory. You can also have it watch for changes with `gulp watch` but be aware that it will build the entire library every time.
 
 ## Development
-Run
-```bash
-yarn start
-```
-to start the development server.
+Run `yarn start` to start the development server.
 
 Once again, to edit the Semantic themes make sure to build with `gulp build` under `./semantic`.
 
