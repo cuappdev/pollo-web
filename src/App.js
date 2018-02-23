@@ -13,7 +13,7 @@ class App extends Component {
     return (
       <Router>
         <Container>
-          <Header as='h1' style={{ paddingTop: '2em' }}>Clicker Web App</Header>
+          <Header as='h1' style={{ paddingTop: '30%' }}>Clicker Web App</Header>
           <Menu pointing secondary>
             <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
             <Menu.Item name='messages' active={activeItem === 'messages'} onClick={this.handleItemClick} />
