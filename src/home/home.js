@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { Button } from 'semantic-ui-react';
 
 class Home extends Component {
   render () {
     return (
       <div>
-        <h2>Clicker</h2>
-        <p>Welcome to the Clicker web app!</p>
+        <p>Welcome to the Clicker web app! We're excited to get started.</p>
+        <Button primary>Join a Session</Button>
       </div>
     );
   }

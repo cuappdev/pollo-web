@@ -2,11 +2,14 @@
 /.vscode
 # dependencies
 /node_modules
-/semantic/tasks
-/semantic/src/*
 /semantic/gulpfile.js
-!/semantic/src/theme.config
+/semantic/tasks
+!/semantic/src
+/semantic/src/*
+!/semantic/src/themes
+/semantic/src/themes/*
 !/semantic/src/themes/clicker
+!/semantic/src/theme.config
 /src/semantic
 
 # testing
