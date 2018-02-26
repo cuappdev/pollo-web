@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { hostURL } from './constants';
 
 const api = axios.create({
-  baseURL: (process.env.NODE_ENV === 'production' ? process.env.REACT_APP_HOST_URL : process.env.REACT_APP_DEV_HOST_URL) + '/api/v1'
+  baseURL: hostURL + '/api/v1'
 });
 
 const get = async (url, params) => {
@@ -29,7 +30,14 @@ export const startPoll = (id, code, name) => {
 };
 
 export const joinPoll = async (codes) => {
-  const edges = await post('/polls/live', { codes: codes });
+  const edges = await post('/polls/live/', { codes: codes });
   if (edges.length === 0) throw 'Invalid session code';
-  return edges[0].node;
+
+  const session = edges[0].node;
+  session.userType = 'student';
+
+  const response = await get(`/polls/${session.id}/ports/`);
+  session.ports = response.ports;
+
+  return session;
 };

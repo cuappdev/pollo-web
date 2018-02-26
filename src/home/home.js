@@ -14,10 +14,17 @@ class Home extends Component {
   joinSession = (code) => {
     joinPoll([code])
       .then((session) => {
-        this.setState({ session: session });
+        console.log(session);
+        this.setState({
+          session: session,
+          joinSessionLoading: false
+        });
       })
       .catch((err) => {
-        this.setState({ error: err.toString() });
+        this.setState({
+          error: err.toString(),
+          joinSessionLoading: false
+        });
       });
   }
 
@@ -27,26 +34,29 @@ class Home extends Component {
         console.log('code:', code);
       })
       .catch((err) => {
-        this.setState({ error: err.toString() });
+        this.setState({
+          error: err.toString(),
+          joinSessionLoading: false
+        });
       });
   }
 
   render () {
-    const home = this.state.session === null
-      ? (
-        <div>
-          <JoinSessionContainer
-            error={this.state.error}
-            loading={this.state.joinSessionLoading}
-            onJoinSession={this.joinSession}
-          />
-          <Divider hidden />
-          <Button content='Create New Session' size='big' primary fluid />
-        </div>
-      ) : (
-        <OpenSessionContainer />
-      );
-    return home;
+    if (this.state.session) {
+      return <OpenSessionContainer session={this.state.session} />;
+    }
+
+    return (
+      <div>
+        <JoinSessionContainer
+          error={this.state.error}
+          loading={this.state.joinSessionLoading}
+          onJoinSession={this.joinSession}
+        />
+        <Divider hidden />
+        <Button content='Create New Session' size='big' primary fluid />
+      </div>
+    );
   }
 }
 
