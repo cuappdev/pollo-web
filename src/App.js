@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container, Menu } from 'semantic-ui-react';
 import Home from './home/Home';
 import './App.css';
@@ -17,8 +17,6 @@ class App extends Component {
             <Container text className='navbar'>
               <Menu text>
                 <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
-                <Menu.Item name='messages' active={activeItem === 'messages'} onClick={this.handleItemClick} />
-                <Menu.Item name='friends' active={activeItem === 'friends'} onClick={this.handleItemClick} />
               </Menu>
             </Container>
           </div>

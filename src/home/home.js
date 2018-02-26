@@ -1,39 +1,52 @@
 import React, { Component } from 'react';
-import { Button, Divider, Header, Input } from 'semantic-ui-react';
+import { Button, Divider } from 'semantic-ui-react';
+import JoinSessionContainer from './JoinSessionContainer';
+import OpenSessionContainer from './OpenSessionContainer';
+import { generateNewCode, joinPoll } from '../utils/requests';
 
 class Home extends Component {
-
-  state = { sessionInput: '' }
-
-  sessionInputChanged = (e, { value }) => {
-    this.setState({ sessionInput: value });
+  state = {
+    session: null,
+    error: null,
+    joinSessionLoading: false
   }
 
-  onKeyPress = ({ key }) => {
-    if (key === 'Enter') {
-      this.joinSession();
-    }
+  joinSession = (code) => {
+    joinPoll([code])
+      .then((session) => {
+        this.setState({ session: session });
+      })
+      .catch((err) => {
+        this.setState({ error: err.toString() });
+      });
+  }
+
+  componentDidMount () {
+    generateNewCode()
+      .then((code) => {
+        console.log('code:', code);
+      })
+      .catch((err) => {
+        this.setState({ error: err.toString() });
+      });
   }
 
   render () {
-    return (
-      <div>
-        <Header size='tiny' color='grey'>Join a different session</Header>
-        <Input
-          placeholder='Enter a Session Code'
-          size='large'
-          action={{
-            primary: this.state.sessionInput !== '',
-            content: 'Join',
-            disabled: this.state.sessionInput === ''
-          }}
-          onChange={this.sessionInputChanged}
-          onKeyPress={this.onKeyPress}
-        />
-        <Divider hidden />
-        <Button content='Create New Session' size='big' primary fluid />
-      </div>
-    );
+    const home = this.state.session === null
+      ? (
+        <div>
+          <JoinSessionContainer
+            error={this.state.error}
+            loading={this.state.joinSessionLoading}
+            onJoinSession={this.joinSession}
+          />
+          <Divider hidden />
+          <Button content='Create New Session' size='big' primary fluid />
+        </div>
+      ) : (
+        <OpenSessionContainer />
+      );
+    return home;
   }
 }
 
