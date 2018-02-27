@@ -34,7 +34,7 @@ export const joinPoll = async (codes) => {
   if (edges.length === 0) throw 'Invalid session code';
 
   const session = edges[0].node;
-  session.userType = 'student';
+  session.userType = 'user';
 
   const response = await get(`/polls/${session.id}/ports/`);
   session.ports = response.ports;

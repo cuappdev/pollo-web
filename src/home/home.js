@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Divider } from 'semantic-ui-react';
-import JoinSessionContainer from './JoinSessionContainer';
-import OpenSessionContainer from './OpenSessionContainer';
+import JoinSession from './JoinSession';
+import OpenSession from './session/OpenSession';
 import { generateNewCode, joinPoll } from '../utils/requests';
 
 class Home extends Component {
@@ -17,15 +17,23 @@ class Home extends Component {
         console.log(session);
         this.setState({
           session: session,
+          error: null,
           joinSessionLoading: false
         });
       })
       .catch((err) => {
         this.setState({
           error: err.toString(),
+          session: null,
           joinSessionLoading: false
         });
       });
+  }
+
+  leaveSession = () => {
+    this.setState({
+      session: null
+    });
   }
 
   componentDidMount () {
@@ -43,12 +51,17 @@ class Home extends Component {
 
   render () {
     if (this.state.session) {
-      return <OpenSessionContainer session={this.state.session} />;
+      return (
+        <OpenSession
+          session={this.state.session}
+          onDisconnect={this.leaveSession}
+        />
+      );
     }
 
     return (
       <div>
-        <JoinSessionContainer
+        <JoinSession
           error={this.state.error}
           loading={this.state.joinSessionLoading}
           onJoinSession={this.joinSession}

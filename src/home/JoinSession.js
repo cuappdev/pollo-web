@@ -10,7 +10,7 @@ function ErrorMessage (props) {
   );
 }
 
-class JoinSessionContainer extends Component {
+class JoinSession extends Component {
   state = {
     sessionInput: ''
   }
@@ -28,20 +28,23 @@ class JoinSessionContainer extends Component {
   joinSession = () => this.props.onJoinSession(this.state.sessionInput)
 
   render () {
+    const { loading, error } = this.props;
+    const { sessionInput } = this.state;
+
     return (
       <div>
         <Header size='tiny' color='grey'>Join a different session</Header>
-        <ErrorMessage error={this.props.error} />
+        <ErrorMessage error={error} />
         <Input
           placeholder='Enter session code'
           size='large'
-          disabled={this.props.loading}
-          error={this.props.error !== null}
+          disabled={loading}
+          error={error !== null}
           action={{
-            primary: this.state.sessionInput !== '',
+            primary: sessionInput !== '',
             content: 'Join',
-            disabled: this.state.sessionInput === '' || this.props.loading,
-            loading: this.props.loading,
+            disabled: sessionInput === '' || loading,
+            loading: loading,
             onClick: this.joinSession
           }}
           onChange={this.sessionInputChanged}
@@ -52,4 +55,4 @@ class JoinSessionContainer extends Component {
   }
 }
 
-export default JoinSessionContainer;
+export default JoinSession;
