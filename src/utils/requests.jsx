@@ -36,8 +36,5 @@ export const joinPoll = async (codes) => {
   const session = edges[0].node;
   session.userType = 'user';
 
-  const response = await get(`/polls/${session.id}/ports/`);
-  session.ports = response.ports;
-
   return session;
 };

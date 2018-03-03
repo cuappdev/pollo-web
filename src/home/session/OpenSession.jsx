@@ -6,20 +6,20 @@ import { hostURL } from '../../utils/constants';
 import './OpenSession.css';
 
 class OpenSession extends Component {
-  socket = io(`http://localhost:${this.props.session.ports[0]}`, {
+  socket = io(`${hostURL}/${this.props.session.id}`, {
     query: {
       userType: this.props.session.userType
     }
   });
 
   componentDidMount () {
-    this.socket.on('connect', () => {
-      console.log('Connected to socket');
-    });
-
     this.socket.on('disconnect', () => {
       this.props.onDisconnect();
     });
+  }
+
+  componentWillUnmount () {
+    this.socket.close();
   }
 
   leaveSession = () => this.socket.disconnect();

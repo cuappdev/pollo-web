@@ -3,22 +3,21 @@ import { Button, Transition } from 'semantic-ui-react';
 
 class SubmitButton extends Component {
   render () {
-    const { submitted } = this.props;
+    const { text, onSubmit, visible } = this.props;
 
     const submit =
       <Button
         fluid
         color='blue'
         size='large'
-        disabled={submitted}
-        onClick={this.props.onSubmit}
+        onClick={onSubmit}
       >
-        {submitted ? 'Submitted!' : 'Submit'}
+        {text}
       </Button>;
 
     return (
       <Transition.Group animation='fade up' duration={200}>
-        {this.props.visible && submit}
+        {visible && submit}
       </Transition.Group>
     );
   }

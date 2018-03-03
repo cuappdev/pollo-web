@@ -28,9 +28,9 @@ class UserSession extends Component {
   }
 
   render () {
-    return this.state.question === null
-      ? (<Header textAlign='center' color='grey'>Please wait for the instructor.</Header>)
-      : (<Question question={this.state.question} onSubmit={this.sendAnswer}></Question>);
+    return this.state.question
+      ? (<Question question={this.state.question} onSubmit={this.sendAnswer}></Question>)
+      : (<Header textAlign='center' color='grey'>Please wait for the instructor.</Header>);
   }
 }
 

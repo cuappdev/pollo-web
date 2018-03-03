@@ -43,6 +43,15 @@ class MultipleChoice extends Component {
           {colName(i)}
         </Header>
         {option}
+        {submitted === i &&
+          <Header
+            color={selected === i ? 'blue' : 'grey'}
+            floated='right'
+            size='small'
+          >
+            Submitted!
+          </Header>
+        }
       </Segment>
     );
 
@@ -50,9 +59,9 @@ class MultipleChoice extends Component {
       <ol className='answer-choice-list'>
         {selections}
         <SubmitButton
-          visible={selected !== null}
+          visible={selected !== null && selected !== submitted}
           onSubmit={this.onSubmit}
-          submitted={selected === submitted && submitted !== null} />
+          text={ submitted ? 'Change Submission' : 'Submit' } />
       </ol>
     );
   }

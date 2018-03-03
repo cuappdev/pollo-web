@@ -14,7 +14,6 @@ class Home extends Component {
   joinSession = (code) => {
     joinPoll([code])
       .then((session) => {
-        console.log(session);
         this.setState({
           session: session,
           error: null,

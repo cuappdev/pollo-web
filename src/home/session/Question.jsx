@@ -5,7 +5,6 @@ import MultipleChoice from './MultipleChoice';
 class Question extends Component {
   render () {
     const { question } = this.props;
-    console.log('Question:', question);
 
     const responseContainer =
       question.type === 'MULTIPLE_CHOICE'

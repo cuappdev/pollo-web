@@ -16,7 +16,7 @@ class JoinSession extends Component {
   }
 
   sessionInputChanged = (e, { value }) => {
-    this.setState({ sessionInput: value });
+    this.setState({ sessionInput: value.toUpperCase() });
   }
 
   onKeyPress = ({ key }) => {
@@ -31,6 +31,10 @@ class JoinSession extends Component {
     const { loading, error } = this.props;
     const { sessionInput } = this.state;
 
+    const actionDisabled = sessionInput === ''
+      || sessionInput.length !== 6
+      || loading;
+
     return (
       <div>
         <Header size='tiny' color='grey'>Join a different session</Header>
@@ -41,12 +45,13 @@ class JoinSession extends Component {
           disabled={loading}
           error={error !== null}
           action={{
-            primary: sessionInput !== '',
+            primary: !actionDisabled,
             content: 'Join',
-            disabled: sessionInput === '' || loading,
+            disabled: actionDisabled,
             loading: loading,
             onClick: this.joinSession
           }}
+          value={sessionInput}
           onChange={this.sessionInputChanged}
           onKeyPress={this.onKeyPress}
         />
