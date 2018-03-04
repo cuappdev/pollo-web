@@ -21,7 +21,6 @@ class UserSession extends Component {
   }
 
   sendAnswer = (answer) => {
-    console.log(colName(answer));
     this.socket.emit('server/question/tally', {
       deviceId: localStorage.getItem('deviceId'),
       question: this.state.question.id,
