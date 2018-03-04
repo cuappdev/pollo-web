@@ -4,11 +4,14 @@ import MultipleChoice from './MultipleChoice';
 
 class Question extends Component {
   render () {
-    const { question } = this.props;
+    const { question, results, onSubmit } = this.props;
 
     const responseContainer =
       question.type === 'MULTIPLE_CHOICE'
-        ? <MultipleChoice options={question.options} onSubmit={this.props.onSubmit} />
+        ? <MultipleChoice
+          results={results}
+          options={question.options}
+          onSubmit={onSubmit} />
         : 'FREE RESPONSE';
 
     return (

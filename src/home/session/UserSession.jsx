@@ -5,7 +5,8 @@ import { colName } from '../../utils/functions';
 
 class UserSession extends Component {
   state = {
-    question: null
+    question: null,
+    results: null
   }
 
   socket = this.props.socket
@@ -15,8 +16,12 @@ class UserSession extends Component {
       this.setState({ question: data.question });
     });
 
+    this.socket.on('user/question/results', (data) => {
+      this.setState({ results: data.results });
+    });
+
     this.socket.on('user/question/end', (data) => {
-      this.setState({ question: null });
+      this.setState({ question: null, results: null });
     });
   }
 
@@ -29,9 +34,11 @@ class UserSession extends Component {
   }
 
   render () {
-    return this.state.question
-      ? (<Question question={this.state.question} onSubmit={this.sendAnswer}></Question>)
-      : (<Header textAlign='center' color='grey'>Please wait for the instructor.</Header>);
+    const { question, results } = this.state;
+    return question
+      ? (<Question question={question} results={results} onSubmit={this.sendAnswer} />)
+      : (<Header textAlign='center' color='grey'>Please wait for the instructor.</Header>
+      );
   }
 }
 
