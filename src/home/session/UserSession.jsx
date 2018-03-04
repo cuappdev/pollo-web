@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import Question from './Question';
+import { colName } from '../../utils/functions';
 
 class UserSession extends Component {
   state = {
@@ -20,10 +21,11 @@ class UserSession extends Component {
   }
 
   sendAnswer = (answer) => {
+    console.log(colName(answer));
     this.socket.emit('server/question/tally', {
       deviceId: localStorage.getItem('deviceId'),
       question: this.state.question.id,
-      data: answer
+      data: colName(answer)
     });
   }
 
