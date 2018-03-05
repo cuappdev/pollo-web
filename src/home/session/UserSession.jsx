@@ -13,7 +13,7 @@ class UserSession extends Component {
 
   componentDidMount () {
     this.socket.on('user/question/start', (data) => {
-      this.setState({ question: data.question });
+      this.setState({ question: data.question, results: null });
     });
 
     this.socket.on('user/question/results', (data) => {
@@ -26,11 +26,13 @@ class UserSession extends Component {
   }
 
   sendAnswer = (answer) => {
-    this.socket.emit('server/question/tally', {
-      deviceId: localStorage.getItem('deviceId'),
-      question: this.state.question.id,
-      data: colName(answer)
-    });
+    if (!this.state.results) {
+      this.socket.emit('server/question/tally', {
+        deviceId: localStorage.getItem('deviceId'),
+        question: this.state.question.id,
+        data: colName(answer)
+      });
+    }
   }
 
   render () {

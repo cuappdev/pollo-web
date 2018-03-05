@@ -11,8 +11,10 @@ class MultipleChoice extends Component {
   }
 
   onChoiceClick = (i) => {
-    if (this.state.selected === i ) this.setState({ selected: null, submitted: null });
-    else this.setState({ selected: i });
+    if (!this.props.results) {
+      if (this.state.selected === i ) this.setState({ selected: null, submitted: null });
+      else this.setState({ selected: i });
+    }
   }
 
   onSubmit = () => {
@@ -31,7 +33,7 @@ class MultipleChoice extends Component {
 
     const rightSubtitle = (i) => {
       if (results) {
-        const count = results[colIndex(i)];
+        const count = results[colIndex(i)] || 0;
         return `${count} ${count === 1 ? 'answer' : 'answers'}`;
       } else if (submitted === i) {
         return 'Submitted!';
@@ -72,7 +74,16 @@ class MultipleChoice extends Component {
         >
           {rightSubtitle(i)}
         </Header>
-        <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: `${width(i)}%`, backgroundColor: 'rgba(66, 133, 244, 0.2)' }} />
+        <div className='tallyBar'
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            width: width(i) + '%',
+            backgroundColor: 'rgba(66, 133, 244, 0.2)'
+          }}
+        />
       </Segment>
     );
 
