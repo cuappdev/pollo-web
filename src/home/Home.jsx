@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
-import { Button, Divider } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import JoinSession from './JoinSession';
-import OpenSession from './session/OpenSession';
-import { generateNewCode, joinPoll } from '../utils/requests';
+import CreateSession from './CreateSession';
+import Session from './session/Session';
+import {
+  generateNewCode,
+  joinPoll,
+  createPoll,
+  startPoll
+} from '../utils/requests';
 
 class Home extends Component {
   state = {
     session: null,
-    error: null,
-    joinSessionLoading: false
+    joinError: null,
+    joinLoading: false,
+    createError: null,
+    createLoading: false
   }
 
   joinSession = (code) => {
@@ -16,15 +24,15 @@ class Home extends Component {
       .then((session) => {
         this.setState({
           session: session,
-          error: null,
-          joinSessionLoading: false
+          joinError: null,
+          joinLoading: false
         });
       })
       .catch((err) => {
         this.setState({
-          error: err.toString(),
           session: null,
-          joinSessionLoading: false
+          joinError: err.toString(),
+          joinLoading: false
         });
       });
   }
@@ -35,24 +43,45 @@ class Home extends Component {
     });
   }
 
-  componentDidMount () {
+  createSession = () => {
     generateNewCode()
       .then((code) => {
-        console.log('code:', code);
+        console.log('Code:', code);
+        return createPoll(null, code);
+      })
+      .then((poll) => {
+        return startPoll(poll);
+      })
+      .then((poll) => {
+        console.log('Started poll:', poll);
+        this.setState({
+          session: poll,
+          createError: null,
+          createLoading: false
+        });
       })
       .catch((err) => {
+        console.log('Creation session failed:', err);
         this.setState({
-          error: err.toString(),
-          joinSessionLoading: false
+          createError: err.toString(),
+          createLoading: false
         });
       });
   }
 
   render () {
-    if (this.state.session) {
+    const {
+      session,
+      joinError,
+      createError,
+      joinLoading,
+      createLoading
+    } = this.state;
+
+    if (session) {
       return (
-        <OpenSession
-          session={this.state.session}
+        <Session
+          session={session}
           onDisconnect={this.leaveSession}
         />
       );
@@ -61,12 +90,16 @@ class Home extends Component {
     return (
       <div>
         <JoinSession
-          error={this.state.error}
-          loading={this.state.joinSessionLoading}
-          onJoinSession={this.joinSession}
+          error={joinError}
+          loading={joinLoading}
+          onJoin={this.joinSession}
         />
         <Divider hidden />
-        <Button content='Create New Session' size='big' primary fluid />
+        <CreateSession
+          error={createError}
+          loading={createLoading}
+          onCreate={this.createSession}
+        />
       </div>
     );
   }

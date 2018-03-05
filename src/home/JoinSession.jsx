@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { Header, Message, Input } from 'semantic-ui-react';
-
-function ErrorMessage (props) {
-  if (!props.error) return null;
-  return (
-    <Message negative size='tiny'>
-      <p>{props.error}</p>
-    </Message>
-  );
-}
+import { Header, Input } from 'semantic-ui-react';
+import ErrorMessage from './ErrorMessage';
 
 class JoinSession extends Component {
   state = {
     sessionInput: ''
+  }
+
+  isInputValid () {
+    const { loading } = this.props;
+    const { sessionInput } = this.state;
+
+    return sessionInput !== ''
+      && sessionInput.length === 6
+      && !loading;
   }
 
   sessionInputChanged = (e, { value }) => {
@@ -20,20 +21,16 @@ class JoinSession extends Component {
   }
 
   onKeyPress = ({ key }) => {
-    if (key === 'Enter') {
+    if (key === 'Enter' && this.isInputValid()) {
       this.joinSession();
     }
   }
 
-  joinSession = () => this.props.onJoinSession(this.state.sessionInput)
+  joinSession = () => this.props.onJoin(this.state.sessionInput)
 
   render () {
     const { loading, error } = this.props;
     const { sessionInput } = this.state;
-
-    const actionDisabled = sessionInput === ''
-      || sessionInput.length !== 6
-      || loading;
 
     return (
       <div>
@@ -45,9 +42,9 @@ class JoinSession extends Component {
           disabled={loading}
           error={error !== null}
           action={{
-            primary: !actionDisabled,
+            primary: this.isInputValid(),
             content: 'Join',
-            disabled: actionDisabled,
+            disabled: !this.isInputValid(),
             loading: loading,
             onClick: this.joinSession
           }}

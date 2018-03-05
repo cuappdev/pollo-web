@@ -3,9 +3,9 @@ import { Button, Message } from 'semantic-ui-react';
 import UserSession from './UserSession';
 import io from 'socket.io-client';
 import { hostURL } from '../../utils/constants';
-import './OpenSession.css';
+import './Session.css';
 
-class OpenSession extends Component {
+class Session extends Component {
   socket = io(`${hostURL}/${this.props.session.id}`, {
     query: {
       userType: this.props.session.userType
@@ -25,7 +25,7 @@ class OpenSession extends Component {
   leaveSession = () => this.socket.disconnect();
 
   render () {
-    const { userType } = this.props.session;
+    const { userType, code } = this.props.session;
 
     return (
       <div>
@@ -34,7 +34,7 @@ class OpenSession extends Component {
           size='tiny'
           color='green'
           header='Connected'
-          content={'Session Code: ' + this.props.session.code}
+          content={'Session Code: ' + code}
         />
         <Button
           fluid
@@ -45,11 +45,11 @@ class OpenSession extends Component {
           Leave Session
         </Button>
         <div className='session-content'>
-          {userType === 'user' ? <UserSession socket={this.socket} /> : null}
+          {userType === 'user' ? <UserSession socket={this.socket} /> : <p>ADMIN SESSION BETCHES</p>}
         </div>
       </div>
     );
   }
 }
 
-export default OpenSession;
+export default Session;
