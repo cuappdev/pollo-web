@@ -20,7 +20,7 @@ class UserSession extends Component {
       this.setState({ results: data.results });
     });
 
-    this.socket.on('user/question/end', (data) => {
+    this.socket.on('user/question/end', () => {
       this.setState({ question: null, results: null });
     });
   }

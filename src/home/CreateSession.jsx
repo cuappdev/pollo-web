@@ -4,7 +4,7 @@ import ErrorMessage from './ErrorMessage';
 
 class CreateSession extends Component {
   render () {
-    const { error, onCreate } = this.props;
+    const { error, loading, onCreate } = this.props;
     return (
       <div>
         <ErrorMessage error={error} />
@@ -12,6 +12,7 @@ class CreateSession extends Component {
           content='Create New Session'
           size='big'
           onClick={onCreate}
+          loading={loading}
         />
       </div>
     );

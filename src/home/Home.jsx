@@ -44,6 +44,10 @@ class Home extends Component {
   }
 
   createSession = () => {
+    this.setState({
+      createLoading: true
+    });
+
     generateNewCode()
       .then((code) => {
         console.log('Code:', code);

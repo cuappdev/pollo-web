@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Message } from 'semantic-ui-react';
 import UserSession from './UserSession';
+import AdminSession from './AdminSession';
 import io from 'socket.io-client';
 import { hostURL } from '../../utils/constants';
 import './Session.css';
@@ -13,6 +14,9 @@ class Session extends Component {
   });
 
   componentDidMount () {
+    this.socket.on('connect', () => {
+    });
+
     this.socket.on('disconnect', () => {
       this.props.onDisconnect();
     });
@@ -45,7 +49,10 @@ class Session extends Component {
           Leave Session
         </Button>
         <div className='session-content'>
-          {userType === 'user' ? <UserSession socket={this.socket} /> : <p>ADMIN SESSION BETCHES</p>}
+          {userType === 'user'
+            ? <UserSession socket={this.socket} />
+            : <AdminSession socket={this.socket} />
+          }
         </div>
       </div>
     );
