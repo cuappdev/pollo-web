@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Message } from 'semantic-ui-react';
-import UserSession from './UserSession';
-import AdminSession from './AdminSession';
+import UserSession from './user/UserSession';
+import AdminSession from './admin/AdminSession';
 import io from 'socket.io-client';
 import { hostURL } from '../../utils/constants';
 import './Session.css';

@@ -46,7 +46,7 @@ class AnswerChoice extends Component {
           }}
         />
       </Segment>
-    )
+    );
   }
 }
 

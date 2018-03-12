@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import SubmitButton from './SubmitButton';
-import AnswerChoice from './AnswerChoice';
-import { colName, colIndex } from '../../utils/functions';
+import SubmitButton from '../SubmitButton';
+import AnswerChoice from '../AnswerChoice';
+import { colName, colIndex } from '../../../utils/functions';
 import './MultipleChoice.css';
 
 class MultipleChoice extends Component {

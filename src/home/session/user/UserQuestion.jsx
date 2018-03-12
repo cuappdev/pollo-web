@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import MultipleChoice from './MultipleChoice';
 
-class Question extends Component {
+class UserQuestion extends Component {
   render () {
     const { question, results, onSubmit } = this.props;
 
@@ -23,4 +23,4 @@ class Question extends Component {
   }
 }
 
-export default Question;
+export default UserQuestion;
