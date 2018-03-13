@@ -1,0 +1,36 @@
+.session-status {
+  position: absolute;
+  top: 5em;
+  left: 0;
+  right: 0;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #29c09e;
+  font-weight: 700;
+  color: white;
+}
+
+#session-leave {
+  position: absolute;
+  top: 0;
+  right: 2em;
+  bottom: 0;
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+#session-leave > i {
+  margin-right: 8px;
+}
+
+#session-leave:hover {
+  color: white;
+}
+
+.session-content {
+  padding: 4em 0;
+}

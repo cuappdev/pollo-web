@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
-import Question from './Question';
-import { colName } from '../../utils/functions';
+import UserQuestion from './UserQuestion';
+import { colName } from '../../../utils/functions';
 
 class UserSession extends Component {
   state = {
@@ -20,7 +20,7 @@ class UserSession extends Component {
       this.setState({ results: data.results });
     });
 
-    this.socket.on('user/question/end', (data) => {
+    this.socket.on('user/question/end', () => {
       this.setState({ question: null, results: null });
     });
   }
@@ -38,7 +38,7 @@ class UserSession extends Component {
   render () {
     const { question, results } = this.state;
     return question
-      ? (<Question question={question} results={results} onSubmit={this.sendAnswer} />)
+      ? (<UserQuestion question={question} results={results} onSubmit={this.sendAnswer} />)
       : (<Header textAlign='center' color='grey'>Please wait for the instructor.</Header>
       );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Header, Segment } from 'semantic-ui-react';
 import SubmitButton from './SubmitButton';
+import AnswerChoice from './AnswerChoice';
 import { colName, colIndex } from '../../utils/functions';
 import './MultipleChoice.css';
 
@@ -25,7 +25,7 @@ class MultipleChoice extends Component {
   }
 
   render () {
-    const { options, results } = this.props;
+    const { options, results, selectionDisabled } = this.props;
     const { selected, submitted } = this.state;
 
     const reducer = (acc, curr) => acc + results[curr];
@@ -51,40 +51,17 @@ class MultipleChoice extends Component {
     };
 
     const selections = options.map((option, i) =>
-      <Segment
+      <AnswerChoice
         as='li'
         key={i}
-        onClick={() => this.onChoiceClick(i)}
-        color={selected === i ? 'blue' : null}
+        onClick={!selectionDisabled ? (() => this.onChoiceClick(i)) : undefined}
+        selected={selected === i}
         className='answer-choice'
-      >
-        <Header
-          color={selected === i ? 'blue' : 'grey'}
-          floated='left'
-          size='small'
-          className='answer-choice-letter'
-        >
-          {colName(i)}
-        </Header>
-        {option}
-        <Header
-          color={selected === i ? 'blue' : 'grey'}
-          floated='right'
-          size='small'
-        >
-          {rightSubtitle(i)}
-        </Header>
-        <div className='tallyBar'
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            width: width(i) + '%',
-            backgroundColor: 'rgba(66, 133, 244, 0.2)'
-          }}
-        />
-      </Segment>
+        letter={colName(i)}
+        rightSubtitle={rightSubtitle(i)}
+        tallyPercentage={width(i)}
+        text={option}
+      />
     );
 
     return (
