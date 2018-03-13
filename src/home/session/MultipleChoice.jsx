@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import SubmitButton from '../SubmitButton';
-import AnswerChoice from '../AnswerChoice';
-import { colName, colIndex } from '../../../utils/functions';
+import SubmitButton from './SubmitButton';
+import AnswerChoice from './AnswerChoice';
+import { colName, colIndex } from '../../utils/functions';
 import './MultipleChoice.css';
 
 class MultipleChoice extends Component {
@@ -25,7 +25,7 @@ class MultipleChoice extends Component {
   }
 
   render () {
-    const { options, results } = this.props;
+    const { options, results, selectionDisabled } = this.props;
     const { selected, submitted } = this.state;
 
     const reducer = (acc, curr) => acc + results[curr];
@@ -54,7 +54,7 @@ class MultipleChoice extends Component {
       <AnswerChoice
         as='li'
         key={i}
-        onClick={() => this.onChoiceClick(i)}
+        onClick={!selectionDisabled ? (() => this.onChoiceClick(i)) : undefined}
         selected={selected === i}
         className='answer-choice'
         letter={colName(i)}

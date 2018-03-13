@@ -50,14 +50,12 @@ class Home extends Component {
 
     generateNewCode()
       .then((code) => {
-        console.log('Code:', code);
         return createPoll(null, code);
       })
       .then((poll) => {
         return startPoll(poll);
       })
       .then((poll) => {
-        console.log('Started poll:', poll);
         this.setState({
           session: poll,
           createError: null,
@@ -65,7 +63,6 @@ class Home extends Component {
         });
       })
       .catch((err) => {
-        console.log('Creation session failed:', err);
         this.setState({
           createError: err.toString(),
           createLoading: false

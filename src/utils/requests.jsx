@@ -14,7 +14,6 @@ const get = async (url, params) => {
 
 const post = async (url, body) => {
   const res = await api.post(url, body);
-  console.log(res.data);
   const { success, data } = res.data;
   if (success) return data;
   throw Error(data.errors[0]);

@@ -1,30 +1,54 @@
 import React, { Component } from 'react';
 import CreateQuestion from './CreateQuestion';
+import AdminQuestion from './AdminQuestion';
 
 class AdminSession extends Component {
   socket = this.props.socket
   state = {
-    question: null
+    question: null,
+    results: null,
+    editingQuestion: null
   }
 
   componentDidMount () {
     this.socket.on('admin/question/updateTally', (data) => {
-      console.log(data);
+      this.setState({
+        results: data.results
+      });
     });
   }
 
   handleStartQuestion = (question) => {
-    this.setState({ question: question });
+    this.setState({ question: question, results: {}, editingQuestion: question });
     this.socket.emit('server/question/start', question);
   }
 
+  handleShareQuestion = () => {
+    this.socket.emit('server/question/results');
+  }
+
+  handleEndQuestion = () => {
+    this.socket.emit('server/question/end');
+    this.setState({
+      question: null,
+      results: null
+    });
+  }
+
   render () {
-    const { question } = this.state;
+    const { question, results, editingQuestion } = this.state;
 
     return question
-      ? <p>Question started</p>
-      : (
+      ? (
+        <AdminQuestion
+          question={question}
+          results={results}
+          handleShare={this.handleShareQuestion}
+          handleEnd={this.handleEndQuestion}
+        />
+      ) : (
         <CreateQuestion
+          initialQuestion={editingQuestion}
           handleStart={this.handleStartQuestion}
         />
       );

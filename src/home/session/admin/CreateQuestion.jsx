@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Header, Input, Menu } from 'semantic-ui-react';
+import { Header, Input, Menu, Popup } from 'semantic-ui-react';
 import MultipleChoiceInput from './MultipleChoiceInput';
 import SubmitButton from '../SubmitButton';
 
 class CreateQuestion extends Component {
 
-  state = {
+  state = this.props.initialQuestion || {
     text: '',
     type: 'MULTIPLE_CHOICE',
     options: ['', '']
@@ -44,7 +44,7 @@ class CreateQuestion extends Component {
   }
 
   render () {
-    const { type, options } = this.state;
+    const { text, type, options } = this.state;
     const { handleStart } = this.props;
 
     const body = type === 'MULTIPLE_CHOICE' && (
@@ -62,6 +62,7 @@ class CreateQuestion extends Component {
         <Input
           fluid
           placeholder='Question'
+          value={text}
           onChange={this.handleQuestionInputChange}
         />
         <Menu pointing secondary>
@@ -70,10 +71,16 @@ class CreateQuestion extends Component {
             name='MULTIPLE_CHOICE'
             active={type === 'MULTIPLE_CHOICE'}
           />
-          <Menu.Item
-            content='Free Response'
-            name='FREE_RESPONSE'
-            active={type === 'FREE_RESPONSE'}
+          <Popup
+            trigger={
+              <Menu.Item
+                content='Free Response'
+                name='FREE_RESPONSE'
+                active={type === 'FREE_RESPONSE'}
+              />
+            }
+            content='Coming soon!'
+            position='bottom center'
           />
         </Menu>
         {body}

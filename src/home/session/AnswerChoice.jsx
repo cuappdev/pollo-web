@@ -27,7 +27,7 @@ class AnswerChoice extends Component {
         >
           {letter}
         </Header>
-        {text}
+        {text || letter}
         <Header
           color={selected ? 'blue' : 'grey'}
           floated='right'

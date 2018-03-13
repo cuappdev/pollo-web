@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
-import MultipleChoice from './MultipleChoice';
+import MultipleChoice from '../MultipleChoice';
 
 class UserQuestion extends Component {
   render () {
