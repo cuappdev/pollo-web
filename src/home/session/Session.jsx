@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Message } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import UserSession from './user/UserSession';
 import AdminSession from './admin/AdminSession';
 import io from 'socket.io-client';
@@ -33,21 +33,16 @@ class Session extends Component {
 
     return (
       <div>
-        <Message
-          attached
-          size='tiny'
-          color='green'
-          header='Connected'
-          content={'Session Code: ' + code}
-        />
-        <Button
-          fluid
-          basic
-          attached='bottom'
-          onClick={this.leaveSession}
-        >
-          Leave Session
-        </Button>
+        <div className='session-status'>
+          {'Session Code: ' + code}
+          <button
+            onClick={this.leaveSession}
+            id='session-leave'
+          >
+            <Icon name='close' />
+            {userType === 'user' ? 'Leave Session' : 'End Session'}
+          </button>
+        </div>
         <div className='session-content'>
           {userType === 'user'
             ? <UserSession socket={this.socket} />

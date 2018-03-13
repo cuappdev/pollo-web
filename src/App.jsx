@@ -15,9 +15,10 @@ class App extends Component {
         <div className='app'>
           <div className='app-header'>
             <Container text className='navbar'>
-              <Menu text>
+              {/* <Menu text>
                 <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
-              </Menu>
+              </Menu> */}
+              <h1>Pollo</h1>
             </Container>
           </div>
           <Container text className='app-content'>

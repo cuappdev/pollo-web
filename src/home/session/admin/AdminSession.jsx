@@ -7,7 +7,8 @@ class AdminSession extends Component {
   state = {
     question: null,
     results: null,
-    editingQuestion: null
+    editingQuestion: null,
+    ended: false
   }
 
   componentDidMount () {
@@ -30,13 +31,20 @@ class AdminSession extends Component {
   handleEndQuestion = () => {
     this.socket.emit('server/question/end');
     this.setState({
+      ended: true
+    });
+  }
+
+  handleNewQuestion = () => {
+    this.setState({
       question: null,
-      results: null
+      results: null,
+      ended: false
     });
   }
 
   render () {
-    const { question, results, editingQuestion } = this.state;
+    const { question, results, editingQuestion, ended } = this.state;
 
     return question
       ? (
@@ -45,6 +53,8 @@ class AdminSession extends Component {
           results={results}
           handleShare={this.handleShareQuestion}
           handleEnd={this.handleEndQuestion}
+          handleNew={this.handleNewQuestion}
+          ended={ended}
         />
       ) : (
         <CreateQuestion
