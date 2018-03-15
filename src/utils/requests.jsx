@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { hostURL } from './constants';
+import { getDeviceId } from './functions';
 
 const api = axios.create({
   baseURL: hostURL + '/api/v1'
@@ -34,12 +35,13 @@ export const joinPoll = async (codes) => {
 };
 
 export const createPoll = async (name, code) => {
-  const data = await post('/polls/', { name: name, code: code });
+  const data = await post('/polls/', { name: name, code: code, deviceId: getDeviceId() });
   return data.node;
 };
 
 export const startPoll = async (poll) => {
-  const session = await post('/start/poll/', poll);
+  const data = await post('/start/poll/', poll);
+  const session = data.node;
   session.userType = 'admin';
   return session;
 };
