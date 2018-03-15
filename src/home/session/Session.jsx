@@ -14,9 +14,6 @@ class Session extends Component {
   });
 
   componentDidMount () {
-    this.socket.on('connect', () => {
-    });
-
     this.socket.on('disconnect', () => {
       this.props.onDisconnect();
     });
