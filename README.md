@@ -9,12 +9,10 @@ In using Semantic UI, we wish to customize the theming, so naturally we cannot u
 
 Now build Semantic UI with gulp by running `gulp build` under the `./semantic` directory. You can also have it watch for changes with `gulp watch` but be aware that it will build the entire library every time.
 
-### 2) secrets.json
-There should be a `src/secrets.json` file that contains the host URL of the backend server. Example config:
-```json
-{
-  "hostURL": "http://example.server.com"
-}
+### 2) Environment
+There should be a `.env` file that contains the host URL of the backend server. Example config:
+```bash
+REACT_APP_HOST_URL=http://backend.server.com
 ```
 
 ## Development
