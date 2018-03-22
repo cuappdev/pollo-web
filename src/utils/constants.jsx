@@ -1,4 +1,6 @@
-const hostURL = 'http://34.226.150.242';
+import secrets from '../secrets.json';
+
+const hostURL = secrets.hostURL;
 
 export {
   hostURL
