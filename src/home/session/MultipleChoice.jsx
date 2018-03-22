@@ -7,19 +7,28 @@ import './MultipleChoice.css';
 class MultipleChoice extends Component {
   state = {
     selected: null,
-    submitted: null
+    submitted: null,
+    open: this.props.open
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.open && !this.props.open) {
+      this.setState({
+        selected: null,
+        submitted: null,
+        open: false
+      });
+    }
   }
 
   onChoiceClick = (i) => {
-    if (!this.props.results) {
-      if (this.state.selected === i ) this.setState({ selected: null, submitted: null });
-      else this.setState({ selected: i });
-    }
+    if (this.state.selected === i ) this.setState({ selected: null });
+    else this.setState({ selected: i });
   }
 
   onSubmit = () => {
     if (this.state.selected !== null) {
-      this.props.onSubmit(this.state.selected);
+      this.props.onSubmit({ 'choice': colName(this.state.selected) });
       this.setState({ submitted: this.state.selected });
     }
   }
@@ -28,23 +37,26 @@ class MultipleChoice extends Component {
     const { options, results, selectionDisabled } = this.props;
     const { selected, submitted } = this.state;
 
-    const reducer = (acc, curr) => acc + results[curr];
+    const reducer = (acc, curr) => acc + results[curr].count;
     const totalAnswers = results && Object.keys(results).reduce(reducer, 0);
 
     const rightSubtitle = (i) => {
+      let subtitle = submitted === i ? 'Submitted' : '';
+
       if (results) {
-        const count = results[colIndex(i)] || 0;
-        return `${count} ${count === 1 ? 'answer' : 'answers'}`;
-      } else if (submitted === i) {
-        return 'Submitted!';
-      } else {
-        return '';
+        const result = results[colIndex(i)];
+        const count = result ? result.count : 0;
+        subtitle += submitted === i ? ' | ' : '';
+        subtitle += `${count} ${count === 1 ? 'answer' : 'answers'}`;
       }
+
+      return subtitle;
     };
 
     const width = (i) => {
       if (results) {
-        return 100 * results[colIndex(i)] / parseFloat(totalAnswers);
+        const result = results[colIndex(i)];
+        return result ? 100 * result.count / parseFloat(totalAnswers) : 0;
       } else {
         return 0;
       }
@@ -70,7 +82,7 @@ class MultipleChoice extends Component {
         <SubmitButton
           visible={selected !== null && selected !== submitted}
           onSubmit={this.onSubmit}
-          text={ submitted ? 'Change Submission' : 'Submit' } />
+          text={ submitted !== null ? 'Change Submission' : 'Submit' } />
       </ol>
     );
   }
