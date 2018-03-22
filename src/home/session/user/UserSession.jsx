@@ -13,7 +13,6 @@ class UserSession extends Component {
 
   componentDidMount () {
     this.socket.on('user/question/start', (data) => {
-      console.log(data);
       this.setState({ question: data.question, results: null, open: true });
     });
 
