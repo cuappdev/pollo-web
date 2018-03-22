@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import MultipleChoice from '../MultipleChoice';
+import FreeResponse from '../FreeResponse';
 
 class UserQuestion extends Component {
   render () {
@@ -15,11 +16,15 @@ class UserQuestion extends Component {
           selectionDisabled={!open}
           open={open}
         />
-        : 'FREE RESPONSE';
+        : <FreeResponse
+          results={results}
+          onSubmit={onSubmit}
+          open={open}
+        />;
 
     return (
       <div>
-        <Header>{question.text}</Header>
+        <Header as='h1'>{question.text}</Header>
         {responseContainer}
       </div>
     );

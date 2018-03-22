@@ -21,7 +21,13 @@ class AdminSession extends Component {
 
   handleStartQuestion = (question) => {
     this.setState({ question: question, results: {}, editingQuestion: question });
-    this.socket.emit('server/question/start', question);
+
+    const questionData = question.type === 'MULTIPLE_CHOICE' ? question : {
+      ...question,
+      options: undefined
+    };
+
+    this.socket.emit('server/question/start', questionData);
   }
 
   handleShareQuestion = () => {

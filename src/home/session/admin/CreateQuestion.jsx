@@ -47,13 +47,15 @@ class CreateQuestion extends Component {
     const { text, type, options } = this.state;
     const { handleStart } = this.props;
 
-    const body = type === 'MULTIPLE_CHOICE' && (
+    const body = type === 'MULTIPLE_CHOICE' ? (
       <MultipleChoiceInput
         handleNew={this.handleOptionNew}
         handleChange={this.handleOptionChange}
         handleDelete={this.handleOptionDelete}
         options={options}
       />
+    ) : (
+      <div />
     );
 
     return (
@@ -70,17 +72,13 @@ class CreateQuestion extends Component {
             content='Multiple Choice'
             name='MULTIPLE_CHOICE'
             active={type === 'MULTIPLE_CHOICE'}
+            onClick={this.handleTypeItemClick}
           />
-          <Popup
-            trigger={
-              <Menu.Item
-                content='Free Response'
-                name='FREE_RESPONSE'
-                active={type === 'FREE_RESPONSE'}
-              />
-            }
-            content='Coming soon!'
-            position='bottom center'
+          <Menu.Item
+            content='Free Response'
+            name='FREE_RESPONSE'
+            active={type === 'FREE_RESPONSE'}
+            onClick={this.handleTypeItemClick}
           />
         </Menu>
         {body}

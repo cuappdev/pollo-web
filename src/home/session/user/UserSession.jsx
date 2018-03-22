@@ -26,6 +26,7 @@ class UserSession extends Component {
   }
 
   sendAnswer = (answer) => {
+    console.log(answer);
     this.socket.emit('server/question/tally', {
       ...answer,
       deviceId: localStorage.getItem('deviceId'),
@@ -44,7 +45,10 @@ class UserSession extends Component {
           onSubmit={this.sendAnswer}
           open={open}
         />
-      ) : (<Header textAlign='center' color='grey'>Please wait for the instructor.</Header>
+      ) : (
+        <Header textAlign='center' color='grey'>
+          Please wait for the instructor.
+        </Header>
       );
   }
 }
