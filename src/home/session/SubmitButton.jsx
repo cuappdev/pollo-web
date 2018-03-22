@@ -3,7 +3,7 @@ import { Button, Transition } from 'semantic-ui-react';
 
 class SubmitButton extends Component {
   render () {
-    const { text, onSubmit, visible } = this.props;
+    const { text, onSubmit, visible, disabled } = this.props;
 
     const submit =
       <Button
@@ -11,6 +11,7 @@ class SubmitButton extends Component {
         color='blue'
         size='large'
         onClick={onSubmit}
+        disabled={disabled}
       >
         {text}
       </Button>;

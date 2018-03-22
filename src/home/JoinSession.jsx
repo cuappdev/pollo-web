@@ -34,7 +34,7 @@ class JoinSession extends Component {
 
     return (
       <div>
-        <Header size='tiny' color='grey'>Join a different session</Header>
+        <Header size='tiny' color='grey'>Join a session</Header>
         <ErrorMessage error={error} />
         <Input
           placeholder='Enter session code'

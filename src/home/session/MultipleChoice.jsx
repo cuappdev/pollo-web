@@ -28,7 +28,7 @@ class MultipleChoice extends Component {
 
   onSubmit = () => {
     if (this.state.selected !== null) {
-      this.props.onSubmit({ 'choice': colName(this.state.selected) });
+      this.props.onSubmit({ choice: colName(this.state.selected) });
       this.setState({ submitted: this.state.selected });
     }
   }
