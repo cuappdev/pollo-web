@@ -1,6 +1,4 @@
-import secrets from '../secrets.json';
-
-const hostURL = secrets.hostURL;
+const hostURL = process.env.REACT_APP_HOST_URL || '';
 
 export {
   hostURL

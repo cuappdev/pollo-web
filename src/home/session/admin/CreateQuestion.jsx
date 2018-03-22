@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Input, Menu, Popup } from 'semantic-ui-react';
+import { Header, Input, Menu } from 'semantic-ui-react';
 import MultipleChoiceInput from './MultipleChoiceInput';
 import SubmitButton from '../SubmitButton';
 

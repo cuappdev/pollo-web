@@ -7,6 +7,8 @@ import { getDeviceId } from './utils/functions';
 import './semantic/semantic.min.css';
 import './index.css';
 
+require('dotenv').config();
+
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
 
