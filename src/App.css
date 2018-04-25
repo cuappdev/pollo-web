@@ -1,16 +1,43 @@
+@import 'index.css';
+
 .app {
   min-height: 100vh;
 }
 
 .app-header {
-  background-color: white;
-  padding: 0.5em 0;
+  position: relative;
+  background-color: var(--pollo-off-white);
+  height: 263.5px;
 }
 
-.app-content {
-  padding: 2em 0;
+/*******************************
+            Header
+*******************************/
+
+.header-section {
+  position: absolute;
+  margin: 0 auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 60%;
 }
+
+.header-content {
+  height: 62.5px;
+  position: relative;
+}
+
+/* Navbar */
 
 .navbar {
-  padding: 1em 0;
+  position: absolute;
+  bottom: 0;
+  float: left;
+  height: 35px;
+  max-width: 50%;
 }
+
+/*******************************
+            Content
+*******************************/

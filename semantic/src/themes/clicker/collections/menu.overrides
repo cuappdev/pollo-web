@@ -1,0 +1,23 @@
+/*******************************
+         Menu Overrides
+*******************************/
+
+.ui.secondary.pointing.menu {
+  height: 100%;
+  min-height: 100%;
+  border-bottom: none;
+}
+
+.ui.secondary.pointing.menu .item {
+  margin: auto 60px auto 0;
+  padding: 0;
+  height: 100%;
+  font-size: @mediumFont;
+  font-weight: @mediumWeight;
+  color: @polloMediumGrey;
+}
+
+.ui.secondary.pointing.menu .active.item {
+  font-weight: @semiboldWeight;
+  color: @polloDeepBlack;
+}
