@@ -10,6 +10,14 @@
   height: 263.5px;
 }
 
+.app-content {
+  margin: 50px auto;
+  width: 60%;
+  background-color: red;
+  height: 500px;
+  width: 60%;
+}
+
 /*******************************
             Header
 *******************************/
@@ -41,3 +49,11 @@
 /*******************************
             Content
 *******************************/
+
+.created-section {
+  
+}
+
+.joined-section {
+
+}
