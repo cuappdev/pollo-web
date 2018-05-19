@@ -1,36 +1,158 @@
-.session-status {
+@import '../../index.css';
+
+:root {
+  /* Padding */
+  --hpadding  : 100px;
+  --vpadding  : 40px;
+}
+
+/*******************************
+   Static Session Components
+*******************************/
+
+.session {
+  min-height: 100vh;
+  background-color: var(--pollo-deep-black);
+}
+
+.session-navbar {
   position: absolute;
-  top: 5em;
+  left: var(--hpadding);
+  top: var(--vpadding);
+}
+
+.ui.primary.button {
+  position: absolute;
+  margin: 0 auto;
+  top: var(--vpadding);
   left: 0;
   right: 0;
-  height: 3em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #29c09e;
-  font-weight: 700;
-  color: white;
-}
-
-#session-leave {
-  position: absolute;
-  top: 0;
-  right: 2em;
-  bottom: 0;
-  border: none;
-  background: none;
-  color: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-}
-
-#session-leave > i {
-  margin-right: 8px;
-}
-
-#session-leave:hover {
-  color: white;
+  width: 158.5px;
+  height: 47.5px;
+  font-size: var(--small-font);
+  font-weight: var(--semibold-weight);
+  color: var(--pollo-deep-black) !important;
+  background-color: var(--pollo-off-white) !important;
+  opacity: 0.9;
+  border-radius: 100px;
 }
 
 .session-content {
-  padding: 4em 0;
+
+}
+
+.ui.secondary.pointing.menu .item {
+  padding-bottom: 5px !important;
+  color: white !important;
+  opacity: 0.75;
+  font-size: var(--small-font) !important;
+  font-weight: var(--bold-weight) !important;
+  border-bottom: none;
+}
+
+.ui.secondary.pointing.menu .active.item {
+  opacity: 1;
+  border-bottom: solid 2px var(--pollo-green) !important;
+}
+
+.session-info {
+  position: absolute;
+  left: var(--hpadding);
+  bottom: var(--vpadding);
+}
+
+.session-name {
+  color: white;
+  font-size: var(--large-font);
+  font-weight: var(--semibold-weight);
+  margin-bottom: 9px;
+}
+
+.session-code {
+  color: var(--pollo-medium-grey);
+  font-size: var(--small-font);
+  font-weight: var(--semibold-weight);
+}
+
+/*******************************
+          Empty State
+*******************************/
+
+.empty-state {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 200px;
+  height: 125px;
+  margin: auto;
+}
+
+.empty-state img {
+  display: block;
+  margin: auto;
+  width: 32px;
+  height: 32px;
+}
+
+.empty-state-title {
+  margin-top: 21px;
+  margin-bottom: 11px;
+  color: white;
+  opacity: 0.9;
+  font-size: var(--small-font);
+  font-weight: var(--semibold-weight);
+  text-align: center;
+}
+
+.empty-state-subtitle {
+  color: var(--pollo-medium-grey);
+  font-size: var(--tiny-font);
+  font-weight: var(--medium-weight);
+  text-align: center;
+}
+
+/*******************************
+        Poll Name Input
+*******************************/
+
+.poll-name-input {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 300px;
+  height: 200px;
+  margin: auto;
+}
+
+.blur {
+  -webkit-filter: blur(8px);
+  -moz-filter: blur(8px);
+  -ms-filter: blur(8px);
+  -o-filter: blur(8px);
+  filter: blur(8px);
+}
+
+.poll-name-input .ui.input {
+  width: 100%;
+  padding-left: 20px;
+}
+
+.poll-name-input input {
+  margin-top: 35px !important;
+  font-size: var(--big-font);
+  font-weight: var(--medium-weight);
+  text-align: center;
+  border: none !important;
+  background-color: transparent !important;
+  color: var(--pollo-medium-grey) !important;
+  caret-color: var(--pollo-green);
+}
+
+input::placeholder {
+  color: var(--pollo-medium-grey) !important;
+  opacity: 1;
 }
