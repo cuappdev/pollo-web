@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';
+import './CreateSession.css';
 
 class CreateSession extends Component {
   render () {
@@ -8,9 +9,9 @@ class CreateSession extends Component {
     return (
       <div>
         <ErrorMessage error={error} />
-        <Button primary fluid
+        <Button primary
           content='Create New Session'
-          size='big'
+          size='small'
           onClick={onCreate}
           loading={loading}
         />
