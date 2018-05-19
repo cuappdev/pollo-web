@@ -34,9 +34,8 @@ class JoinSession extends Component {
     const { sessionInput } = this.state;
 
     return (
-      <div class='join-session-container'>
+      <div className='join-session-container'>
         <Input
-          class='join-session-input'
           placeholder='Enter a code'
           size='small'
           disabled={loading}

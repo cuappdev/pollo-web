@@ -73,3 +73,42 @@
   font-size: var(--small-font);
   font-weight: var(--semibold-weight);
 }
+
+/*******************************
+          Empty State
+*******************************/
+
+.empty-state {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 200px;
+  height: 125px;
+  margin: auto;
+}
+
+.empty-state img {
+  display: block;
+  margin: auto;
+  width: 32px;
+  height: 32px;
+}
+
+.empty-state-title {
+  margin-top: 21px;
+  margin-bottom: 11px;
+  color: white;
+  opacity: 0.9;
+  font-size: var(--small-font);
+  font-weight: var(--semibold-weight);
+  text-align: center;
+}
+
+.empty-state-subtitle {
+  color: var(--pollo-medium-grey);
+  font-size: var(--tiny-font);
+  font-weight: var(--medium-weight);
+  text-align: center;
+}

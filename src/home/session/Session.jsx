@@ -5,6 +5,7 @@ import AdminSession from './admin/AdminSession';
 import io from 'socket.io-client';
 import { hostURL } from '../../utils/constants';
 import './Session.css';
+import empty_monkey_icon from '../../assets/empty_monkey_icon.png'
 
 class Session extends Component {
 
@@ -21,7 +22,16 @@ class Session extends Component {
 
     // FIX: Dummy values for integrating UI
     var userType = 'admin';
-    var code = 'ABCDEF'
+    var code = 'ABCDEF';
+    var polls = null;
+
+    const emptyStateSection = (
+      <div className='empty-state'>
+        <img src={empty_monkey_icon} alt="No Polls"></img>
+        <div className='empty-state-title'>Nothing to see here.</div>
+        <div className='empty-state-subtitle'>You haven’t made any polls yet! Try it out above.</div>
+      </div>
+    );
 
     return (
       <div className='session'>
@@ -42,7 +52,9 @@ class Session extends Component {
           </Menu>
         </div>
         <Button className='create-poll-button' primary onClick={this.createPoll}>Create a poll</Button>
-        <div className='session-content'></div>
+        <div className='session-content'>
+          {!polls && emptyStateSection}
+        </div>
         <div className='session-info'>
           <div className='session-name'>Test Class</div>
           <div className='session-code'>{'Code: ' + code}</div>
