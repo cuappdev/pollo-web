@@ -112,3 +112,47 @@
   font-weight: var(--medium-weight);
   text-align: center;
 }
+
+/*******************************
+        Poll Name Input
+*******************************/
+
+.poll-name-input {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 300px;
+  height: 200px;
+  margin: auto;
+}
+
+.blur {
+  -webkit-filter: blur(8px);
+  -moz-filter: blur(8px);
+  -ms-filter: blur(8px);
+  -o-filter: blur(8px);
+  filter: blur(8px);
+}
+
+.poll-name-input .ui.input {
+  width: 100%;
+  padding-left: 20px;
+}
+
+.poll-name-input input {
+  margin-top: 35px !important;
+  font-size: var(--big-font);
+  font-weight: var(--medium-weight);
+  text-align: center;
+  border: none !important;
+  background-color: transparent !important;
+  color: var(--pollo-medium-grey) !important;
+  caret-color: var(--pollo-green);
+}
+
+input::placeholder {
+  color: var(--pollo-medium-grey) !important;
+  opacity: 1;
+}
