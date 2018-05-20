@@ -97,3 +97,43 @@
   font-size: var(--small-font) !important;
   font-weight: var(--regular-weight) !important;
 }
+
+/*******************************
+          Popup Footer
+*******************************/
+
+.popup-footer {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 84px;
+  bottom: 0;
+  border-top: solid 1px var(--pollo-border-grey);
+}
+
+.popup-button {
+  position: absolute;
+  margin: auto !important;
+  top: 0;
+  bottom: 0;
+  width: 205px !important;
+  height: 48px !important;
+  padding: 0 !important;
+  font-size: var(--small-font) !important;
+  border-radius: 100px !important;
+}
+
+.save-draft {
+  left: var(--edge-padding);
+  font-weight: var(--regular-weight) !important;
+  background-color: var(--pollo-border-grey) !important;
+  color: var(--pollo-medium-grey) !important;
+  opacity: 0.5;
+}
+
+.start-question {
+  right: var(--edge-padding);
+  font-weight: var(--semibold-weight) !important;
+  background-color: var(--pollo-green) !important;
+  color: white !important;
+}

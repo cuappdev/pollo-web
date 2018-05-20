@@ -59,6 +59,14 @@ class AdminSession extends Component {
     console.log("show drafts");
   }
 
+  saveDraft = () => {
+    console.log("save draft");
+  }
+
+  startQuestion = () => {
+    console.log("start question");
+  }
+
   dismissCreatePoll = () => {
     this.props.dismissCreatePoll(false);
   }
@@ -93,7 +101,10 @@ class AdminSession extends Component {
             >{'Drafts (' + drafts.length + ')'}</Button>
           </div>
           <div className='popup-content'></div>
-          <div className='popup-footer'></div>
+          <div className='popup-footer'>
+            <Button className='save-draft popup-button' onClick={this.saveDraft}>Save as draft</Button>
+            <Button className='start-question popup-button' onClick={this.startQuestion}>Start question</Button>
+          </div>
         </div>
       </div>
     )
