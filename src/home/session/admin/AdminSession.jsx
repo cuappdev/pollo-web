@@ -79,6 +79,13 @@ class AdminSession extends Component {
       { value: 'FREE_RESPONSE', text: 'Free Response' }
     ]
 
+    // const questionContainer = (type === 'MULTIPLE_CHOICE')
+    //   ? (
+    //     <MultipleChoice options={question.options} results={results} selectionDisabled />
+    //   ) : (
+    //     <FreeResponseResults results={results} />
+    //   );
+
     return (
       <div className='create-poll-section'>
         <div className='bg-overlay'></div>
@@ -100,7 +107,12 @@ class AdminSession extends Component {
               onClick={this.showDrafts}
             >{'Drafts (' + drafts.length + ')'}</Button>
           </div>
-          <div className='popup-content'></div>
+          <div className='popup-content'>
+            <CreateQuestion
+              initialQuestion={editingQuestion}
+              handleStart={this.handleStartQuestion}
+            />
+          </div>
           <div className='popup-footer'>
             <Button className='save-draft popup-button' onClick={this.saveDraft}>Save as draft</Button>
             <Button className='start-question popup-button' onClick={this.startQuestion}>Start question</Button>

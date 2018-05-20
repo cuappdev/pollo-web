@@ -10,10 +10,9 @@ class MultipleChoiceInput extends Component {
     const optionSegments = options.map((option, i) =>
       <Input
         fluid
-        label={colName(i)}
         key={i}
         as='li'
-        placeholder='Text (optional)'
+        placeholder={'Option ' + colName(i)}
         value={option}
         onChange={(e, { value}) => handleChange(value, i)}
         action={
@@ -26,16 +25,13 @@ class MultipleChoiceInput extends Component {
 
     optionSegments.push(
       <Button
-        icon
-        basic
+        className='add-option-button'
         fluid
-        labelPosition='left'
         as='li'
         key={optionSegments.length}
         onClick={handleNew}
       >
-        <Icon name='add' />
-        Add Option
+        + Add Option
       </Button>
     );
 

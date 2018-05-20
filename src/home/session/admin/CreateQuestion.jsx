@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header, Input, Menu } from 'semantic-ui-react';
 import MultipleChoiceInput from './MultipleChoiceInput';
 import SubmitButton from '../SubmitButton';
+import './CreateQuestion.css';
 
 class CreateQuestion extends Component {
 
@@ -47,7 +48,7 @@ class CreateQuestion extends Component {
     const { text, type, options } = this.state;
     const { handleStart } = this.props;
 
-    const body = type === 'MULTIPLE_CHOICE' ? (
+    const body = (type === 'MULTIPLE_CHOICE') ? (
       <MultipleChoiceInput
         handleNew={this.handleOptionNew}
         handleChange={this.handleOptionChange}
@@ -60,33 +61,14 @@ class CreateQuestion extends Component {
 
     return (
       <div>
-        <Header>Create Question</Header>
         <Input
+          className='question-input'
           fluid
-          placeholder='Question'
+          placeholder='Ask a question...'
           value={text}
           onChange={this.handleQuestionInputChange}
         />
-        <Menu pointing secondary>
-          <Menu.Item
-            content='Multiple Choice'
-            name='MULTIPLE_CHOICE'
-            active={type === 'MULTIPLE_CHOICE'}
-            onClick={this.handleTypeItemClick}
-          />
-          <Menu.Item
-            content='Free Response'
-            name='FREE_RESPONSE'
-            active={type === 'FREE_RESPONSE'}
-            onClick={this.handleTypeItemClick}
-          />
-        </Menu>
         {body}
-        <SubmitButton
-          text='Start Question'
-          onSubmit={() => handleStart(this.state)}
-          visible
-        />
       </div>
     );
   }
