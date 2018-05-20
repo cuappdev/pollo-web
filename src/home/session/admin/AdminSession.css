@@ -12,10 +12,10 @@
 }
 
 /*******************************
-             Popup
+            Popups
 *******************************/
 
-.create-poll-section {
+.popup-section {
   width: 100vw;
   height: 100vh;
 }
@@ -27,7 +27,7 @@
   opacity: 0.6;
 }
 
-.create-poll-popup {
+.popup {
   position: absolute;
   margin: auto;
   top: 0;
@@ -36,12 +36,19 @@
   right: 0;
   width: var(--popup-height);
   height: var(--popup-height);
-  background-color: var(--pollo-off-white);
   border-radius: 15px;
 }
 
+.create-poll {
+  background-color: var(--pollo-off-white);
+}
+
+.drafts {
+  background-color: var(--pollo-medium-grey);
+}
+
 /*******************************
-          Popup Header
+    Create Poll Popup Header
 *******************************/
 
 .popup-header {
@@ -105,7 +112,7 @@
 }
 
 /*******************************
-         Popup Content
+   Create Poll Popup Content
 *******************************/
 
 .popup-content {
@@ -115,7 +122,7 @@
 }
 
 /*******************************
-          Popup Footer
+   Create Poll Popup Footer
 *******************************/
 
 .popup-footer {
@@ -152,4 +159,40 @@
   font-weight: var(--semibold-weight) !important;
   background-color: var(--pollo-green) !important;
   color: white !important;
+}
+
+/*******************************
+      Drafts Popup Header
+*******************************/
+
+.drafts-popup-header {
+  position: absolute;
+  width: 100%;
+  height: var(--header-height);
+}
+
+.drafts-back-button {
+  position: absolute;
+  top: var(--edge-padding);
+  left: var(--edge-padding);
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: 8px !important;
+  min-height: 14px !important;
+  background-image: url('../../../assets/BackArrow.png') !important;
+  background-size: cover !important;
+  background-color: transparent !important;
+}
+
+.drafts-title {
+  position: absolute;
+  top: var(--edge-padding);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100px;
+  font-size: var(--small-font);
+  font-weight: var(--semibold-weight);
+  color: white;
+  text-align: center;
 }

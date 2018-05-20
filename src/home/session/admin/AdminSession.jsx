@@ -12,7 +12,9 @@ class AdminSession extends Component {
     editingQuestion: null,
     ended: false,
     type: 'MULTIPLE_CHOICE', // TODO: replace with question.type
-    drafts: []
+    drafts: [],
+    showCreatePoll: true,
+    showDrafts: false
   }
 
   // componentDidMount () {
@@ -56,7 +58,13 @@ class AdminSession extends Component {
   handleQuestionTypeClick = (e, { val }) => this.setState({ type: val })
 
   showDrafts = () => {
-    console.log("show drafts");
+    this.setState({ showDrafts: true });
+    this.setState({ showCreatePoll: false });
+  }
+
+  hideDrafts = () => {
+    this.setState({ showDrafts: false });
+    this.setState({ showCreatePoll: true });
   }
 
   saveDraft = () => {
@@ -72,52 +80,59 @@ class AdminSession extends Component {
   }
 
   render () {
-    const { question, results, editingQuestion, ended, type, drafts } = this.state;
+    const { question, results, editingQuestion, ended, type, drafts, showCreatePoll, showDrafts } = this.state;
 
     const questionTypes = [
       { value: 'MULTIPLE_CHOICE', text: 'Multiple Choice' },
       { value: 'FREE_RESPONSE', text: 'Free Response' }
     ]
 
-    // const questionContainer = (type === 'MULTIPLE_CHOICE')
-    //   ? (
-    //     <MultipleChoice options={question.options} results={results} selectionDisabled />
-    //   ) : (
-    //     <FreeResponseResults results={results} />
-    //   );
-
     return (
-      <div className='create-poll-section'>
+      <div className='popup-section'>
         <div className='bg-overlay'></div>
-        <div className='create-poll-popup'>
-          <div className='popup-header'>
-            <Button
-              className='dismiss-button'
-              onClick={this.dismissCreatePoll}
-            />
-            <Dropdown
-              className='question-dropdown'
-              onChange={this.handleQuestionTypeClick}
-              options={questionTypes}
-              selection
-              value={type}
-            />
-            <Button
-              className='drafts-button'
-              onClick={this.showDrafts}
-            >{'Drafts (' + drafts.length + ')'}</Button>
+        { showCreatePoll &&
+          <div className='create-poll popup'>
+            <div className='popup-header'>
+              <Button
+                className='dismiss-button'
+                onClick={this.dismissCreatePoll}
+              />
+              <Dropdown
+                className='question-dropdown'
+                onChange={this.handleQuestionTypeClick}
+                options={questionTypes}
+                selection
+                value={type}
+              />
+              <Button
+                className='drafts-button'
+                onClick={this.showDrafts}
+              >{'Drafts (' + drafts.length + ')'}</Button>
+            </div>
+            <div className='popup-content'>
+              <CreateQuestion
+                initialQuestion={editingQuestion}
+                handleStart={this.handleStartQuestion}
+              />
+            </div>
+            <div className='popup-footer'>
+              <Button className='save-draft popup-button' onClick={this.saveDraft}>Save as draft</Button>
+              <Button className='start-question popup-button' onClick={this.startQuestion}>Start question</Button>
+            </div>
           </div>
-          <div className='popup-content'>
-            <CreateQuestion
-              initialQuestion={editingQuestion}
-              handleStart={this.handleStartQuestion}
-            />
+        }
+        { showDrafts &&
+          <div className='drafts popup'>
+            <div className='drafts-popup-header'>
+              <Button
+                className='drafts-back-button'
+                onClick={this.hideDrafts}
+              />
+              <div className='drafts-title'>Drafts</div>
+            </div>
+            <div className='drafts-popup-content'></div>
           </div>
-          <div className='popup-footer'>
-            <Button className='save-draft popup-button' onClick={this.saveDraft}>Save as draft</Button>
-            <Button className='start-question popup-button' onClick={this.startQuestion}>Start question</Button>
-          </div>
-        </div>
+        }
       </div>
     )
   }
