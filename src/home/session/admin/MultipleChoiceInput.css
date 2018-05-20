@@ -2,6 +2,33 @@
   padding: 0;
 }
 
+.multiple-choice-input-list li {
+  height: 47px;
+  color: var(--pollo-medium-grey) !important;
+  font-size: var(--small-font) !important;
+  font-weight: var(--regular-weight) !important;
+  caret-color: var(--pollo-green);
+  border-radius: 5px !important;
+}
+
 .multiple-choice-input {
-  margin: 0 0 1em 0;
+  margin-bottom: 6px;
+}
+
+.multiple-choice-input input {
+  padding-left: 18px !important;
+  border: none !important;
+  background-color: var(--pollo-light-grey) !important;
+}
+
+.add-option-button {
+  padding-top: 14px !important;
+  padding-left: 18px !important;
+  border: solid 0.5px var(--pollo-border-grey) !important;
+  text-align: left !important;
+  background-color: transparent !important;
+}
+
+.multiple-choice-input button.ui.icon.button {
+  background-color: var(--pollo-light-grey) !important;
 }

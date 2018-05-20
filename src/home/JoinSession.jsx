@@ -36,6 +36,7 @@ class JoinSession extends Component {
     return (
       <div className='join-session-container'>
         <Input
+          className='join-session-input'
           placeholder='Enter a code'
           size='small'
           disabled={loading}
