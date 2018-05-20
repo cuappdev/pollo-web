@@ -5,20 +5,22 @@ import AdminSession from './admin/AdminSession';
 import io from 'socket.io-client';
 import { hostURL } from '../../utils/constants';
 import './Session.css';
-import empty_monkey_icon from '../../assets/empty_monkey_icon.png'
+import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png'
 
 class Session extends Component {
 
   state = {
     activeTab: 'Q & A',
     sessionInput: '',
-    sessionName: ''
+    sessionName: 'Test Class',
+    showCreatePoll: false
   }
 
   handleNavbarTabClick = (e, { name }) => this.setState({ activeTab: name })
 
   createPoll = () => {
     console.log("create a poll");
+    this.setState({ showCreatePoll: true });
   }
 
   sessionInputChanged = (e, { value }) => {
@@ -31,8 +33,12 @@ class Session extends Component {
     }
   }
 
+  dismissCreatePoll = (val) => {
+    this.setState({ showCreatePoll: val });
+  }
+
   render () {
-    const { activeTab, sessionInput, sessionName } = this.state;
+    const { activeTab, sessionInput, sessionName, showCreatePoll } = this.state;
 
     // FIX: Dummy values for integrating UI
     var userType = 'admin';
@@ -41,7 +47,7 @@ class Session extends Component {
 
     const emptyStateSection = (
       <div className={'empty-state' + (sessionName ?  '' : ' blur')}>
-        <img src={empty_monkey_icon} alt="No Polls"></img>
+        <img src={EmptyMonkeyIcon} alt="No Polls"></img>
         <div className='empty-state-title'>Nothing to see here.</div>
         <div className='empty-state-subtitle'>You haven’t made any polls yet! Try it out above.</div>
       </div>
@@ -57,6 +63,10 @@ class Session extends Component {
           onKeyPress={this.onKeyPress}
         />
       </div>
+    );
+
+    const createPollPopup = (
+      <AdminSession socket={null} dismissCreatePoll={this.dismissCreatePoll} />
     );
 
     return (
@@ -86,6 +96,7 @@ class Session extends Component {
           <div className='session-name'>{sessionName}</div>
           <div className='session-code'>{'Code: ' + code}</div>
         </div>
+        {showCreatePoll && createPollPopup}
       </div>
     );
   }
