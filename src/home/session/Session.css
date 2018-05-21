@@ -104,6 +104,14 @@
   text-align: center;
 }
 
+.screen-darken {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--pollo-deep-black);
+  opacity: 0.6;
+}
+
 /*******************************
           Empty State
 *******************************/

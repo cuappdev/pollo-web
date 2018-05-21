@@ -82,7 +82,11 @@ class Session extends Component {
     );
 
     const createPollPopup = (
-      <AdminSession socket={null} dismissCreatePoll={this.dismissCreatePoll} />
+      <div>
+        <div className='screen-darken'></div>
+        <AdminSession socket={null} dismissCreatePoll={this.dismissCreatePoll} />
+      </div>
+
     );
 
     const sessionHeader = (
