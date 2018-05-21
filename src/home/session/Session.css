@@ -2,8 +2,9 @@
 
 :root {
   /* Padding */
-  --hpadding  : 100px;
-  --vpadding  : 40px;
+  --hpadding     : 100px;
+  --vpadding     : 40px;
+  --edge-padding : 18px;
 }
 
 /*******************************
@@ -184,4 +185,88 @@
 input::placeholder {
   color: var(--pollo-medium-grey) !important;
   opacity: 1;
+}
+
+/*******************************
+         Question Card
+*******************************/
+
+.question-card {
+  position: absolute;
+  top: calc(5 * var(--vpadding));
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 375px;
+  background-color: var(--pollo-off-white);
+  border-radius: 15px 15px 0 0;
+}
+
+/* Question Card Header */
+
+.question-card-header {
+  display: flex;
+  padding: var(--edge-padding);
+  padding-bottom: calc(var(--edge-padding)/2);
+  border-radius: 15px 15px 0 0;
+}
+
+.question-name {
+  font-size: var(--bigger-font);
+  font-weight: var(--heavy-weight);
+  color: var(--pollo-deep-black);
+  line-height: 1.3;
+}
+
+.edit-question-button {
+  padding: 0 !important;
+  margin: 15px 0 0 var(--edge-padding) !important;
+  min-width: 16.5px !important;
+  min-height: 3.5px !important;
+  height: 3.5px;
+  background-image: url('../../assets/EditQuestionButton.png') !important;
+  background-size: cover !important;
+  background-color: transparent !important;
+}
+
+/* Question Instructor Info */
+
+.question-instructor-info {
+  padding: 0 var(--edge-padding);
+  width: 100%;
+  display: flex;
+  font-size: var(--mini-font);
+  font-weight: var(--semibold-weight);
+  color: var(--pollo-medium-grey);
+}
+
+.question-instructor-info img {
+  margin-right: 7px;
+  width: 20px;
+  height: 18px;
+}
+
+.question-votes {
+  position: absolute;
+  right: var(--edge-padding);
+}
+
+/* Question Card Footer */
+
+.end-question-button {
+  position: absolute;
+  bottom: calc(2 * var(--vpadding));
+  left: 0;
+  right: 0;
+  margin: auto !important;
+  width: 222.5px;
+  height: 47.5px;
+  font-size: var(--small-font) !important;
+  font-weight: var(--semibold-weight) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  background-color: rgba(32, 32, 32, 0.6) !important;
+  border: solid 1px rgba(255, 255, 255, 0.9) !important;
+  border-radius: 100px !important;
+  box-shadow: 0px 1px 10px rgba(0, 0, 0, .25) !important;
 }

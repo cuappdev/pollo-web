@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import { hostURL } from '../../utils/constants';
 import './Session.css';
 import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png'
+import HiddenIcon from '../../assets/HiddenIcon.png'
 
 class Session extends Component {
 
@@ -35,6 +36,16 @@ class Session extends Component {
 
   dismissCreatePoll = (val) => {
     this.setState({ showCreatePoll: val });
+  }
+
+  editQuestion = () => {
+    console.log("edit question");
+    // TODO: Show edit question options
+  }
+
+  endQuestion = () => {
+    console.log("end question");
+    // TODO: Call backend endpoint
   }
 
   leaveSession = () => {
@@ -74,11 +85,11 @@ class Session extends Component {
       <AdminSession socket={null} dismissCreatePoll={this.dismissCreatePoll} />
     );
 
-    return (
-      <div className='session'>
+    const sessionHeader = (
+      <div className='session-header'>
         <Button
-          content='Home'
           className='go-home-button'
+          content='Home'
           onClick={this.leaveSession}
           icon='chevron left'
         />
@@ -99,16 +110,47 @@ class Session extends Component {
           </Menu>
         </div>
         <Button className='create-poll-button' primary onClick={this.createPoll}>Create a poll</Button>
-        <div className='session-content'>
-          {!polls && emptyStateSection}
-          {!sessionName && pollNameSection}
-        </div>
+      </div>
+    );
+
+    const sessionFooter = (
+      <div className='session-footer'>
         <div className='footer-bg'></div>
         <div className='session-info'>
           <div className='session-name'>{sessionName}</div>
           <div className='session-code'>{'Code: ' + code}</div>
         </div>
+        <Button
+          className='end-question-button'
+          content='End Question'
+          onClick={this.endQuestion}
+        />
         <div className='time-counter'>0:00</div>
+      </div>
+    );
+
+    return (
+      <div className='session'>
+        {sessionHeader}
+        <div className='session-content'>
+          {!polls && emptyStateSection}
+          {!sessionName && pollNameSection}
+          <div className='question-card'>
+            <div className='question-card-header'>
+              <div className='question-name'>What is the name of Saturn's largest moon?</div>
+              <Button
+                className='edit-question-button'
+                onClick={this.editQuestion}
+              />
+            </div>
+            <div className='question-instructor-info'>
+              <img src={HiddenIcon}></img>
+              <div className='hidden-text'>Only you can see results</div>
+              <div className='question-votes'>32 votes</div>
+            </div>
+          </div>
+        </div>
+        {sessionFooter}
         {showCreatePoll && createPollPopup}
       </div>
     );

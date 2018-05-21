@@ -102,9 +102,10 @@ class AdminSession extends Component {
     const draftElements = drafts.map((draft, i) =>
       <li className='draft-cell' key={i}>
         <Button
+          content={draft}
           className='select-draft-button'
           onClick={() => this.selectDraft(i)}
-        >{draft}</Button>
+        />
         <Button
           className='draft-button'
           onClick={() => this.showDraftOptions(i)}
