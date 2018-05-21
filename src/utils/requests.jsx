@@ -24,6 +24,13 @@ const post = async (url, body) => {
   throw Error(data.errors[0]);
 };
 
+const del = async (url) => {
+  const res = await api.delete(url);
+  const { success, data } = res.data;
+  if (success) return data;
+  throw Error(data.errors[0]);
+};
+
 /*******************************
             Session
 *******************************/
@@ -53,8 +60,14 @@ export const createNewSession = async (code) => {
   return data;
 };
 
+// Role: admin or member
 export const getAllSessions = async (role) => {
   const data = await get(`/sessions/all/${role}`);
+  return data;
+};
+
+export const deleteSession = async (sessionId) => {
+  const data = await del(`/sessions/${sessionId}`);
   return data;
 };
 

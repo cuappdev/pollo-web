@@ -48,7 +48,7 @@ class Session extends Component {
   }
 
   leaveSession = () => {
-    console.log("leave session");
+    this.props.leaveSession();
     // TODO: End socket connection
   }
 

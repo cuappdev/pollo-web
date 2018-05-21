@@ -8,6 +8,7 @@ import {
   generateNewCode,
   createNewSession,
   getAllSessions,
+  deleteSession,
   joinPoll,
   createPoll,
   startPoll
@@ -49,7 +50,9 @@ class Home extends Component {
 
   leaveSession = () => {
     this.setState({
-      session: null
+      session: null,
+      createdSessions: null,
+      joinedSessions: null
     });
   }
 
@@ -81,9 +84,26 @@ class Home extends Component {
       });
   }
 
-  showSessionOptions = (i) => {
-    console.log("show session options for Session " + i);
-    // TODO: Show session options
+  // TODO: Show more session options than just delete
+  deleteSession = (i) => {
+    console.log("delete session");
+    const { activeTab, createdSessions, joinedSessions } = this.state;
+
+    // Delete session
+    const loadedSessions = (activeTab == 'CREATED') ? createdSessions : joinedSessions;
+    deleteSession(loadedSessions[i].id)
+    .then((data) => {
+      loadedSessions.splice(i, 1);
+
+      if (activeTab == 'CREATED') {
+        this.setState({ createdSessions: loadedSessions });
+      } else {
+        this.setState({ joinedSessions: loadedSessions });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   logout = () => {
@@ -120,7 +140,7 @@ class Home extends Component {
     if (!createdSessions) {
       getAllSessions('admin')
       .then((sessions) => {
-        this.setState({ createdSessions: sessions });
+        this.setState({ createdSessions: sessions.map(session => session.node) });
       })
       .catch((err) => {
         console.log(err);
@@ -131,7 +151,7 @@ class Home extends Component {
     if (!joinedSessions) {
       getAllSessions('member')
       .then((sessions) => {
-        this.setState({ joinedSessions: sessions });
+        this.setState({ joinedSessions: sessions.map(session => session.node) });
       })
       .catch((err) => {
         console.log(err);
@@ -144,6 +164,7 @@ class Home extends Component {
         <Session
           session={session}
           onDisconnect={this.leaveSession}
+          leaveSession={this.leaveSession}
         />
       );
     }
@@ -155,12 +176,12 @@ class Home extends Component {
     const sessionCells = (loadedSessions && loadedSessions.map((loadedSession, i) =>
       <li className='session-cell' key={i}>
         <div className='session-cell-info'>
-          <div className='session-title'>{loadedSession.node.name}</div>
-          <div className='session-activity'>{`Session code: ${loadedSession.node.code}`}</div>
+          <div className='session-title'>{loadedSession.name}</div>
+          <div className='session-activity'>{`Session code: ${loadedSession.code}`}</div>
         </div>
         <Button
           className='session-options-button'
-          onClick={() => this.showSessionOptions(i)}
+          onClick={() => this.deleteSession(i)}
         />
       </li>
     ));
