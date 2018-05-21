@@ -39,7 +39,7 @@ const del = async (url) => {
 };
 
 /*******************************
-            Session
+            User
 *******************************/
 
 export const generateUserSession = async (user) => {
@@ -56,6 +56,15 @@ export const generateUserSession = async (user) => {
 
   return data;
 };
+
+export const getCurrentUser = async () => {
+  const data = await get('/users/');
+  return data;
+};
+
+/*******************************
+            Session
+*******************************/
 
 export const generateNewCode = async () => {
   const data = await get('/generate/code/');
