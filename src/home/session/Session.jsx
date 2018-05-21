@@ -3,7 +3,6 @@ import { Icon, Button, Menu, Input } from 'semantic-ui-react';
 import UserSession from './user/UserSession';
 import AdminSession from './admin/AdminSession';
 import io from 'socket.io-client';
-import { hostURL } from '../../utils/constants';
 import './Session.css';
 import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png'
 import HiddenIcon from '../../assets/HiddenIcon.png'

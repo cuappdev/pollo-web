@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Header, Menu } from 'semantic-ui-react';
 import Home from './home/Home';
+import Session from './home/session/Session';
 import './App.css';
 import GoogleLogin from 'react-google-login';
 import { googleClientId } from './utils/constants';

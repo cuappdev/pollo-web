@@ -4,7 +4,10 @@ import JoinSession from './JoinSession';
 import CreateSession from './CreateSession';
 import Session from './session/Session';
 import {
+  generateUserSession,
   generateNewCode,
+  createNewSession,
+  getAllSessions,
   joinPoll,
   createPoll,
   startPoll
@@ -18,7 +21,10 @@ class Home extends Component {
     joinLoading: false,
     joinError: null,
     createLoading: false,
-    createError: null
+    createError: null,
+    userSession: null,
+    createdSessions: null,
+    joinedSessions: null
   }
 
   handleNavbarTabClick = (e, { name }) => this.setState({ activeTab: name })
@@ -47,21 +53,22 @@ class Home extends Component {
     });
   }
 
-  createSession = () => {
+  createSession = (user) => {
     this.setState({
       createLoading: true
     });
 
-    generateNewCode()
+    generateUserSession(user)
+      .then((node) => {
+        this.setState({ userSession: node });
+        return generateNewCode();
+      })
       .then((code) => {
-        return createPoll(null, code);
+        return createNewSession(code);
       })
-      .then((poll) => {
-        return startPoll(poll);
-      })
-      .then((poll) => {
+      .then((session) => {
         this.setState({
-          session: poll,
+          session: session,
           createLoading: false,
           createError: null
         });
@@ -80,6 +87,7 @@ class Home extends Component {
   }
 
   logout = () => {
+    this.setState({ userSession: null });
     this.props.logout(null);
   }
 
@@ -91,24 +99,71 @@ class Home extends Component {
       joinLoading,
       joinError,
       createLoading,
-      createError
+      createError,
+      userSession,
+      createdSessions,
+      joinedSessions
     } = this.state;
+
+    // Create or update user session when user logs in
+    if (!userSession) {
+      generateUserSession(user)
+      .then((node) => {
+        this.setState({ userSession: node });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+
+    // Get all sessions user created
+    if (!createdSessions) {
+      getAllSessions('admin')
+      .then((sessions) => {
+        this.setState({ createdSessions: sessions });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+
+    // Get all sessions user joined
+    if (!joinedSessions) {
+      getAllSessions('member')
+      .then((sessions) => {
+        this.setState({ joinedSessions: sessions });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+
+    // Go to session screen if new session created
+    if (session) {
+      return (
+        <Session
+          session={session}
+          onDisconnect={this.leaveSession}
+        />
+      );
+    }
 
     // FIX: Dummy data for integrating UI
     var previousSessions = ['Session 1', 'Session 2'];
+    var loadedSessions = (activeTab == 'CREATED') ? createdSessions : joinedSessions;
 
-    const sessionCells = previousSessions.map((sessionName, i) =>
+    const sessionCells = (loadedSessions && loadedSessions.map((loadedSession, i) =>
       <li className='session-cell' key={i}>
         <div className='session-cell-info'>
-          <div className='session-title'>{sessionName}</div>
-          <div className='session-activity'>Latest activity 2 hours ago</div>
+          <div className='session-title'>{loadedSession.node.name}</div>
+          <div className='session-activity'>{`Session code: ${loadedSession.node.code}`}</div>
         </div>
         <Button
           className='session-options-button'
           onClick={() => this.showSessionOptions(i)}
         />
       </li>
-    );
+    ));
 
     const contentSection = (activeTab == 'CREATED') ? (
       <ul className='created-section'>
@@ -149,7 +204,7 @@ class Home extends Component {
                 <CreateSession
                   error={createError}
                   loading={createLoading}
-                  onCreate={this.createSession}
+                  onCreate={() => this.createSession(user)}
                 />
                 <div className='buttons-divider'></div>
                 <JoinSession
