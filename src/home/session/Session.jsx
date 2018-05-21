@@ -103,10 +103,12 @@ class Session extends Component {
           {!polls && emptyStateSection}
           {!sessionName && pollNameSection}
         </div>
+        <div className='footer-bg'></div>
         <div className='session-info'>
           <div className='session-name'>{sessionName}</div>
           <div className='session-code'>{'Code: ' + code}</div>
         </div>
+        <div className='time-counter'>0:00</div>
         {showCreatePoll && createPollPopup}
       </div>
     );
