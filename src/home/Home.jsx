@@ -63,7 +63,7 @@ class Home extends Component {
       })
       .then((session) => {
         this.setState({
-          session: session.node,
+          session: session,
           createLoading: false,
           createError: null
         });
@@ -146,7 +146,7 @@ class Home extends Component {
     if (!createdSessions) {
       getAllSessions('admin')
       .then((sessions) => {
-        this.setState({ createdSessions: sessions.map(session => session.node) });
+        this.setState({ createdSessions: sessions });
       })
       .catch((err) => {
         console.log(err);
@@ -157,7 +157,7 @@ class Home extends Component {
     if (!joinedSessions) {
       getAllSessions('member')
       .then((sessions) => {
-        this.setState({ joinedSessions: sessions.map(session => session.node) });
+        this.setState({ joinedSessions: sessions });
       })
       .catch((err) => {
         console.log(err);

@@ -13,6 +13,7 @@ const api = axios.create({
 const get = async (url, params) => {
   const res = await api.get(url, params);
   const { success, data } = res.data;
+  console.log(res);
   if (success) return data;
   throw Error(data.errors[0]);
 };
@@ -63,6 +64,40 @@ export const getCurrentUser = async () => {
 };
 
 /*******************************
+            Roles
+*******************************/
+
+export const getMembers = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}/members/`);
+  return data;
+};
+
+export const getAdmins = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}/admins/`);
+  return data;
+};
+
+export const addMembers = async (sessionId) => {
+  const data = await post(`/sessions/${sessionId}/members/`);
+  return data;
+};
+
+export const removeMembers = async (sessionId) => {
+  const data = await put(`/sessions/${sessionId}/members/`);
+  return data;
+};
+
+export const addAdmins = async (sessionId) => {
+  const data = await post(`/sessions/${sessionId}/admins/`);
+  return data;
+};
+
+export const removeAdmins = async (sessionId) => {
+  const data = await put(`/sessions/${sessionId}/admins/`);
+  return data;
+};
+
+/*******************************
             Session
 *******************************/
 
@@ -73,18 +108,18 @@ export const generateNewCode = async () => {
 
 export const createNewSession = async (code) => {
   const data = await post('/sessions/', { name: null, code: code });
-  return data;
+  return data.node;
 };
 
-export const getSession = async (sessionId) => {
-  const data = await get(`/sessions/${sessionId}`);
-  return data;
+export const getSession = async (code) => {
+  const data = await get(`/sessions/${code}`);
+  return data.node;
 };
 
 // Role: admin or member
 export const getAllSessions = async (role) => {
   const data = await get(`/sessions/all/${role}`);
-  return data;
+  return data.map(session => session.node);
 };
 
 export const deleteSession = async (sessionId) => {
@@ -94,7 +129,7 @@ export const deleteSession = async (sessionId) => {
 
 export const updateSession = async (sessionId, name, code) => {
   const data = await put(`/sessions/${sessionId}`, { id: sessionId, name: name, code: code });
-  return data;
+  return data.node;
 };
 
 /*******************************
