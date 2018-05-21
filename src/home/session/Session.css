@@ -233,7 +233,7 @@ input::placeholder {
   min-width: 16.5px !important;
   min-height: 3.5px !important;
   height: 3.5px;
-  background-image: url('../../assets/EditQuestionButton.png') !important;
+  background-image: url('../../assets/GreyShowMoreButton.png') !important;
   background-size: cover !important;
   background-color: transparent !important;
 }

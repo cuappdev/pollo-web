@@ -13,9 +13,6 @@
 .app-content {
   margin: 50px auto;
   width: 60%;
-  background-color: red;
-  height: 500px;
-  width: 60%;
 }
 
 /*******************************
@@ -69,12 +66,52 @@
 }
 
 /*******************************
-            Content
+   Previous Created Sessions
 *******************************/
 
 .created-section {
-
+  padding: 0;
 }
+
+.session-cell {
+  position: relative;
+  width: 350px;
+  padding: 20px 0;
+  display: flex;
+  border-bottom: solid 0.5px var(--pollo-border-grey);
+}
+
+.session-title {
+  margin-bottom: 4px;
+  font-size: var(--medium-font);
+  font-weight: var(--semibold-weight);
+  color: var(--pollo-deep-black);
+}
+
+.session-activity {
+  font-size: var(--tiny-font);
+  font-weight: var(--medium-weight);
+  color: var(--pollo-medium-grey);
+}
+
+.session-options-button {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0 !important;
+  margin: auto 0 !important;
+  min-width: 17px !important;
+  min-height: 3.5px !important;
+  height: 3.5px;
+  background-image: url('../assets/GreyShowMoreButton.png') !important;
+  background-size: cover !important;
+  background-color: transparent !important;
+}
+
+/*******************************
+    Previous Joined Sessions
+*******************************/
 
 .joined-section {
 
