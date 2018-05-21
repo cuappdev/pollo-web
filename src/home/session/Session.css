@@ -17,6 +17,7 @@
 
 .go-home-button {
   position: absolute;
+  padding: 0 !important;
   left: var(--hpadding);
   top: var(--vpadding);
   font-size: var(--small-font) !important;
@@ -61,6 +62,16 @@
   border-bottom: solid 2px var(--pollo-green) !important;
 }
 
+.footer-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 115px;
+  background: linear-gradient(transparent, black);
+  opacity: 0.48
+}
+
 .session-info {
   position: absolute;
   left: var(--hpadding);
@@ -78,6 +89,18 @@
   color: var(--pollo-medium-grey);
   font-size: var(--small-font);
   font-weight: var(--semibold-weight);
+}
+
+.time-counter {
+  position: absolute;
+  bottom: var(--vpadding);
+  left: 0;
+  right: 0;
+  margin: auto;
+  font-size: var(--semi-huge-font);
+  font-weight: var(--semibold-weight);
+  color: white;
+  text-align: center;
 }
 
 /*******************************
