@@ -35,7 +35,7 @@ class Session extends Component {
 
       updateSession(id, newSessionName, code)
       .then((newSession) => {
-        this.setState({ session: newSession.node });
+        this.setState({ session: newSession });
       })
       .catch((err) => {
         console.log(err);

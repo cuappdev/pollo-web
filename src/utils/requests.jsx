@@ -73,7 +73,7 @@ export const generateNewCode = async () => {
 
 export const createNewSession = async (code) => {
   const data = await post('/sessions/', { name: null, code: code });
-  return data;
+  return data.node;
 };
 
 export const getSession = async (sessionId) => {
@@ -84,7 +84,7 @@ export const getSession = async (sessionId) => {
 // Role: admin or member
 export const getAllSessions = async (role) => {
   const data = await get(`/sessions/all/${role}`);
-  return data;
+  return data.map(session => session.node);
 };
 
 export const deleteSession = async (sessionId) => {
@@ -94,7 +94,7 @@ export const deleteSession = async (sessionId) => {
 
 export const updateSession = async (sessionId, name, code) => {
   const data = await put(`/sessions/${sessionId}`, { id: sessionId, name: name, code: code });
-  return data;
+  return data.node;
 };
 
 /*******************************
