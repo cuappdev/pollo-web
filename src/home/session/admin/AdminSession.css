@@ -1,9 +1,6 @@
 @import '../../../index.css';
 
 :root {
-  /* Padding */
-  --edge-padding   : 18px;
-
   /* Popup */
   --popup-height   : 465px;
   --header-height  : 50px;

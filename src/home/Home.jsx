@@ -79,7 +79,12 @@ class Home extends Component {
     // TODO: Show session options
   }
 
+  logout = () => {
+    this.props.logout(null);
+  }
+
   render () {
+    const { user } = this.props;
     const {
       activeTab,
       session,
@@ -105,7 +110,6 @@ class Home extends Component {
       </li>
     );
 
-
     const contentSection = (activeTab == 'CREATED') ? (
       <ul className='created-section'>
         {sessionCells}
@@ -117,6 +121,11 @@ class Home extends Component {
     return (
       <div className='app'>
         <div className='app-header'>
+          <Button
+            className='logout-button'
+            content='Logout'
+            onClick={this.logout}
+          />
           <div className='header-section'>
             <div className='header-content'>
               <Header as='h1' className='header-title'>Polls</Header>

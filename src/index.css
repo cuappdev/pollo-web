@@ -29,4 +29,9 @@
   --bold-weight       : 700;
   --heavy-weight      : 800;
   --black-weight      : 900;
+
+  /* Padding */
+  --edge-padding      : 18px;
+  --hpadding          : 100px;
+  --vpadding          : 40px;
 }

@@ -1,12 +1,5 @@
 @import '../../index.css';
 
-:root {
-  /* Padding */
-  --hpadding     : 100px;
-  --vpadding     : 40px;
-  --edge-padding : 18px;
-}
-
 /*******************************
    Static Session Components
 *******************************/
