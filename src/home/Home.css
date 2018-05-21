@@ -15,6 +15,18 @@
   width: 60%;
 }
 
+.logout-button {
+  margin: 0 !important;
+  position: absolute;
+  top: var(--edge-padding);
+  right: var(--edge-padding);
+  width: 100px;
+  height: 47.5px;
+  font-size: var(--small-font);
+  font-weight: var(--semibold-weight);
+  border-radius: 100px !important;
+}
+
 /*******************************
             Header
 *******************************/

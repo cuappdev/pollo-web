@@ -86,7 +86,6 @@ class Session extends Component {
         <div className='screen-darken'></div>
         <AdminSession socket={null} dismissCreatePoll={this.dismissCreatePoll} />
       </div>
-
     );
 
     const sessionHeader = (
