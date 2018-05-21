@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Input } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';
+import './JoinSession.css';
 
 class JoinSession extends Component {
   state = {
@@ -33,12 +34,11 @@ class JoinSession extends Component {
     const { sessionInput } = this.state;
 
     return (
-      <div>
-        <Header size='tiny' color='grey'>Join a session</Header>
-        <ErrorMessage error={error} />
+      <div className='join-session-container'>
         <Input
-          placeholder='Enter session code'
-          size='large'
+          className='join-session-input'
+          placeholder='Enter a code'
+          size='small'
           disabled={loading}
           error={error !== null}
           action={{
@@ -52,6 +52,7 @@ class JoinSession extends Component {
           onChange={this.sessionInputChanged}
           onKeyPress={this.onKeyPress}
         />
+        <ErrorMessage error={error} />
       </div>
     );
   }

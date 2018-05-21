@@ -1,0 +1,12 @@
+/*******************************
+        Header Overrides
+*******************************/
+
+.ui.header {
+  margin: 0;
+}
+
+h1.ui.header {
+  font-size: @massiveFont;
+  font-weight: @heavyWeight;
+}

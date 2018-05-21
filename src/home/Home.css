@@ -1,0 +1,69 @@
+@import '../index.css';
+
+.app {
+  min-height: 100vh;
+}
+
+.app-header {
+  position: relative;
+  background-color: var(--pollo-off-white);
+  height: 263.5px;
+}
+
+.app-content {
+  margin: 50px auto;
+  width: 60%;
+  background-color: red;
+  height: 500px;
+  width: 60%;
+}
+
+/*******************************
+            Header
+*******************************/
+
+.header-section {
+  position: absolute;
+  margin: 0 auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 60%;
+}
+
+.header-content {
+  height: 62.5px;
+  position: relative;
+}
+
+/* Navbar */
+
+.navbar {
+  position: absolute;
+  bottom: 0;
+  float: left;
+  height: 35px;
+  max-width: 50%;
+}
+
+/* Session Buttons */
+
+.session-buttons {
+  float: right;
+}
+
+.buttons-divider {
+  height: 10px;
+}
+
+/*******************************
+            Content
+*******************************/
+
+.created-section {
+
+}
+
+.joined-section {
+
+}
