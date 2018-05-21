@@ -48,14 +48,6 @@ class Home extends Component {
       });
   }
 
-  leaveSession = () => {
-    this.setState({
-      session: null,
-      createdSessions: null,
-      joinedSessions: null
-    });
-  }
-
   createSession = (user) => {
     this.setState({
       createLoading: true
@@ -84,12 +76,19 @@ class Home extends Component {
       });
   }
 
+  goToSession = (i) => {
+    const { activeTab, createdSessions, joinedSessions } = this.state;
+    const loadedSessions = (activeTab == 'CREATED') ? createdSessions : joinedSessions;
+
+    this.setState({ session: loadedSessions[i] });
+  }
+
   // TODO: Show more session options than just delete
   deleteSession = (i) => {
     const { activeTab, createdSessions, joinedSessions } = this.state;
+    const loadedSessions = (activeTab == 'CREATED') ? createdSessions : joinedSessions;
 
     // Delete session
-    const loadedSessions = (activeTab == 'CREATED') ? createdSessions : joinedSessions;
     deleteSession(loadedSessions[i].id)
     .then((data) => {
       loadedSessions.splice(i, 1);
@@ -102,6 +101,14 @@ class Home extends Component {
     })
     .catch((err) => {
       console.log(err);
+    });
+  }
+
+  leaveSession = () => {
+    this.setState({
+      session: null,
+      createdSessions: null,
+      joinedSessions: null
     });
   }
 
@@ -157,7 +164,7 @@ class Home extends Component {
       });
     }
 
-    // Go to session screen if new session created
+    // Go to session screen if new session created or old session loaded
     if (session) {
       return (
         <Session
@@ -174,10 +181,10 @@ class Home extends Component {
 
     const sessionCells = (loadedSessions && loadedSessions.map((loadedSession, i) =>
       <li className='session-cell' key={i}>
-        <div className='session-cell-info'>
+        <Button className='session-cell-info' onClick={() => this.goToSession(i)}>
           <div className='session-title'>{loadedSession.name ? loadedSession.name : 'Untitled'}</div>
           <div className='session-activity'>{`Session code: ${loadedSession.code}`}</div>
-        </div>
+        </Button>
         <Button
           className='session-options-button'
           onClick={() => this.deleteSession(i)}

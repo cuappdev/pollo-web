@@ -67,6 +67,11 @@ export const createNewSession = async (code) => {
   return data;
 };
 
+export const getSession = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}`);
+  return data;
+};
+
 // Role: admin or member
 export const getAllSessions = async (role) => {
   const data = await get(`/sessions/all/${role}`);
