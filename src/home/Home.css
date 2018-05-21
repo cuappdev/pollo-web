@@ -89,13 +89,20 @@
 .session-cell {
   position: relative;
   width: 350px;
-  padding: 20px 0;
+  padding: 0;
   display: flex;
   border-bottom: solid 0.5px var(--pollo-border-grey);
 }
 
+.session-cell-info {
+  width: 333px !important;
+  padding: 20px 0 !important;
+  background-color: transparent !important;
+  text-align: left !important;
+}
+
 .session-title {
-  margin-bottom: 4px;
+  margin-bottom: 10px;
   font-size: var(--medium-font);
   font-weight: var(--semibold-weight);
   color: var(--pollo-deep-black);

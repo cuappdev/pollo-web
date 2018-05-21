@@ -2,8 +2,12 @@ import axios from 'axios';
 import { hostURL } from './constants';
 import { getDeviceId } from './functions';
 
+/*******************************
+            General
+*******************************/
+
 const api = axios.create({
-  baseURL: hostURL + '/api/v1'
+  baseURL: hostURL + '/api/v2'
 });
 
 const get = async (url, params) => {
@@ -20,10 +24,73 @@ const post = async (url, body) => {
   throw Error(data.errors[0]);
 };
 
+const put = async (url, body) => {
+  const res = await api.put(url, body);
+  const { success, data } = res.data;
+  if (success) return data;
+  throw Error(data.errors[0]);
+};
+
+const del = async (url) => {
+  const res = await api.delete(url);
+  const { success, data } = res.data;
+  if (success) return data;
+  throw Error(data.errors[0]);
+};
+
+/*******************************
+            Session
+*******************************/
+
+export const generateUserSession = async (user) => {
+  const body = {
+    userId: user.googleId,
+    givenName: user.w3.ofa,
+    familyName: user.w3.wea,
+    email: user.w3.U3
+  };
+  const data = await post('/auth/mobile/', body);
+
+  // Once user is logged in, set authorization header for all api calls
+  api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
+
+  return data;
+};
+
 export const generateNewCode = async () => {
   const data = await get('/generate/code/');
   return data.code;
 };
+
+export const createNewSession = async (code) => {
+  const data = await post('/sessions/', { name: null, code: code });
+  return data;
+};
+
+export const getSession = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}`);
+  return data;
+};
+
+// Role: admin or member
+export const getAllSessions = async (role) => {
+  const data = await get(`/sessions/all/${role}`);
+  return data;
+};
+
+export const deleteSession = async (sessionId) => {
+  const data = await del(`/sessions/${sessionId}`);
+  return data;
+};
+
+export const updateSession = async (sessionId, name, code) => {
+  const data = await put(`/sessions/${sessionId}`, { id: sessionId, name: name, code: code });
+  return data;
+};
+
+/*******************************
+             Poll
+*******************************/
 
 export const joinPoll = async (codes) => {
   const edges = await post('/polls/live/', { codes: codes });
