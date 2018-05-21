@@ -37,6 +37,11 @@ class Session extends Component {
     this.setState({ showCreatePoll: val });
   }
 
+  leaveSession = () => {
+    console.log("leave session");
+    // TODO: End socket connection
+  }
+
   render () {
     const { activeTab, sessionInput, sessionName, showCreatePoll } = this.state;
 
@@ -71,6 +76,12 @@ class Session extends Component {
 
     return (
       <div className='session'>
+        <Button
+          content='Home'
+          className='go-home-button'
+          onClick={this.leaveSession}
+          icon='chevron left'
+        />
         <div className='session-navbar'>
           <Menu pointing secondary className='navbar-menu'>
             <Menu.Item
