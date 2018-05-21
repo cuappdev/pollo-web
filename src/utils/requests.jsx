@@ -24,6 +24,13 @@ const post = async (url, body) => {
   throw Error(data.errors[0]);
 };
 
+const put = async (url, body) => {
+  const res = await api.put(url, body);
+  const { success, data } = res.data;
+  if (success) return data;
+  throw Error(data.errors[0]);
+};
+
 const del = async (url) => {
   const res = await api.delete(url);
   const { success, data } = res.data;
@@ -45,7 +52,7 @@ export const generateUserSession = async (user) => {
   const data = await post('/auth/mobile/', body);
 
   // Once user is logged in, set authorization header for all api calls
-  api.defaults.headers.common['Authorization'] = data.accessToken;
+  api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
 
   return data;
 };
@@ -56,7 +63,7 @@ export const generateNewCode = async () => {
 };
 
 export const createNewSession = async (code) => {
-  const data = await post('/sessions/', { name: 'Untitled', code: code });
+  const data = await post('/sessions/', { name: null, code: code });
   return data;
 };
 
@@ -68,6 +75,11 @@ export const getAllSessions = async (role) => {
 
 export const deleteSession = async (sessionId) => {
   const data = await del(`/sessions/${sessionId}`);
+  return data;
+};
+
+export const updateSession = async (sessionId, name, code) => {
+  const data = await put(`/sessions/${sessionId}`, { id: sessionId, name: name, code: code });
   return data;
 };
 

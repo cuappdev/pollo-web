@@ -6,13 +6,13 @@ import io from 'socket.io-client';
 import './Session.css';
 import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png'
 import HiddenIcon from '../../assets/HiddenIcon.png'
+import { updateSession } from '../../utils/requests';
 
 class Session extends Component {
-
   state = {
+    session: this.props.session,
     activeTab: 'Q & A',
     sessionInput: '',
-    sessionName: 'Test Class',
     showCreatePoll: false
   }
 
@@ -28,8 +28,18 @@ class Session extends Component {
   }
 
   onKeyPress = ({ key }) => {
+    // TODO: Add data validation for empty names
     if (key === 'Enter') {
-      this.setState({ sessionName: this.state.sessionInput });
+      const { id, code } = this.state.session;
+      const newSessionName = this.state.sessionInput;
+
+      updateSession(id, newSessionName, code)
+      .then((newSession) => {
+        this.setState({ session: newSession.node });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     }
   }
 
@@ -53,15 +63,15 @@ class Session extends Component {
   }
 
   render () {
-    const { activeTab, sessionInput, sessionName, showCreatePoll } = this.state;
+    const { session, activeTab, sessionInput, showCreatePoll } = this.state;
+    const { id, name, code } = session;
 
     // FIX: Dummy values for integrating UI
     var userType = 'admin';
-    var code = 'ABCDEF';
     var polls = null;
 
     const emptyStateSection = (
-      <div className={'empty-state' + (sessionName ?  '' : ' blur')}>
+      <div className={`empty-state ${name ?  '' : 'blur'}`}>
         <img src={EmptyMonkeyIcon} alt="No Polls"></img>
         <div className='empty-state-title'>Nothing to see here.</div>
         <div className='empty-state-subtitle'>You haven’t made any polls yet! Try it out above.</div>
@@ -115,11 +125,28 @@ class Session extends Component {
       </div>
     );
 
+    const questionCard = (
+      <div className='question-card'>
+        <div className='question-card-header'>
+          <div className='question-name'>What is the name of Saturn's largest moon?</div>
+          <Button
+            className='edit-question-button'
+            onClick={this.editQuestion}
+          />
+        </div>
+        <div className='question-instructor-info'>
+          <img src={HiddenIcon}></img>
+          <div className='hidden-text'>Only you can see results</div>
+          <div className='question-votes'>32 votes</div>
+        </div>
+      </div>
+    );
+
     const sessionFooter = (
       <div className='session-footer'>
         <div className='footer-bg'></div>
         <div className='session-info'>
-          <div className='session-name'>{sessionName}</div>
+          <div className='session-name'>{name ? name : 'Untitled'}</div>
           <div className='session-code'>{'Code: ' + code}</div>
         </div>
         <Button
@@ -136,21 +163,8 @@ class Session extends Component {
         {sessionHeader}
         <div className='session-content'>
           {!polls && emptyStateSection}
-          {!sessionName && pollNameSection}
-          <div className='question-card'>
-            <div className='question-card-header'>
-              <div className='question-name'>What is the name of Saturn's largest moon?</div>
-              <Button
-                className='edit-question-button'
-                onClick={this.editQuestion}
-              />
-            </div>
-            <div className='question-instructor-info'>
-              <img src={HiddenIcon}></img>
-              <div className='hidden-text'>Only you can see results</div>
-              <div className='question-votes'>32 votes</div>
-            </div>
-          </div>
+          {!name && pollNameSection}
+          {polls && questionCard}
         </div>
         {sessionFooter}
         {showCreatePoll && createPollPopup}

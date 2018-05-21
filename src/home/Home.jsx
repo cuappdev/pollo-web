@@ -71,7 +71,7 @@ class Home extends Component {
       })
       .then((session) => {
         this.setState({
-          session: session,
+          session: session.node,
           createLoading: false,
           createError: null
         });
@@ -86,7 +86,6 @@ class Home extends Component {
 
   // TODO: Show more session options than just delete
   deleteSession = (i) => {
-    console.log("delete session");
     const { activeTab, createdSessions, joinedSessions } = this.state;
 
     // Delete session
@@ -176,7 +175,7 @@ class Home extends Component {
     const sessionCells = (loadedSessions && loadedSessions.map((loadedSession, i) =>
       <li className='session-cell' key={i}>
         <div className='session-cell-info'>
-          <div className='session-title'>{loadedSession.name}</div>
+          <div className='session-title'>{loadedSession.name ? loadedSession.name : 'Untitled'}</div>
           <div className='session-activity'>{`Session code: ${loadedSession.code}`}</div>
         </div>
         <Button
