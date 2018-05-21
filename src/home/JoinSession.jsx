@@ -38,11 +38,9 @@ class JoinSession extends Component {
         <Input
           className='join-session-input'
           placeholder='Enter a code'
-          size='small'
           disabled={loading}
           error={error !== null}
           action={{
-            primary: this.isInputValid(),
             content: 'Join',
             disabled: !this.isInputValid(),
             loading: loading,
@@ -52,7 +50,7 @@ class JoinSession extends Component {
           onChange={this.sessionInputChanged}
           onKeyPress={this.onKeyPress}
         />
-        <ErrorMessage error={error} />
+        {/* TODO: Add error message if error occurs when joining session */}
       </div>
     );
   }

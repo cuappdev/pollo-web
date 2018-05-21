@@ -1,29 +1,38 @@
 @import '../index.css';
 
-.join-session-container {
-  float: right;
-}
-
 /*******************************
        Join Session Input
 *******************************/
 
+.join-session-container {
+  position: absolute;
+  bottom: 11px;
+  right: 0;
+}
+
 .join-session-input {
   border: solid 1px var(--pollo-border-grey);
   border-radius: 100px;
+  background-color: white !important;
+  width: 270px !important;
+  height: 47px !important;
+  caret-color: var(--pollo-green);
 }
 
-input {
-  border: none;
-  border-radius: 100px;
-}
-
-.join-session-input:not([class*="left action"]) > input {
-  border: none;
-  border-radius: 100px;
-}
-
-.join-session-input:not([class*="left action"]) > button {
+.join-session-input input {
+  border: none !important;
   border-radius: 100px !important;
-  margin: 1px;
+  font-size: var(--small-font);
+  font-weight: var(--medium-weight);
+  max-width: 182px !important;
+}
+
+.join-session-input button {
+  border-radius: 100px !important;
+  margin: 1px !important;
+  width: 84px !important;
+  font-size: var(--small-font) !important;
+  font-weight: var(--semibold-weight) !important;
+  background-color: var(--pollo-green) !important;
+  color: white !important;
 }
