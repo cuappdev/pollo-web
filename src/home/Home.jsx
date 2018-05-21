@@ -118,8 +118,8 @@ class Home extends Component {
       <div className='app'>
         <div className='app-header'>
           <div className='header-section'>
-            <Header as='h1' className='header-title'>Polls</Header>
             <div className='header-content'>
+              <Header as='h1' className='header-title'>Polls</Header>
               <div className='navbar'>
                 <Menu pointing secondary className='navbar-menu'>
                   <Menu.Item
@@ -138,7 +138,6 @@ class Home extends Component {
               </div>
               <div className='session-buttons'>
                 <CreateSession
-                  className='create-session-button'
                   error={createError}
                   loading={createLoading}
                   onCreate={this.createSession}

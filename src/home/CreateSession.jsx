@@ -7,11 +7,11 @@ class CreateSession extends Component {
   render () {
     const { error, loading, onCreate } = this.props;
     return (
-      <div>
+      <div className='create-session-container'>
         <ErrorMessage error={error} />
-        <Button primary
+        <Button
+          className='create-session-button'
           content='Create New Session'
-          size='small'
           onClick={onCreate}
           loading={loading}
         />
