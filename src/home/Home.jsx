@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Menu } from 'semantic-ui-react';
+import { Header, Menu, Button } from 'semantic-ui-react';
 import JoinSession from './JoinSession';
 import CreateSession from './CreateSession';
 import Session from './session/Session';
@@ -74,6 +74,11 @@ class Home extends Component {
       });
   }
 
+  showSessionOptions = (i) => {
+    console.log("show session options for Session " + i);
+    // TODO: Show session options
+  }
+
   render () {
     const {
       activeTab,
@@ -84,10 +89,29 @@ class Home extends Component {
       createError
     } = this.state;
 
+    // FIX: Dummy data for integrating UI
+    var previousSessions = ['Session 1', 'Session 2'];
+
+    const sessionCells = previousSessions.map((sessionName, i) =>
+      <li className='session-cell' key={i}>
+        <div className='session-cell-info'>
+          <div className='session-title'>{sessionName}</div>
+          <div className='session-activity'>Latest activity 2 hours ago</div>
+        </div>
+        <Button
+          className='session-options-button'
+          onClick={() => this.showSessionOptions(i)}
+        />
+      </li>
+    );
+
+
     const contentSection = (activeTab == 'CREATED') ? (
-      <div className='created-section'></div>
+      <ul className='created-section'>
+        {sessionCells}
+      </ul>
     ) : (
-      <div className='joined-section'></div>
+      <ul className='joined-section'></ul>
     );
 
     return (
