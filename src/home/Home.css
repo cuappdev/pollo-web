@@ -46,6 +46,18 @@
   max-width: 50%;
 }
 
+.navbar .ui.secondary.pointing.menu .item {
+  padding-bottom: 10px !important;
+  font-size: var(--medium-font) !important;
+  font-weight: var(--medium-font) !important;
+  color: var(--pollo-medium-grey) !important;
+}
+
+.navbar .ui.secondary.pointing.menu .active.item {
+  font-weight: var(--semibold-weight) !important;
+  color: var(--pollo-deep-black) !important;
+}
+
 /* Session Buttons */
 
 .session-buttons {
