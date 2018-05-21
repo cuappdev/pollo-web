@@ -12,7 +12,7 @@ class AdminSession extends Component {
     editingQuestion: null,
     ended: false,
     type: 'MULTIPLE_CHOICE', // TODO: replace with question.type
-    drafts: [],
+    drafts: ['Draft 1', 'Draft 2'], // TODO: replace with actual drafts
     showCreatePoll: true,
     showDrafts: false
   }
@@ -60,6 +60,7 @@ class AdminSession extends Component {
   showDrafts = () => {
     this.setState({ showDrafts: true });
     this.setState({ showCreatePoll: false });
+    // TODO: call backend endpoint to get saved drafts
   }
 
   hideDrafts = () => {
@@ -69,6 +70,17 @@ class AdminSession extends Component {
 
   saveDraft = () => {
     console.log("save draft");
+    // TODO: Call backend endpoint to save poll as draft
+  }
+
+  selectDraft = (i) => {
+    console.log("select draft " + i);
+    // TODO: Populate old draft
+  }
+
+  showDraftOptions = (i) => {
+    console.log("show draft options for draft " + i);
+    // TODO: Show option to delete draft
   }
 
   startQuestion = () => {
@@ -87,9 +99,21 @@ class AdminSession extends Component {
       { value: 'FREE_RESPONSE', text: 'Free Response' }
     ]
 
+    const draftElements = drafts.map((draft, i) =>
+      <li className='draft-cell' key={i}>
+        <Button
+          className='select-draft-button'
+          onClick={() => this.selectDraft(i)}
+        >{draft}</Button>
+        <Button
+          className='draft-button'
+          onClick={() => this.showDraftOptions(i)}
+        />
+      </li>
+    );
+
     return (
       <div className='popup-section'>
-        <div className='bg-overlay'></div>
         { showCreatePoll &&
           <div className='create-poll popup'>
             <div className='popup-header'>
@@ -123,6 +147,7 @@ class AdminSession extends Component {
         }
         { showDrafts &&
           <div className='drafts popup'>
+            <div className='bg-overlay'></div>
             <div className='drafts-popup-header'>
               <Button
                 className='drafts-back-button'
@@ -130,7 +155,7 @@ class AdminSession extends Component {
               />
               <div className='drafts-title'>Drafts</div>
             </div>
-            <div className='drafts-popup-content'></div>
+            <ul className='drafts-popup-content'>{draftElements}</ul>
           </div>
         }
       </div>
