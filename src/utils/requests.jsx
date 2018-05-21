@@ -13,7 +13,6 @@ const api = axios.create({
 const get = async (url, params) => {
   const res = await api.get(url, params);
   const { success, data } = res.data;
-  console.log(res);
   if (success) return data;
   throw Error(data.errors[0]);
 };
@@ -21,6 +20,7 @@ const get = async (url, params) => {
 const post = async (url, body) => {
   const res = await api.post(url, body);
   const { success, data } = res.data;
+  console.log(res);
   if (success) return data;
   throw Error(data.errors[0]);
 };
@@ -77,23 +77,24 @@ export const getAdmins = async (sessionId) => {
   return data;
 };
 
-export const addMembers = async (sessionId) => {
-  const data = await post(`/sessions/${sessionId}/members/`);
+export const addMembers = async (sessionId, memberIds) => {
+  const data = await post(`/sessions/${sessionId}/members/`, { memberIds : memberIds });
+  console.log(data);
   return data;
 };
 
-export const removeMembers = async (sessionId) => {
-  const data = await put(`/sessions/${sessionId}/members/`);
+export const removeMembers = async (sessionId, memberIds) => {
+  const data = await put(`/sessions/${sessionId}/members/`, { memberIds : memberIds });
   return data;
 };
 
-export const addAdmins = async (sessionId) => {
-  const data = await post(`/sessions/${sessionId}/admins/`);
+export const addAdmins = async (sessionId, adminIds) => {
+  const data = await post(`/sessions/${sessionId}/admins/`, { adminIds : adminIds });
   return data;
 };
 
-export const removeAdmins = async (sessionId) => {
-  const data = await put(`/sessions/${sessionId}/admins/`);
+export const removeAdmins = async (sessionId, adminIds) => {
+  const data = await put(`/sessions/${sessionId}/admins/`, { adminIds : adminIds });
   return data;
 };
 
@@ -132,27 +133,18 @@ export const updateSession = async (sessionId, name, code) => {
   return data.node;
 };
 
-/*******************************
-             Poll
-*******************************/
-
-export const joinPoll = async (codes) => {
-  const edges = await post('/polls/live/', { codes: codes });
-  if (edges.length === 0) throw Error('Invalid session code');
-
-  const session = edges[0].node;
-  session.userType = 'user';
-  return session;
-};
-
-export const createPoll = async (name, code) => {
-  const data = await post('/polls/', { name: name, code: code, deviceId: getDeviceId() });
+// TODO: Throw error if session code is invalid
+export const joinSession = async (code) => {
+  const data = await post('/start/session/', { code: code });
+  console.log(data.node);
   return data.node;
 };
 
-export const startPoll = async (poll) => {
-  const data = await post('/start/poll/', poll);
-  const session = data.node;
-  session.userType = 'admin';
-  return session;
+export const endSession = async (sessionId, shouldSave) => {
+  const data = await post(`/session/${sessionId}/end/`, { save: shouldSave });
+  return data;
 };
+
+/*******************************
+             Poll
+*******************************/

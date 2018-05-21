@@ -8,8 +8,10 @@ import {
   generateNewCode,
   createNewSession,
   getAllSessions,
+  getSession,
   deleteSession,
-  joinPoll,
+  addMembers,
+  joinSession,
   createPoll,
   startPoll
 } from '../utils/requests';
@@ -31,21 +33,25 @@ class Home extends Component {
   handleNavbarTabClick = (e, { name }) => this.setState({ activeTab: name })
 
   joinSession = (code) => {
-    joinPoll([code])
-      .then((session) => {
-        this.setState({
-          session: session,
-          joinLoading: false,
-          joinError: null
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          session: null,
-          joinLoading: false,
-          joinError: err.toString()
-        });
+    this.setState({
+      joinLoading: true
+    });
+
+    joinSession(code)
+    .then((session) => {
+      this.setState({
+        session: session,
+        joinLoading: false,
+        joinError: null
       });
+    })
+    .catch((err) => {
+      this.setState({
+        session: null,
+        joinLoading: false,
+        joinError: err.toString()
+      });
+    });
   }
 
   createSession = (user) => {
