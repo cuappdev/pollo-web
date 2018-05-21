@@ -15,9 +15,19 @@
   background-color: var(--pollo-deep-black);
 }
 
-.session-navbar {
+.go-home-button {
   position: absolute;
   left: var(--hpadding);
+  top: var(--vpadding);
+  font-size: var(--small-font) !important;
+  font-weight: var(--bold-weight) !important;
+  background-color: transparent !important;
+  color: white !important;
+}
+
+.session-navbar {
+  position: absolute;
+  left: calc(2.5 * var(--hpadding));
   top: var(--vpadding);
 }
 
@@ -35,10 +45,6 @@
   background-color: var(--pollo-off-white) !important;
   opacity: 0.9;
   border-radius: 100px;
-}
-
-.session-content {
-
 }
 
 .ui.secondary.pointing.menu .item {
