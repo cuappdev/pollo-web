@@ -20,7 +20,6 @@ const get = async (url, params) => {
 const post = async (url, body) => {
   const res = await api.post(url, body);
   const { success, data } = res.data;
-  console.log(res);
   if (success) return data;
   throw Error(data.errors[0]);
 };
@@ -136,7 +135,6 @@ export const updateSession = async (sessionId, name, code) => {
 // TODO: Throw error if session code is invalid
 export const joinSession = async (code) => {
   const data = await post('/start/session/', { code: code });
-  console.log(data.node);
   return data.node;
 };
 
@@ -146,5 +144,72 @@ export const endSession = async (sessionId, shouldSave) => {
 };
 
 /*******************************
-             Poll
+             Polls
 *******************************/
+
+export const createPoll = async (sessionId, text, results, type, shared) => {
+  const body = {
+    text: text,
+    results: results,
+    type: type,
+    shared: shared
+  };
+
+  const data = await post(`/sessions/${sessionId}/polls/`, body);
+  return data;
+};
+
+export const getPoll = async (pollId) => {
+  const data = await get(`/polls/${pollId}/`);
+  return data;
+};
+
+export const getPollsForSession = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}/polls/`);
+  return data;
+};
+
+export const getPollsSortedByDate = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}/polls/date/`);
+  return data;
+};
+
+export const updatePoll = async (pollId, text, results, shared) => {
+  const body = {
+    text: text,
+    results: results,
+    shared: shared
+  };
+
+  const data = await put(`/polls/${pollId}/`);
+  return data;
+};
+
+export const deletePoll = async (pollId) => {
+  const data = await del(`/polls/${pollId}/`);
+  return data;
+};
+
+/*******************************
+            Drafts
+*******************************/
+
+export const getDrafts = async () => {
+  const data = await get('/drafts/');
+  return data.edges.map(edge => edge.node);
+};
+
+export const createDraft = async (text, options) => {
+  const data = await post('/drafts/', { text: text, options: options });
+  return data.node;
+};
+
+export const updateDraft = async (draftId, text, options) => {
+  const data = await put(`/drafts/${draftId}`, { text: text, options: options });
+  return data.node;
+};
+
+export const deleteDraft = async (draftId) => {
+  const data = await del(`/drafts/${draftId}`);
+  return data;
+};

@@ -3,6 +3,12 @@ import { Button, Dropdown, Menu } from 'semantic-ui-react';
 import CreateQuestion from './CreateQuestion';
 import AdminQuestion from './AdminQuestion';
 import './AdminSession.css';
+import {
+  getDrafts,
+  createDraft,
+  updateDraft,
+  deleteDraft
+} from '../../../utils/requests';
 
 class AdminSession extends Component {
   socket = this.props.socket
@@ -12,18 +18,20 @@ class AdminSession extends Component {
     editingQuestion: null,
     ended: false,
     type: 'MULTIPLE_CHOICE', // TODO: replace with question.type
-    drafts: ['Draft 1', 'Draft 2'], // TODO: replace with actual drafts
+    drafts: null,
     showCreatePoll: true,
     showDrafts: false
   }
 
-  // componentDidMount () {
-  //   this.socket.on('admin/question/updateTally', (data) => {
-  //     this.setState({
-  //       results: data.results
-  //     });
-  //   });
-  // }
+  componentDidMount () {
+    this.socket.on('admin/poll/updateTally', (data) => {
+      this.setState({
+        results: data.results
+      });
+    });
+  }
+
+  /* Socket Functions */
 
   handleStartQuestion = (question) => {
     this.setState({ question: question, results: {}, editingQuestion: question });
@@ -33,15 +41,15 @@ class AdminSession extends Component {
       options: undefined
     };
 
-    this.socket.emit('server/question/start', questionData);
+    this.socket.emit('server/poll/start', questionData);
   }
 
   handleShareQuestion = () => {
-    this.socket.emit('server/question/results');
+    this.socket.emit('server/poll/results');
   }
 
   handleEndQuestion = () => {
-    this.socket.emit('server/question/end');
+    this.socket.emit('server/poll/end');
     this.setState({
       ended: true
     });
@@ -57,10 +65,24 @@ class AdminSession extends Component {
 
   handleQuestionTypeClick = (e, { val }) => this.setState({ type: val })
 
+  startQuestion = () => {
+    console.log("start question");
+    console.log(this.state.question);
+  }
+
+  updateQuestion = (question) => {
+    this.setState({ question: question });
+  }
+
+  dismissCreatePoll = () => {
+    this.props.dismissCreatePoll(false);
+  }
+
+  /* Draft Functions */
+
   showDrafts = () => {
     this.setState({ showDrafts: true });
     this.setState({ showCreatePoll: false });
-    // TODO: call backend endpoint to get saved drafts
   }
 
   hideDrafts = () => {
@@ -68,9 +90,32 @@ class AdminSession extends Component {
     this.setState({ showCreatePoll: true });
   }
 
+  updateDrafts = () => {
+    getDrafts()
+    .then((drafts) => {
+      console.log(drafts);
+      this.setState({ drafts: drafts });
+      console.log("Drafts");
+      console.log(this.state.drafts);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   saveDraft = () => {
-    console.log("save draft");
-    // TODO: Call backend endpoint to save poll as draft
+    const { text, options } = this.state.question;
+
+    // Create new draft or update old draft
+    createDraft(text, options)
+    .then((draft) => {
+      // TODO: Show UI message that draft was saved
+      console.log("draft saved");
+      this.updateDrafts();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   selectDraft = (i) => {
@@ -78,17 +123,15 @@ class AdminSession extends Component {
     // TODO: Populate old draft
   }
 
-  showDraftOptions = (i) => {
-    console.log("show draft options for draft " + i);
-    // TODO: Show option to delete draft
-  }
-
-  startQuestion = () => {
-    console.log("start question");
-  }
-
-  dismissCreatePoll = () => {
-    this.props.dismissCreatePoll(false);
+  // TODO: Show more options than just deleting draft
+  deleteDraft = (i) => {
+    deleteDraft(this.state.drafts[i].id)
+    .then((data) => {
+      this.updateDrafts();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   render () {
@@ -99,18 +142,25 @@ class AdminSession extends Component {
       { value: 'FREE_RESPONSE', text: 'Free Response' }
     ]
 
-    const draftElements = drafts.map((draft, i) =>
+    if (!drafts) {
+      this.updateDrafts();
+    }
+
+    const numDrafts = drafts ? drafts.length : 0;
+    const draftElements = drafts ? (drafts.map((draft, i) =>
       <li className='draft-cell' key={i}>
         <Button
-          content={draft}
+          content={(draft.text == '') ? 'Untitled' : draft.text}
           className='select-draft-button'
           onClick={() => this.selectDraft(i)}
         />
         <Button
           className='draft-button'
-          onClick={() => this.showDraftOptions(i)}
+          onClick={() => this.deleteDraft(i)}
         />
       </li>
+    )) : (
+      <div />
     );
 
     return (
@@ -131,13 +181,14 @@ class AdminSession extends Component {
               />
               <Button
                 className='drafts-button'
+                content={`Drafts (${numDrafts})`}
                 onClick={this.showDrafts}
-              >{'Drafts (' + drafts.length + ')'}</Button>
+              />
             </div>
             <div className='popup-content'>
               <CreateQuestion
                 initialQuestion={editingQuestion}
-                handleStart={this.handleStartQuestion}
+                updateQuestion={this.updateQuestion}
               />
             </div>
             <div className='popup-footer'>

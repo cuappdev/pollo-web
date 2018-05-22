@@ -7,13 +7,30 @@ import './Session.css';
 import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png'
 import HiddenIcon from '../../assets/HiddenIcon.png'
 import { updateSession } from '../../utils/requests';
+import { hostURL } from '../../utils/constants';
 
 class Session extends Component {
+  socket = io(`${hostURL}/${this.props.session.id}`);
+
   state = {
     session: this.props.session,
     activeTab: 'Q & A',
     sessionInput: '',
-    showCreatePoll: false
+    showCreatePoll: false,
+    question: null,
+    results: null,
+    editingQuestion: null,
+    ended: false
+  }
+
+  componentDidMount () {
+    this.socket.on('disconnect', () => {
+      this.props.onDisconnect();
+    });
+  }
+
+  componentWillUnmount () {
+    this.socket.close();
   }
 
   handleNavbarTabClick = (e, { name }) => this.setState({ activeTab: name })
@@ -59,16 +76,18 @@ class Session extends Component {
 
   leaveSession = () => {
     this.props.leaveSession();
-    // TODO: End socket connection
+    this.socket.disconnect();
   }
 
   render () {
-    const { session, activeTab, sessionInput, showCreatePoll } = this.state;
+    const { session, activeTab, sessionInput, showCreatePoll, question, results, editingQuestion, ended } = this.state;
     const { id, name, code } = session;
 
     // FIX: Dummy values for integrating UI
     var userType = 'admin';
     var polls = null;
+
+    console.log(this.socket);
 
     const emptyStateSection = (
       <div className={`empty-state ${name ?  '' : 'blur'}`}>
@@ -93,7 +112,7 @@ class Session extends Component {
     const createPollPopup = (
       <div>
         <div className='screen-darken'></div>
-        <AdminSession socket={null} dismissCreatePoll={this.dismissCreatePoll} />
+        <AdminSession socket={this.socket} dismissCreatePoll={this.dismissCreatePoll} />
       </div>
     );
 
