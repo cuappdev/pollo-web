@@ -93,10 +93,7 @@ class AdminSession extends Component {
   updateDrafts = () => {
     getDrafts()
     .then((drafts) => {
-      console.log(drafts);
       this.setState({ drafts: drafts });
-      console.log("Drafts");
-      console.log(this.state.drafts);
     })
     .catch((err) => {
       console.log(err);
@@ -104,29 +101,46 @@ class AdminSession extends Component {
   }
 
   saveDraft = () => {
-    const { text, options } = this.state.question;
+    const { id, text, options } = this.state.question;
 
-    // Create new draft or update old draft
-    createDraft(text, options)
-    .then((draft) => {
-      // TODO: Show UI message that draft was saved
-      console.log("draft saved");
-      this.updateDrafts();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    if (id) { // Update old draft
+      updateDraft(id, text, options)
+      .then((draft) => {
+        // TODO: Show UI message that draft was saved
+        this.updateDrafts();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    } else { // Create new draft
+      createDraft(text, options)
+      .then((draft) => {
+        // TODO: Show UI message that draft was created
+        this.updateDrafts();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
   }
 
   selectDraft = (i) => {
-    console.log("select draft " + i);
-    // TODO: Populate old draft
+    const { id, text, options } = this.state.drafts[i]
+    const type = 'MULTIPLE_CHOICE'; // TODO: Handle free response
+
+    this.setState({ question: { id: id, text: text, type: type, options: options } });
+    this.hideDrafts();
   }
 
   // TODO: Show more options than just deleting draft
   deleteDraft = (i) => {
-    deleteDraft(this.state.drafts[i].id)
+    const { question } = this.state;
+    const draftId = this.state.drafts[i].id;
+    deleteDraft(draftId)
     .then((data) => {
+      if (question && draftId == question.id) {
+        this.setState({ question: null });
+      }
       this.updateDrafts();
     })
     .catch((err) => {
@@ -187,7 +201,7 @@ class AdminSession extends Component {
             </div>
             <div className='popup-content'>
               <CreateQuestion
-                initialQuestion={editingQuestion}
+                initialQuestion={question}
                 updateQuestion={this.updateQuestion}
               />
             </div>

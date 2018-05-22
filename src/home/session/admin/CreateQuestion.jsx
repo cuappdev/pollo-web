@@ -7,6 +7,7 @@ import './CreateQuestion.css';
 class CreateQuestion extends Component {
 
   state = this.props.initialQuestion || {
+    id: null,
     text: '',
     type: 'MULTIPLE_CHOICE',
     options: ['', '']
