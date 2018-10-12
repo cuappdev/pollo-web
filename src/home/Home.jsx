@@ -32,38 +32,38 @@ class Home extends Component {
 
   handleNavbarTabClick = (e, { name }) => this.setState({ activeTab: name })
 
+  // TODO: need to check fo invalid code
+  // TODO: joining doesn't work
   joinSession = (code) => {
     this.setState({
       joinLoading: true
     });
 
     joinSession(code)
-    .then((session) => {
-      this.setState({
-        session: session,
-        joinLoading: false,
-        joinError: null
+      .then((session) => {
+        this.setState({
+          session: session,
+          joinLoading: false,
+          joinError: null
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({
+          session: null,
+          joinLoading: false,
+          joinError: err.toString()
+        });
       });
-    })
-    .catch((err) => {
-      this.setState({
-        session: null,
-        joinLoading: false,
-        joinError: err.toString()
-      });
-    });
   }
 
-  createSession = (user) => {
+  //TODO: save session to DB when name is given (not when ‘create session' button is clicked
+  createSession = () => {
     this.setState({
       createLoading: true
     });
 
-    generateUserSession(user)
-      .then((node) => {
-        this.setState({ userSession: node });
-        return generateNewCode();
-      })
+    generateNewCode()
       .then((code) => {
         return createNewSession(code);
       })
@@ -84,30 +84,31 @@ class Home extends Component {
 
   goToSession = (i) => {
     const { activeTab, createdSessions, joinedSessions } = this.state;
-    const loadedSessions = (activeTab == 'CREATED') ? createdSessions : joinedSessions;
+    const loadedSessions = (activeTab === 'CREATED') ? createdSessions : joinedSessions;
 
     this.setState({ session: loadedSessions[i] });
   }
 
-  // TODO: Show more session options than just delete
+  // TODO: session deletes when ‘…’ clicked;
+  //       Show more session options than just delete
   deleteSession = (i) => {
     const { activeTab, createdSessions, joinedSessions } = this.state;
-    const loadedSessions = (activeTab == 'CREATED') ? createdSessions : joinedSessions;
+    const loadedSessions = (activeTab === 'CREATED') ? createdSessions : joinedSessions;
 
     // Delete session
     deleteSession(loadedSessions[i].id)
-    .then((data) => {
-      loadedSessions.splice(i, 1);
+      .then((data) => {
+        loadedSessions.splice(i, 1);
 
-      if (activeTab == 'CREATED') {
-        this.setState({ createdSessions: loadedSessions });
-      } else {
-        this.setState({ joinedSessions: loadedSessions });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+        if (activeTab === 'CREATED') {
+          this.setState({ createdSessions: loadedSessions });
+        } else {
+          this.setState({ joinedSessions: loadedSessions });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   leaveSession = () => {
@@ -121,10 +122,10 @@ class Home extends Component {
   logout = () => {
     this.setState({ userSession: null });
     this.props.logout(null);
+    localStorage.clear();
   }
 
   render () {
-    const { user } = this.props;
     const {
       activeTab,
       session,
@@ -132,42 +133,31 @@ class Home extends Component {
       joinError,
       createLoading,
       createError,
-      userSession,
       createdSessions,
       joinedSessions
     } = this.state;
 
-    // Create or update user session when user logs in
-    if (!userSession) {
-      generateUserSession(user)
-      .then((node) => {
-        this.setState({ userSession: node });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
 
     // Get all sessions user created
     if (!createdSessions) {
       getAllSessions('admin')
-      .then((sessions) => {
-        this.setState({ createdSessions: sessions });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((sessions) => {
+          this.setState({ createdSessions: sessions });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
 
     // Get all sessions user joined
     if (!joinedSessions) {
       getAllSessions('member')
-      .then((sessions) => {
-        this.setState({ joinedSessions: sessions });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((sessions) => {
+          this.setState({ joinedSessions: sessions });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
 
     // Go to session screen if new session created or old session loaded
@@ -175,7 +165,6 @@ class Home extends Component {
       return (
         <Session
           session={session}
-          onDisconnect={this.leaveSession}
           leaveSession={this.leaveSession}
         />
       );
@@ -183,7 +172,7 @@ class Home extends Component {
 
     // FIX: Dummy data for integrating UI
     var previousSessions = ['Session 1', 'Session 2'];
-    var loadedSessions = (activeTab == 'CREATED') ? createdSessions : joinedSessions;
+    var loadedSessions = (activeTab === 'CREATED') ? createdSessions : joinedSessions;
 
     const sessionCells = (loadedSessions && loadedSessions.map((loadedSession, i) =>
       <li className='session-cell' key={i}>
@@ -198,7 +187,7 @@ class Home extends Component {
       </li>
     ));
 
-    const contentSection = (activeTab == 'CREATED') ? (
+    const contentSection = (activeTab === 'CREATED') ? (
       <ul className='created-section'>
         {sessionCells}
       </ul>
@@ -222,13 +211,13 @@ class Home extends Component {
                   <Menu.Item
                     content='Created'
                     name='CREATED'
-                    active={activeTab == 'CREATED'}
+                    active={activeTab === 'CREATED'}
                     onClick={this.handleNavbarTabClick}
                   />
                   <Menu.Item
                     content='Joined'
                     name='JOINED'
-                    active={activeTab == 'JOINED'}
+                    active={activeTab === 'JOINED'}
                     onClick={this.handleNavbarTabClick}
                   />
                 </Menu>
@@ -237,7 +226,7 @@ class Home extends Component {
                 <CreateSession
                   error={createError}
                   loading={createLoading}
-                  onCreate={() => this.createSession(user)}
+                  onCreate={() => this.createSession()}
                 />
                 <div className='buttons-divider'></div>
                 <JoinSession

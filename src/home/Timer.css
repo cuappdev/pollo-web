@@ -1,0 +1,11 @@
+.time-counter {
+  position: absolute;
+  bottom: var(--vpadding);
+  left: 0;
+  right: 0;
+  margin: auto;
+  font-size: var(--semi-huge-font);
+  font-weight: var(--semibold-weight);
+  color: white;
+  text-align: center;
+}

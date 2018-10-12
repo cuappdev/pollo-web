@@ -19,20 +19,32 @@ class CreateQuestion extends Component {
   }
 
   handleQuestionInputChange = (e, { value }) => {
-    this.setState({ text: value });
-    this.props.updateQuestion(this.state);
+    this.setState(
+      { text: value },
+      () => {
+        this.props.updateQuestion(this.state);
+      }
+    );
   }
 
   handleOptionNew = () => {
-    this.setState({ options: this.state.options.concat(['']) });
-    this.props.updateQuestion(this.state);
+    this.setState(
+      { options: this.state.options.concat(['']) },
+      () => {
+        this.props.updateQuestion(this.state);
+      }
+    );
   }
 
   handleOptionChange = (value, i) => {
     let { options } = this.state;
     options[i] = value;
-    this.setState({ options: options });
-    this.props.updateQuestion(this.state);
+    this.setState(
+      { options: options },
+      () => {
+        this.props.updateQuestion(this.state);
+      }
+    );
   }
 
   handleOptionDelete = (i) => {

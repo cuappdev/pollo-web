@@ -50,11 +50,19 @@ export const generateUserSession = async (user) => {
     email: user.w3.U3
   };
   const data = await post('/auth/mobile/', body);
+  localStorage.setItem('accessToken', data.accessToken);
 
   // Once user is logged in, set authorization header for all api calls
-  api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
+  setAuthHeader(data.accessToken);
 
   return data;
+};
+
+export const setAuthHeader = (token) => {
+  if (!token) {
+    token = localStorage.getItem('accessToken');
+  }
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
 export const getCurrentUser = async () => {
@@ -134,7 +142,7 @@ export const updateSession = async (sessionId, name, code) => {
 
 // TODO: Throw error if session code is invalid
 export const joinSession = async (code) => {
-  const data = await post('/start/session/', { code: code });
+  const data = await post('/join/session/', { code: code });
   return data.node;
 };
 
@@ -166,11 +174,6 @@ export const getPoll = async (pollId) => {
 
 export const getPollsForSession = async (sessionId) => {
   const data = await get(`/sessions/${sessionId}/polls/`);
-  return data;
-};
-
-export const getPollsSortedByDate = async (sessionId) => {
-  const data = await get(`/sessions/${sessionId}/polls/date/`);
   return data;
 };
 

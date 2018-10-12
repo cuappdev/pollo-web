@@ -40,3 +40,18 @@
   font-size: var(--small-font);
   font-weight: var(--semibold-weight);
 }
+
+/*******************************
+             Loading
+*******************************/
+
+.app-header {
+  position: relative;
+  background-color: var(--pollo-off-white);
+  height: 263.5px;
+}
+
+.app-content {
+  margin: 50px auto;
+  width: 60%;
+}
