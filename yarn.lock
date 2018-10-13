@@ -2344,10 +2344,6 @@ dotenv@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
-dotenv@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.0.tgz#0206eb5b336639bf377618a2a304ff00c6a1fddb"
-
 duplexer2@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/duplexer2/-/duplexer2-0.0.2.tgz#c614dcf67e2fb14995a91711e5a617e8a60a31db"
@@ -7452,6 +7448,7 @@ semantic-ui@^2.3.0:
     gulp-watch "^4.3.11"
     jquery "^3.2.1"
     map-stream "^0.1.0"
+    merge-stream "^1.0.0"
     mkdirp "^0.5.1"
     prompt-sui "^3.2.1"
     require-dot-file "^0.4.0"

@@ -1,0 +1,15 @@
+@import '../../../index.css';
+
+.question-input input {
+  padding-left: 0 !important;
+  font-size: var(--medium-font);
+  font-weight: var(--regular-weight);
+  caret-color: var(--pollo-green);
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.question-input::placeholder {
+  color: var(--pollo-medium-grey) !important;
+  opacity: 1;
+}

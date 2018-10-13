@@ -2,8 +2,12 @@ import axios from 'axios';
 import { hostURL } from './constants';
 import { getDeviceId } from './functions';
 
+/*******************************
+            General
+*******************************/
+
 const api = axios.create({
-  baseURL: hostURL + '/api/v1'
+  baseURL: hostURL + '/api/v2'
 });
 
 const get = async (url, params) => {
@@ -20,28 +24,195 @@ const post = async (url, body) => {
   throw Error(data.errors[0]);
 };
 
+const put = async (url, body) => {
+  const res = await api.put(url, body);
+  const { success, data } = res.data;
+  if (success) return data;
+  throw Error(data.errors[0]);
+};
+
+const del = async (url) => {
+  const res = await api.delete(url);
+  const { success, data } = res.data;
+  if (success) return data;
+  throw Error(data.errors[0]);
+};
+
+/*******************************
+            User
+*******************************/
+
+export const generateUserSession = async (user) => {
+  const body = {
+    userId: user.googleId,
+    givenName: user.w3.ofa,
+    familyName: user.w3.wea,
+    email: user.w3.U3
+  };
+  const data = await post('/auth/mobile/', body);
+  localStorage.setItem('accessToken', data.accessToken);
+
+  // Once user is logged in, set authorization header for all api calls
+  setAuthHeader(data.accessToken);
+
+  return data;
+};
+
+export const setAuthHeader = (token) => {
+  if (!token) {
+    token = localStorage.getItem('accessToken');
+  }
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+};
+
+export const getCurrentUser = async () => {
+  const data = await get('/users/');
+  return data;
+};
+
+/*******************************
+            Roles
+*******************************/
+
+export const getMembers = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}/members/`);
+  return data;
+};
+
+export const getAdmins = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}/admins/`);
+  return data;
+};
+
+export const addMembers = async (sessionId, memberIds) => {
+  const data = await post(`/sessions/${sessionId}/members/`, { memberIds : memberIds });
+  console.log(data);
+  return data;
+};
+
+export const removeMembers = async (sessionId, memberIds) => {
+  const data = await put(`/sessions/${sessionId}/members/`, { memberIds : memberIds });
+  return data;
+};
+
+export const addAdmins = async (sessionId, adminIds) => {
+  const data = await post(`/sessions/${sessionId}/admins/`, { adminIds : adminIds });
+  return data;
+};
+
+export const removeAdmins = async (sessionId, adminIds) => {
+  const data = await put(`/sessions/${sessionId}/admins/`, { adminIds : adminIds });
+  return data;
+};
+
+/*******************************
+            Session
+*******************************/
+
 export const generateNewCode = async () => {
   const data = await get('/generate/code/');
   return data.code;
 };
 
-export const joinPoll = async (codes) => {
-  const edges = await post('/polls/live/', { codes: codes });
-  if (edges.length === 0) throw Error('Invalid session code');
-
-  const session = edges[0].node;
-  session.userType = 'user';
-  return session;
-};
-
-export const createPoll = async (name, code) => {
-  const data = await post('/polls/', { name: name, code: code, deviceId: getDeviceId() });
+export const createNewSession = async (code) => {
+  const data = await post('/sessions/', { name: null, code: code });
   return data.node;
 };
 
-export const startPoll = async (poll) => {
-  const data = await post('/start/poll/', poll);
-  const session = data.node;
-  session.userType = 'admin';
-  return session;
+export const getSession = async (code) => {
+  const data = await get(`/sessions/${code}`);
+  return data.node;
+};
+
+// Role: admin or member
+export const getAllSessions = async (role) => {
+  const data = await get(`/sessions/all/${role}`);
+  return data.map(session => session.node);
+};
+
+export const deleteSession = async (sessionId) => {
+  const data = await del(`/sessions/${sessionId}`);
+  return data;
+};
+
+export const updateSession = async (sessionId, name, code) => {
+  const data = await put(`/sessions/${sessionId}`, { id: sessionId, name: name, code: code });
+  return data.node;
+};
+
+// TODO: Throw error if session code is invalid
+export const joinSession = async (code) => {
+  const data = await post('/join/session/', { code: code });
+  return data.node;
+};
+
+export const endSession = async (sessionId, shouldSave) => {
+  const data = await post(`/session/${sessionId}/end/`, { save: shouldSave });
+  return data;
+};
+
+/*******************************
+             Polls
+*******************************/
+
+export const createPoll = async (sessionId, text, results, type, shared) => {
+  const body = {
+    text: text,
+    results: results,
+    type: type,
+    shared: shared
+  };
+
+  const data = await post(`/sessions/${sessionId}/polls/`, body);
+  return data;
+};
+
+export const getPoll = async (pollId) => {
+  const data = await get(`/polls/${pollId}/`);
+  return data;
+};
+
+export const getPollsForSession = async (sessionId) => {
+  const data = await get(`/sessions/${sessionId}/polls/`);
+  return data;
+};
+
+export const updatePoll = async (pollId, text, results, shared) => {
+  const body = {
+    text: text,
+    results: results,
+    shared: shared
+  };
+
+  const data = await put(`/polls/${pollId}/`);
+  return data;
+};
+
+export const deletePoll = async (pollId) => {
+  const data = await del(`/polls/${pollId}/`);
+  return data;
+};
+
+/*******************************
+            Drafts
+*******************************/
+
+export const getDrafts = async () => {
+  const data = await get('/drafts/');
+  return data.edges.map(edge => edge.node);
+};
+
+export const createDraft = async (text, options) => {
+  const data = await post('/drafts/', { text: text, options: options });
+  return data.node;
+};
+
+export const updateDraft = async (draftId, text, options) => {
+  const data = await put(`/drafts/${draftId}`, { text: text, options: options });
+  return data.node;
+};
+
+export const deleteDraft = async (draftId) => {
+  const data = await del(`/drafts/${draftId}`);
+  return data;
 };
