@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Button, Menu, Input } from 'semantic-ui-react';
-import UserSession from './user/UserSession';
+import { Button, Menu, Input } from 'semantic-ui-react';
 import AdminSession from './admin/AdminSession';
 import io from 'socket.io-client';
 import './Session.css';
@@ -8,7 +7,6 @@ import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png';
 import HiddenIcon from '../../assets/HiddenIcon.png';
 import { updateSession, getPollsForSession } from '../../utils/requests';
 import { hostURL } from '../../utils/constants';
-import MultipleChoice from './MultipleChoice';
 
 //TODO: restrict screen size (if minimize screen a lot, the icons overlap)
 
@@ -99,12 +97,10 @@ class Session extends Component {
   }
 
   render () {
-    const { session, activeTab, sessionInput, showCreatePoll, question, results, editingQuestion, ended, polls, pollsDate, selectedDate } = this.state;
-    const { id, name, code } = session;
+    const { session, activeTab, sessionInput, showCreatePoll, polls, pollsDate, selectedDate } = this.state;
+    const { name, code } = session;
 
     // TODO: fix dummy values for integrating UI
-    var userType = 'admin';
-
     console.log(this.socket);
 
     const emptyStateSection = (
@@ -149,35 +145,18 @@ class Session extends Component {
             <Menu.Item
               content='Q & A'
               name='Q & A'
-              active={activeTab == 'Q & A'}
+              active={activeTab === 'Q & A'}
               onClick={this.handleNavbarTabClick}
             />
             <Menu.Item
               content='Review'
               name='REVIEW'
-              active={activeTab == 'REVIEW'}
+              active={activeTab === 'REVIEW'}
               onClick={this.handleNavbarTabClick}
             />
           </Menu>
         </div>
         <Button className='create-poll-button' primary onClick={this.createPoll}>Create a poll</Button>
-      </div>
-    );
-
-    const questionCard = (
-      <div className='question-card'>
-        <div className='question-card-header'>
-          <div className='question-name'>What is the name of Saturn's largest moon?</div>
-          <Button
-            className='edit-question-button'
-            onClick={this.editQuestion}
-          />
-        </div>
-        <div className='question-instructor-info'>
-          <img src={HiddenIcon}></img>
-          <div className='hidden-text'>Only you can see results</div>
-          <div className='question-votes'>32 votes</div>
-        </div>
       </div>
     );
 
@@ -210,7 +189,7 @@ class Session extends Component {
                     />
                   </div>
                   <div className='question-instructor-info'>
-                    <img src={HiddenIcon}></img>
+                    <img alt='' src={HiddenIcon}></img>
                     <div className='hidden-text'>Only you can see results</div>
                   </div>
                   <div className='question-card-content'>

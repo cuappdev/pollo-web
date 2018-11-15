@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Input } from 'semantic-ui-react';
-import ErrorMessage from './ErrorMessage';
+import { Input } from 'semantic-ui-react';
 import './JoinSession.css';
 
 class JoinSession extends Component {

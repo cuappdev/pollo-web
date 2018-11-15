@@ -1,9 +1,8 @@
 //TODO: connect with server
 //TODO: change question -> polls
 //TODO: change to redux states
-import React, { Component, createContext } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Header, Menu } from 'semantic-ui-react';
 import Home from './home/Home';
 // import Session from './home/session/Session';
 import './App.css';
@@ -27,8 +26,6 @@ class App extends Component {
   handleResponse = async (response) => {
     if (response.error) {
       // TODO: Show error message in UI
-      console.log(response.error);
-      console.log(response.details);
     } else {
       // TODO: localstorage(pro: session persists even if you close the tab
       //                    con: can have only one account associated to entire browser
@@ -38,6 +35,7 @@ class App extends Component {
       localStorage.setItem('user', response.w3.ig);
       await generateUserSession(response);
       this.setState({ user: response.w3.ig });
+      this.forceUpdate();
     }
   }
 

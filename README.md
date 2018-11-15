@@ -1,4 +1,4 @@
-# Clicker Web App
+# Pollo Web App
 
 ## Setup
 
@@ -10,15 +10,9 @@ In using Semantic UI, we wish to customize the theming, so naturally we cannot u
 Now build Semantic UI with gulp by running `gulp build` under the `./semantic` directory. You can also have it watch for changes with `gulp watch` but be aware that it will build the entire library every time.
 
 ### 2) Environment
-There should be a `.env` file that contains the host URL of the backend server in the root directory. Example config:
+Copy the environment template to `.env` by running the following:
 ```bash
-REACT_APP_HOST_URL=http://backend.server.com
-```
-
-For local development, put the following line in your `.env` file.
-
-```bash
-REACT_APP_HOST_URL=localhost:3000
+cp env.template .env
 ```
 
 ## Development

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Header, Input, Menu } from 'semantic-ui-react';
+import { Input } from 'semantic-ui-react';
 import MultipleChoiceInput from './MultipleChoiceInput';
-import SubmitButton from '../SubmitButton';
 import './CreateQuestion.css';
 
 class CreateQuestion extends Component {

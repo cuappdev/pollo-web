@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Icon, Input } from 'semantic-ui-react';
+import { Button, Input } from 'semantic-ui-react';
 import { colName } from '../../../utils/functions';
 import './MultipleChoiceInput.css';
 

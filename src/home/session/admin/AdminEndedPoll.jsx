@@ -6,7 +6,7 @@ import './AdminEndedPoll.css';
 
 class AdminEndedPoll extends Component {
   render () {
-    const { question, results, handleShare, handleNew, handleDismiss } = this.props;
+    const { question, results, handleShare, handleDismiss } = this.props;
 
     const questionContainer = question.type === 'MULTIPLE_CHOICE'
       ? (

@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { hostURL } from './constants';
-import { getDeviceId } from './functions';
 
 /*******************************
             General
 *******************************/
 
 const api = axios.create({
-  baseURL: hostURL + '/api/v2'
+  baseURL: 'http://' + hostURL + '/api/v2',
 });
 
 const get = async (url, params) => {
@@ -42,19 +41,13 @@ const del = async (url) => {
             User
 *******************************/
 
-export const generateUserSession = async (user) => {
-  const body = {
-    userId: user.googleId,
-    givenName: user.w3.ofa,
-    familyName: user.w3.wea,
-    email: user.w3.U3
-  };
+export const generateUserSession = async (response) => {
+  const body = { idToken: response.tokenId };
   const data = await post('/auth/mobile/', body);
   localStorage.setItem('accessToken', data.accessToken);
 
-  // Once user is logged in, set authorization header for all api calls
+  // Post-login, set auth header
   setAuthHeader(data.accessToken);
-
   return data;
 };
 
@@ -86,7 +79,6 @@ export const getAdmins = async (sessionId) => {
 
 export const addMembers = async (sessionId, memberIds) => {
   const data = await post(`/sessions/${sessionId}/members/`, { memberIds : memberIds });
-  console.log(data);
   return data;
 };
 
@@ -178,12 +170,6 @@ export const getPollsForSession = async (sessionId) => {
 };
 
 export const updatePoll = async (pollId, text, results, shared) => {
-  const body = {
-    text: text,
-    results: results,
-    shared: shared
-  };
-
   const data = await put(`/polls/${pollId}/`);
   return data;
 };

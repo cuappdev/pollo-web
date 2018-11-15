@@ -4,16 +4,11 @@ import JoinSession from './JoinSession';
 import CreateSession from './CreateSession';
 import Session from './session/Session';
 import {
-  generateUserSession,
   generateNewCode,
   createNewSession,
   getAllSessions,
-  getSession,
   deleteSession,
-  addMembers,
   joinSession,
-  createPoll,
-  startPoll
 } from '../utils/requests';
 import './Home.css';
 
@@ -171,7 +166,6 @@ class Home extends Component {
     }
 
     // FIX: Dummy data for integrating UI
-    var previousSessions = ['Session 1', 'Session 2'];
     var loadedSessions = (activeTab === 'CREATED') ? createdSessions : joinedSessions;
 
     const sessionCells = (loadedSessions && loadedSessions.map((loadedSession, i) =>

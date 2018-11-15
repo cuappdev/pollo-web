@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Dropdown, Menu } from 'semantic-ui-react';
+import { Button, Dropdown } from 'semantic-ui-react';
 import CreateQuestion from './CreateQuestion';
 import AdminLiveQuestion from './AdminLiveQuestion';
 import AdminEndedPoll from './AdminEndedPoll';
@@ -171,7 +171,7 @@ class AdminSession extends Component {
     const draftId = this.state.drafts[i].id;
     deleteDraft(draftId)
       .then((data) => {
-        if (question && draftId == question.id) {
+        if (question && draftId === question.id) {
           this.setState({ question: null });
         }
         this.updateDrafts();
@@ -182,8 +182,15 @@ class AdminSession extends Component {
   }
 
   render () {
-    const { question, results, editingQuestion, ended, type,
-      drafts, showCreatePoll, showDrafts, showLiveQuestion, showEndedPoll } = this.state;
+    const { 
+      drafts, 
+      question, 
+      showCreatePoll, 
+      showDrafts, 
+      showEndedPoll, 
+      showLiveQuestion, 
+      type,
+    } = this.state;
 
     const questionTypes = [
       { value: 'MULTIPLE_CHOICE', text: 'Multiple Choice' },
@@ -198,7 +205,7 @@ class AdminSession extends Component {
     const draftElements = drafts ? (drafts.map((draft, i) =>
       <li className='draft-cell' key={i}>
         <Button
-          content={(draft.text == '') ? 'Untitled' : draft.text}
+          content={(draft.text === '') ? 'Untitled' : draft.text}
           className='select-draft-button'
           onClick={() => this.selectDraft(i)}
         />

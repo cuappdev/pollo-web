@@ -7,7 +7,7 @@ import './AdminLiveQuestion.css';
 class AdminLiveQuestion extends Component {
 
   render () {
-    const { question, results, handleShare, handleEnd, handleNew, ended } = this.props;
+    const { question, results, handleEnd } = this.props;
 
     const questionContainer = question.type === 'MULTIPLE_CHOICE'
       ? (
