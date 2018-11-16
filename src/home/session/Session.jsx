@@ -13,30 +13,42 @@ import './Session.css';
 //TODO: restrict screen size (if minimize screen a lot, the icons overlap)
 
 class Session extends Component {
-  socket = io(
-    `${hostURL}/${this.props.session.id}`,
-    {
-      'query': {
-        'userType': 'admin',
-      }
-    }
-  );
-
-  state = {
-    session: this.props.session,
-    activeTab: 'Q & A',//TODO:active tab?
-    sessionInput: '',
-    showCreatePoll: false,
-    question: null,
-    results: null,
-    editingQuestion: null,
-    ended: false,
-    polls: null,
-    pollsDate: [],
-    selectedDate: null
+  propTypes: {
+    adminSession: boolean, // whether or not the session is an admin one
+    leaveSession: any,
+    session: any,
   };
 
-  componentDidMount () {
+  constructor(props: propTypes) {
+    super(props);
+
+    const userType = props.adminSession ? 'admin' : 'member';
+    this.socket = io(
+      `${hostURL}/${this.props.session.id}`,
+      {
+        'query': {
+          'googleId': localStorage.getItem('googleId'),
+          'userType': userType, 
+        }
+      }
+    );
+
+    this.state = {
+      activeTab: 'Q & A', // TODO: active tab?
+      editingQuestion: null,
+      ended: false,
+      polls: null,
+      pollsDate: [],
+      question: null,
+      results: null,
+      selectedDate: null,
+      session: props.session,
+      sessionInput: '',
+      showCreatePoll: false,
+    };
+  }
+
+  componentDidMount() {
     this.socket.on('disconnect', () => {
       this.props.leaveSession();
     });
@@ -50,7 +62,7 @@ class Session extends Component {
       });
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.socket.close();
   }
 
@@ -83,16 +95,6 @@ class Session extends Component {
 
   dismissCreatePoll = (val) => {
     this.setState({ showCreatePoll: val });
-  }
-
-  editQuestion = () => {
-    console.log('edit question');
-    // TODO: Show edit question options
-  }
-
-  endQuestion = () => {
-    console.log('end question');
-    // TODO: Call backend endpoint
   }
 
   handleDateClick = (e, val) => {

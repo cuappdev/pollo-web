@@ -6,35 +6,41 @@ import AdminEndedPoll from './AdminEndedPoll';
 import Timer from '../../Timer';
 import './AdminSession.css';
 import {
-  getDrafts,
   createDraft,
-  updateDraft,
   deleteDraft,
-  createPoll
+  getDrafts,
+  updateDraft,
 } from '../../../utils/requests';
 
 class AdminSession extends Component {
-  socket = this.props.socket;
-  state = {
-    question: null,
-    results: null,
-    editingQuestion: null,
-    ended: false,
-    type: 'MULTIPLE_CHOICE', // TODO: replace with question.type
-    drafts: null,
-    shared: false,
-    showCreatePoll: true,
-    showDrafts: false,
-    showLiveQuestion: false,
-    showEndedPoll: false,
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.socket = props.socket;
+    this.state = {
+      drafts: null,
+      editingQuestion: null,
+      ended: false,
+      question: null,
+      results: null,
+      shared: false,
+      showCreatePoll: true,
+      showDrafts: false,
+      showEndedPoll: false,
+      showLiveQuestion: false,
+      type: 'MULTIPLE_CHOICE', // TODO: replace with question.type
+    };
+
+    props.socket.on('admin/poll/updateTally', (data) => {
+      this.setState({ results: data.results });
+    });
+  }
 
   /* Socket Functions */
 
   handleStartQuestion(question) {
     const poll = {
-      correctAnswer: 'A', // TODO: fix this
-      results: {'A': {'text': 'blue', 'count': 0}, 'B': {'text': 'red', 'count': 0}},
       options: question.options,
       shared: false,
       text: question.text,
@@ -49,9 +55,7 @@ class AdminSession extends Component {
       showLiveQuestion: true,
     });
 
-    console.log('start question');
-    console.log('poll', poll);
-
+    console.log('starting poll', poll);
     this.socket.emit('server/poll/start', poll);
   }
 
@@ -67,14 +71,6 @@ class AdminSession extends Component {
       showLiveQuestion: false,
       showEndedPoll: true,
     });
-
-    createPoll(
-      this.props.session, 
-      this.state.question.text, 
-      this.state.results,
-      this.state.type, 
-      this.state.shared
-    ).then(data => console.log(data));
   }
 
   handleNewQuestion = () => {
@@ -203,9 +199,7 @@ class AdminSession extends Component {
           onClick={() => this.deleteDraft(i)}
         />
       </li>
-    )) : (
-      <div />
-    );
+    )) : (<div/>);
 
     return (
       <div className='popup-section'>
@@ -247,8 +241,7 @@ class AdminSession extends Component {
             <div className='drafts-popup-header'>
               <Button
                 className='drafts-back-button'
-                onClick={this.hideDrafts}
-              />
+                onClick={this.hideDrafts} />
               <div className='drafts-title'>Drafts</div>
             </div>
             <ul className='drafts-popup-content'>{draftElements}</ul>
@@ -258,13 +251,13 @@ class AdminSession extends Component {
           <div>
             <div className='poll popup'>
               <AdminLiveQuestion
-                question={this.state.question}
-                results={this.state.results}
-                handleShare={this.handleShareQuestion}
+                ended={this.state.ended}
                 handleEnd={this.handleEndQuestion}
                 handleNew={this.handleNewQuestion}
-                startTimer={this.startTimer}
-                ended={this.state.ended} />
+                handleShare={this.handleShareQuestion}
+                question={this.state.question}
+                results={this.state.results}
+                startTimer={this.startTimer} />
             </div>
             <Timer />
           </div>
@@ -272,12 +265,11 @@ class AdminSession extends Component {
         { showEndedPoll &&
           <div className='poll popup'>
             <AdminEndedPoll
-              question={this.state.question}
-              results={this.state.results}
-              handleShare={this.handleShareQuestion}
-              handleNew={this.handleNewQuestion}
               handleDismiss={this.dismissCreatePoll}
-            />
+              handleNew={this.handleNewQuestion}
+              handleShare={this.handleShareQuestion}
+              question={this.state.question}
+              results={this.state.results} />
           </div>
         }
       </div>

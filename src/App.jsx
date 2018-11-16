@@ -11,10 +11,14 @@ import { generateUserSession, setAuthHeader } from './utils/requests';
 
 
 class App extends Component {
-  state = {
-    user: localStorage.getItem('user'),
-    setHeaders: false
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      setHeaders: false,
+      user: localStorage.getItem('user'),
+    };
+  }
 
   async componentDidMount() {
     if (this.state.user) setAuthHeader(null);
@@ -31,14 +35,15 @@ class App extends Component {
       //        sessionstorage(pro: account associated to each tab so multiple account can be hosted simultaneously
       //                       con: if you close the tab, you need to sign in again)
       localStorage.setItem('user', response.w3.ig);
+      localStorage.setItem('googleId', response.googleId);
       await generateUserSession(response);
       this.setState({ user: response.w3.ig });
       this.forceUpdate();
     }
   }
 
-  logout = (val) => {
-    this.setState({ user: val });
+  logout = () => {
+    this.setState({ user: null });
     localStorage.clear();
   }
 
@@ -71,13 +76,9 @@ class App extends Component {
       </div>
     );
 
-    if (!user) { // If user not logged in, render sign in page
-      return loginScreen;
-    } else if (user && !setHeaders) { // Middle-state: user is logged in but authentication header is being set up
-      return loadingScreen;
-    } else { // If user logged in, render home page
-      return homeScreen;
-    }
+    if (!user) return loginScreen;
+    if (user && !setHeaders) return loadingScreen;
+    return homeScreen;
   }
 }
 

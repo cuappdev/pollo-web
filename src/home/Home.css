@@ -82,7 +82,7 @@
    Previous Created Sessions
 *******************************/
 
-.created-section {
+.sessions-section {
   padding: 0;
 }
 
@@ -103,6 +103,7 @@
 
 .session-title {
   margin-bottom: 10px;
+  height: 20px;
   font-size: var(--medium-font);
   font-weight: var(--semibold-weight);
   color: var(--pollo-deep-black);
@@ -127,12 +128,4 @@
   background-image: url('../assets/GreyShowMoreButton.png') !important;
   background-size: cover !important;
   background-color: transparent !important;
-}
-
-/*******************************
-    Previous Joined Sessions
-*******************************/
-
-.joined-section {
-
 }

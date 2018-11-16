@@ -109,8 +109,6 @@ export const generateNewCode = async () => {
 
 export const createNewSession = async (code) => {
   const data = await post('/sessions/', { name: null, code: code });
-  console.log('CREATE SESSION');
-  console.log(data);
   return data.node;
 };
 
@@ -119,14 +117,22 @@ export const getSession = async (code) => {
   return data.node;
 };
 
-// Role: admin or member
-export const getAllSessions = async (role) => {
-  const data = await get(`/sessions/all/${role}`);
-  return data.map(session => session.node);
+export const getAllSessions = async () => {
+  const adminSessions = await get('/sessions/all/admin');
+  const memberSessions = await get('/sessions/all/member');
+  return {
+    'adminSessions': adminSessions.map(session => session.node),
+    'memberSessions': memberSessions.map(session => session.node),
+  };
 };
 
 export const deleteSession = async (sessionId) => {
   const data = await del(`/sessions/${sessionId}`);
+  return data;
+};
+
+export const leaveSession = async (sessionId) => {
+  const data = await del(`/sessions/${sessionId}/members`);
   return data;
 };
 
@@ -137,6 +143,7 @@ export const updateSession = async (sessionId, name, code) => {
 
 // TODO: Throw error if session code is invalid
 export const joinSession = async (code) => {
+  // const group= await get(`/groups/${code}`);
   const data = await post('/join/session/', { code: code });
   return data.node;
 };
