@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
 import { Button, Menu, Input } from 'semantic-ui-react';
-import AdminSession from './admin/AdminSession';
 import io from 'socket.io-client';
-import './Session.css';
+
+import AdminSession from './admin/AdminSession';
 import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png';
 import HiddenIcon from '../../assets/HiddenIcon.png';
-import { updateSession, getPollsForSession } from '../../utils/requests';
 import { hostURL } from '../../utils/constants';
+import { getPollsForSession, updateSession } from '../../utils/requests';
+
+import './Session.css';
 
 //TODO: restrict screen size (if minimize screen a lot, the icons overlap)
 
 class Session extends Component {
-  socket = io(`${hostURL}/${this.props.session.id}`);
+  socket = io(
+    `${hostURL}/${this.props.session.id}`,
+    {
+      'query': {
+        'userType': 'admin',
+      }
+    }
+  );
 
   state = {
     session: this.props.session,
@@ -25,7 +34,7 @@ class Session extends Component {
     polls: null,
     pollsDate: [],
     selectedDate: null
-  }
+  };
 
   componentDidMount () {
     this.socket.on('disconnect', () => {
@@ -97,8 +106,16 @@ class Session extends Component {
   }
 
   render () {
-    const { session, activeTab, sessionInput, showCreatePoll, polls, pollsDate, selectedDate } = this.state;
-    const { name, code } = session;
+    const { 
+      activeTab, 
+      polls, 
+      pollsDate, 
+      selectedDate,
+      session, 
+      sessionInput, 
+      showCreatePoll, 
+    } = this.state;
+    const { code, name } = session;
 
     // TODO: fix dummy values for integrating UI
     console.log(this.socket);
@@ -128,7 +145,11 @@ class Session extends Component {
     const createPollPopup = (
       <div>
         <div className='screen-darken'></div>
-        <AdminSession socket={this.socket} session={this.state.session.id} dismissCreatePoll={this.dismissCreatePoll} />
+        <AdminSession 
+          dismissCreatePoll={this.dismissCreatePoll} 
+          session={this.state.session.id} 
+          socket={this.socket} 
+        />
       </div>
     );
 
@@ -137,21 +158,21 @@ class Session extends Component {
         <Button
           className='go-home-button'
           content='Home'
-          onClick={this.leaveSession}
           icon='chevron left'
+          onClick={this.leaveSession}
         />
         <div className='session-navbar'>
-          <Menu pointing secondary className='navbar-menu'>
+          <Menu className='navbar-menu' pointing secondary>
             <Menu.Item
+              active={activeTab === 'Q & A'}
               content='Q & A'
               name='Q & A'
-              active={activeTab === 'Q & A'}
               onClick={this.handleNavbarTabClick}
             />
             <Menu.Item
+              active={activeTab === 'REVIEW'}
               content='Review'
               name='REVIEW'
-              active={activeTab === 'REVIEW'}
               onClick={this.handleNavbarTabClick}
             />
           </Menu>
@@ -165,7 +186,12 @@ class Session extends Component {
         <div className='poll-card-dates'>
           {pollsDate.map(date => {
             return (
-              <Button key={date} name={date} className={(date===selectedDate ? 'poll-card-dates-button-disabled' : 'poll-card-dates-button')} onClick={this.handleDateClick}>
+              <Button 
+                className={(date===selectedDate ? 'poll-card-dates-button-disabled' : 'poll-card-dates-button')} 
+                key={date} 
+                name={date} 
+                onClick={this.handleDateClick}
+              >
                 <div className='poll-card-dates-date'>
                   {date}
                 </div>

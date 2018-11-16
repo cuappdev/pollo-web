@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+import moment from 'moment';
+
 import './Timer.css';
 
 class Timer extends Component {
-  state = {
-    time : null
-  }
+  state = { time: 0 };
 
   async componentDidMount() {
-    await this.setState({ time : 0 });
-    var interval = setInterval(() => this.timer(), 1000);
+    await this.setState({ time: 0 });
+    var interval = setInterval(() => this.incrementTimer(), 1000);
     this.setState({ interval });
   }
 
@@ -16,16 +16,16 @@ class Timer extends Component {
     clearInterval(this.state.interval);
   }
 
-  timer() {
+  incrementTimer() {
     this.setState({ time: this.state.time + 1 });
-    console.log('TIMER', this.state.time);
   }
 
   render () {
+    const timeString = moment.utc(this.state.time*1000).format('mm:ss');
+
     return (
       <div className='time-counter'>
-        {this.state.time < 60 ? '0' : `${Math.floor(this.state.timer/60)}`} :
-        {(this.state.time%60) < 10 ? `0${this.state.time%60}` : `${this.state.time%60}`}
+        {timeString}
       </div>
     );
   }

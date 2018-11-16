@@ -44,6 +44,7 @@ const del = async (url) => {
 export const generateUserSession = async (response) => {
   const body = { idToken: response.tokenId };
   const data = await post('/auth/mobile/', body);
+  console.log(data);
   localStorage.setItem('accessToken', data.accessToken);
 
   // Post-login, set auth header
@@ -108,6 +109,8 @@ export const generateNewCode = async () => {
 
 export const createNewSession = async (code) => {
   const data = await post('/sessions/', { name: null, code: code });
+  console.log('CREATE SESSION');
+  console.log(data);
   return data.node;
 };
 
@@ -147,7 +150,7 @@ export const endSession = async (sessionId, shouldSave) => {
              Polls
 *******************************/
 
-export const createPoll = async (sessionId, text, results, type, shared) => {
+export const createPoll = async (sessionID, text, results, type, shared) => {
   const body = {
     text: text,
     results: results,
@@ -155,7 +158,7 @@ export const createPoll = async (sessionId, text, results, type, shared) => {
     shared: shared
   };
 
-  const data = await post(`/sessions/${sessionId}/polls/`, body);
+  const data = await post(`/sessions/${sessionID}/polls/`, body);
   return data;
 };
 

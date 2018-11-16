@@ -123,15 +123,14 @@ class Home extends Component {
   render () {
     const {
       activeTab,
-      session,
-      joinLoading,
-      joinError,
-      createLoading,
       createError,
+      createLoading,
       createdSessions,
-      joinedSessions
+      joinError,
+      joinLoading,
+      joinedSessions,
+      session,
     } = this.state;
-
 
     // Get all sessions user created
     if (!createdSessions) {

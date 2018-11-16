@@ -1,18 +1,16 @@
-//TODO: connect with server
 //TODO: change question -> polls
 //TODO: change to redux states
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Home from './home/Home';
-// import Session from './home/session/Session';
-import './App.css';
 import GoogleLogin from 'react-google-login';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import './App.css';
+import Home from './home/Home';
 import { googleClientId } from './utils/constants';
 import { generateUserSession, setAuthHeader } from './utils/requests';
 
 
 class App extends Component {
-
   state = {
     user: localStorage.getItem('user'),
     setHeaders: false
@@ -45,7 +43,7 @@ class App extends Component {
   }
 
   render () {
-    const { user, setHeaders } = this.state;
+    const { setHeaders, user } = this.state;
 
     const loginScreen = (
       <div className='login-screen'>

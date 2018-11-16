@@ -12,10 +12,9 @@ import {
   deleteDraft,
   createPoll
 } from '../../../utils/requests';
-import { colName } from '../../../utils/functions';
 
 class AdminSession extends Component {
-  socket = this.props.socket
+  socket = this.props.socket;
   state = {
     question: null,
     results: null,
@@ -28,52 +27,37 @@ class AdminSession extends Component {
     showDrafts: false,
     showLiveQuestion: false,
     showEndedPoll: false,
-  }
-
-  // componentDidMount () {
-  //   this.socket.on('admin/poll/updateTally', (data) => {
-  //     this.setState({
-  //       results: data.results
-  //     });
-  //   });
-  //   console.log('results', this.state.results);
-  // }
+  };
 
   /* Socket Functions */
 
   handleStartQuestion(question) {
-    var poll = question;
-    if (poll === null) {
-      poll = {
-        id: null,
-        text: '',
-        type: 'MULTIPLE_CHOICE',
-        options: ['', '']
-      };
-    }
-    poll.options.map((item, i) => !item ? colName(i) : item);
-    this.setState({ question: poll,
-      results: {},
+    const poll = {
+      correctAnswer: 'A', // TODO: fix this
+      results: {'A': {'text': 'blue', 'count': 0}, 'B': {'text': 'red', 'count': 0}},
+      options: question.options,
+      shared: false,
+      text: question.text,
+      type: question.type,
+    };
+
+    this.setState({ 
       editingQuestion: poll,
+      question: poll,
+      results: {},
       showCreatePoll: false,
       showLiveQuestion: true,
     });
 
-    const questionData = poll.type === 'MULTIPLE_CHOICE' ? poll : {
-      ...poll,
-      options: undefined
-    };
-
     console.log('start question');
-    console.log('this.state.question', this.state.question);
     console.log('poll', poll);
 
-    this.socket.emit('server/poll/start', questionData);
+    this.socket.emit('server/poll/start', poll);
   }
 
   handleShareQuestion = () => {
     this.socket.emit('server/poll/results');
-    this.setState({shared:true});
+    this.setState({ shared:true });
   }
 
   handleEndQuestion = () => {
@@ -83,9 +67,14 @@ class AdminSession extends Component {
       showLiveQuestion: false,
       showEndedPoll: true,
     });
-    createPoll(this.props.session, this.state.question.text, this.state.results,
-      this.state.type, this.state.shared)
-      .then(data => console.log(data));
+
+    createPoll(
+      this.props.session, 
+      this.state.question.text, 
+      this.state.results,
+      this.state.type, 
+      this.state.shared
+    ).then(data => console.log(data));
   }
 
   handleNewQuestion = () => {
