@@ -3,7 +3,7 @@ import { Button, Menu, Input } from 'semantic-ui-react';
 import io from 'socket.io-client';
 
 import AdminSession from './admin/AdminSession';
-import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png';
+import EmptyStateSection from './EmptyStateSection';
 import HiddenIcon from '../../assets/HiddenIcon.png';
 import { hostURL } from '../../utils/constants';
 import { getPollsForSession, updateSession } from '../../utils/requests';
@@ -108,6 +108,7 @@ class Session extends Component {
   }
 
   render () {
+    const { adminSession } = this.props;
     const { 
       activeTab, 
       polls, 
@@ -121,14 +122,6 @@ class Session extends Component {
 
     // TODO: fix dummy values for integrating UI
     console.log(this.socket);
-
-    const emptyStateSection = (
-      <div className={`empty-state ${name ?  '' : 'blur'}`}>
-        <img src={EmptyMonkeyIcon} alt="No Polls"></img>
-        <div className='empty-state-title'>Nothing to see here.</div>
-        <div className='empty-state-subtitle'>You haven’t made any polls yet! Try it out above.</div>
-      </div>
-    );
 
     // TODO:enable closing out of naming to cancel creating session
     // TODO:implement button to click on to name session? (not super intuitive to press enter)
@@ -179,7 +172,8 @@ class Session extends Component {
             />
           </Menu>
         </div>
-        <Button className='create-poll-button' primary onClick={this.createPoll}>Create a poll</Button>
+        {adminSession && 
+            <Button className='create-poll-button' primary onClick={this.createPoll}>Create a poll</Button>}
       </div>
     );
 
@@ -250,7 +244,9 @@ class Session extends Component {
         (<div className='session'>
           {sessionHeader}
           <div className='session-content'>
-            {polls && pollsDate.length === 0 && emptyStateSection}
+            {polls && pollsDate.length === 0 && 
+                <EmptyStateSection adminSession={adminSession} />
+            }
             {polls && pollsDate.length !== 0 && pollCard}
           </div>
           {sessionFooter}
