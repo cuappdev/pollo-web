@@ -3,7 +3,7 @@ import { Header } from 'semantic-ui-react';
 import MultipleChoice from '../MultipleChoice';
 import FreeResponse from '../FreeResponse';
 
-class UserQuestion extends Component {
+class MemberQuestion extends Component {
   render () {
     const { question, results, onSubmit, open } = this.props;
 
@@ -31,4 +31,4 @@ class UserQuestion extends Component {
   }
 }
 
-export default UserQuestion;
+export default MemberQuestion;

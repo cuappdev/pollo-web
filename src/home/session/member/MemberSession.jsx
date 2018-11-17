@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import UserQuestion from './UserQuestion';
 
-class UserSession extends Component {
+class MemberSession extends Component {
   state = {
     question: null,
     results: null,
@@ -53,4 +53,4 @@ class UserSession extends Component {
   }
 }
 
-export default UserSession;
+export default MemberSession;
