@@ -144,7 +144,7 @@ class Home extends Component {
     if (session) {
       return (
         <SessionPage
-          adminSession={activeTab === 'CREATED'}
+          isAdminSession={activeTab === 'CREATED'}
           leaveSession={this.leaveSession} 
           session={session} />
       );

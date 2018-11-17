@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import EmptyMonkeyIcon from '../../assets/EmptyMonkeyIcon.png';
 
-class EmptyStateSection extends Component {
-  propTypes: {
-    adminSession: boolean, 
-  }
+interface propTypes {
+  isAdminSession: boolean, 
+}
+
+class EmptyStateSection extends Component<Props, null> {
 
   render() {
     let title, subtitle;
-    if (this.props.adminSession) {
+    if (this.props.isAdminSession) {
       title = 'Nothing to see here';
       subtitle = 'You haven\'t made any polls yet! Try it out above.';
     } else {

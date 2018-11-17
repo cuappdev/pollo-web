@@ -13,17 +13,24 @@ import './SessionPage.css';
 
 //TODO: restrict screen size (if minimize screen a lot, the icons overlap)
 
-class SessionPage extends Component {
-  propTypes: {
-    adminSession: boolean, // whether or not the session is an admin one
-    leaveSession: any,
-    session: any,
-  };
+interface Props {
+  isAdminSession: boolean, // whether or not the session is an admin one
+  leaveSession: any,
+  session: any,
+}
 
-  constructor(props: propTypes) {
+interface State {
+  isAdminSession: boolean, // whether or not the session is an admin one
+  leaveSession: any,
+  session: any,
+}
+
+class SessionPage extends Component<Props, State> {
+
+  constructor(props: Props) {
     super(props);
 
-    const userType = props.adminSession ? 'admin' : 'member';
+    const userType = props.isAdminSession ? 'admin' : 'member';
     this.socket = io(
       `${hostURL}/${this.props.session.id}`,
       {
@@ -109,7 +116,7 @@ class SessionPage extends Component {
   }
 
   render () {
-    const { adminSession } = this.props;
+    const { isAdminSession } = this.props;
     const { 
       activeTab, 
       polls, 
@@ -174,7 +181,7 @@ class SessionPage extends Component {
             />
           </Menu>
         </div>
-        {adminSession && 
+        {isAdminSession && 
             <Button className='create-poll-button' primary onClick={this.createPoll}>Create a poll</Button>}
       </div>
     );
@@ -247,13 +254,13 @@ class SessionPage extends Component {
           {sessionHeader}
           <div className='session-content'>
             {polls && pollsDate.length === 0 && 
-                <EmptyStateSection adminSession={adminSession} />
+                <EmptyStateSection isAdminSession={isAdminSession} />
             }
             {polls && pollsDate.length !== 0 && pollCard}
           </div>
           {sessionFooter}
           {showCreatePoll && createPollPopup}
-          {!adminSession && 
+          {!isAdminSession && 
             <MemberSession
               dismissCreatePoll={this.dismissCreatePoll} 
               results={results} 
