@@ -3,7 +3,7 @@ import { Header, Menu, Button } from 'semantic-ui-react';
 
 import CreateSession from './CreateSession';
 import JoinSession from './JoinSession';
-import Session from './session/Session';
+import SessionPage from './session/SessionPage';
 import {
   createNewSession,
   deleteSession,
@@ -140,10 +140,10 @@ class Home extends Component {
       session,
     } = this.state;
 
-    // Go to session screen if session non-null
+    // Go to session page if session non-null
     if (session) {
       return (
-        <Session
+        <SessionPage
           adminSession={activeTab === 'CREATED'}
           leaveSession={this.leaveSession} 
           session={session} />

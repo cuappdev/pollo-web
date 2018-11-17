@@ -3,16 +3,17 @@ import { Button, Menu, Input } from 'semantic-ui-react';
 import io from 'socket.io-client';
 
 import AdminSession from './admin/AdminSession';
+import MemberSession from './member/MemberSession';
 import EmptyStateSection from './EmptyStateSection';
 import HiddenIcon from '../../assets/HiddenIcon.png';
 import { hostURL } from '../../utils/constants';
 import { getPollsForSession, updateSession } from '../../utils/requests';
 
-import './Session.css';
+import './SessionPage.css';
 
 //TODO: restrict screen size (if minimize screen a lot, the icons overlap)
 
-class Session extends Component {
+class SessionPage extends Component {
   propTypes: {
     adminSession: boolean, // whether or not the session is an admin one
     leaveSession: any,
@@ -113,6 +114,7 @@ class Session extends Component {
       activeTab, 
       polls, 
       pollsDate, 
+      results,
       selectedDate,
       session, 
       sessionInput, 
@@ -251,9 +253,16 @@ class Session extends Component {
           </div>
           {sessionFooter}
           {showCreatePoll && createPollPopup}
+          {!adminSession && 
+            <MemberSession
+              dismissCreatePoll={this.dismissCreatePoll} 
+              results={results} 
+              socket={this.socket} 
+            />
+          }
         </div>)
     );
   }
 }
 
-export default Session;
+export default SessionPage;

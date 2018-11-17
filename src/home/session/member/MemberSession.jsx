@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
-import UserQuestion from './UserQuestion';
+import MemberQuestion from './MemberQuestion';
 
-class MemberSession extends Component {
-  state = {
-    question: null,
-    results: null,
-    open: null
+interface Props {
+  socket: any,
+}
+
+interface State {
+  question: null,
+  results: null,
+  open: null,
+}
+
+class MemberSession extends Component<Props, State> {
+  constructor(props) {
+    super(props);
+
+    this.socket = props.socket;
+    this.state = {
+      question: null,
+      results: null,
+      open: null
+    };
   }
-
-  socket = this.props.socket
 
   componentDidMount () {
     this.socket.on('user/question/start', (data) => {
@@ -39,7 +52,7 @@ class MemberSession extends Component {
 
     return question
       ? (
-        <UserQuestion
+        <MemberQuestion
           question={question}
           results={results}
           onSubmit={this.sendAnswer}

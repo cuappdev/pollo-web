@@ -231,7 +231,11 @@ class AdminSession extends Component {
             </div>
             <div className='popup-footer'>
               <Button className='save-draft popup-button' onClick={this.saveDraft}>Save as draft</Button>
-              <Button className='start-question popup-button' onClick={() => this.handleStartQuestion(question)}>Start question</Button>
+              <Button 
+                className='start-question popup-button' 
+                onClick={() => this.handleStartQuestion(question)}>
+                Start question
+              </Button>
             </div>
           </div>
         }
