@@ -3,7 +3,7 @@ import { Button, Dropdown } from 'semantic-ui-react';
 import CreateQuestion from './CreateQuestion';
 import AdminLiveQuestion from './AdminLiveQuestion';
 import AdminEndedPoll from './AdminEndedPoll';
-import Timer from '../../Timer';
+import Timer from '../Timer';
 import './AdminSession.css';
 import {
   createDraft,
