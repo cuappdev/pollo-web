@@ -3,13 +3,13 @@
 import React, { Component } from 'react';
 import GoogleLogin from 'react-google-login';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
 import './App.css';
 import Home from './home/Home';
 import { googleClientId } from './utils/constants';
 import { generateUserSession, setAuthHeader } from './utils/requests';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import AppReducer from './reducers/AppReducer';
 
 

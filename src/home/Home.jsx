@@ -237,8 +237,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadUser: (payload) => dispatch(this.loadUser(payload)),
-    clearUser: () => dispatch(this.clearUser())
-  }
+    clearUser: () => dispatch(this.clearUser()),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
