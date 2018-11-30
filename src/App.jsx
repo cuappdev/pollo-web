@@ -8,6 +8,9 @@ import './App.css';
 import Home from './home/Home';
 import { googleClientId } from './utils/constants';
 import { generateUserSession, setAuthHeader } from './utils/requests';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import AppReducer from './reducers/AppReducer';
 
 
 class App extends Component {
@@ -47,6 +50,8 @@ class App extends Component {
     localStorage.clear();
   }
 
+  store = createStore(AppReducer);
+
   render () {
     const { setHeaders, user } = this.state;
 
@@ -76,9 +81,25 @@ class App extends Component {
       </div>
     );
 
-    if (!user) return loginScreen;
-    if (user && !setHeaders) return loadingScreen;
-    return homeScreen;
+    if (!user) {
+      return (
+        <Provider store={this.store}>
+          {loginScreen}
+        </Provider>
+      );
+    }
+    if (user && !setHeaders) {
+      return (
+        <Provider store={this.store}>
+          {loadingScreen}
+        </Provider>
+      )
+    }
+    return (
+      <Provider store={this.store}>
+          {homeScreen}
+        </Provider>
+    );
   }
 }
 

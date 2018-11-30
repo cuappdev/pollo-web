@@ -16,10 +16,17 @@ import { connect } from 'react-redux';
 
 import './Home.css';
 
-class Home extends Component {
+type Props = {
+  loadUser: Object => void,
+  clearUser: void => void
+}
+
+class Home extends React.Component<Props> {
 
   constructor(props) {
     super(props);
+
+    console.log(props);
 
     this.state = {
       activeTab: 'CREATED',
@@ -32,6 +39,9 @@ class Home extends Component {
       adminSessions: null,
       memberSessions: null
     };
+
+    this.loadUser = props.loadUser.bind(this);
+    this.clearUser = props.clearUser.bind(this);
 
     this.fetchSessions();
   }
@@ -226,8 +236,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadUser: (payload) => dispatch(loadUser(payload)),
-    clearUser: () => dispatch(clearUser())
+    loadUser: (payload) => dispatch(this.loadUser(payload)),
+    clearUser: () => dispatch(this.clearUser())
   }
 }
 
