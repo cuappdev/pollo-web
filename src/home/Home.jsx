@@ -12,6 +12,7 @@ import {
   joinSession,
   leaveSession,
 } from '../utils/requests';
+import { connect } from 'react-redux';
 
 import './Home.css';
 
@@ -219,4 +220,15 @@ class Home extends Component {
   }
 }
 
-export default Home;
+function mapStateToProps(state) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    loadUser: (payload) => dispatch(loadUser(payload)),
+    clearUser: () => dispatch(clearUser())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
