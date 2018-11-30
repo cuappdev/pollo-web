@@ -12,13 +12,21 @@ import {
   joinSession,
   leaveSession,
 } from '../utils/requests';
+import { connect } from 'react-redux';
 
 import './Home.css';
 
-class Home extends Component {
+type Props = {
+  loadUser: Object => void,
+  clearUser: void => void
+}
+
+class Home extends React.Component<Props> {
 
   constructor(props) {
     super(props);
+
+    console.log(props);
 
     this.state = {
       activeTab: 'CREATED',
@@ -31,6 +39,9 @@ class Home extends Component {
       adminSessions: null,
       memberSessions: null
     };
+
+    this.loadUser = props.loadUser.bind(this);
+    this.clearUser = props.clearUser.bind(this);
 
     this.fetchSessions();
   }
@@ -219,4 +230,15 @@ class Home extends Component {
   }
 }
 
-export default Home;
+function mapStateToProps(state) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    loadUser: (payload) => dispatch(this.loadUser(payload)),
+    clearUser: () => dispatch(this.clearUser()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
