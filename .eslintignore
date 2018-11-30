@@ -1,0 +1,4 @@
+build/*
+public/*
+semantic/*
+node_modules/*
