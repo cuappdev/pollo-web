@@ -6,7 +6,7 @@ export type SessionState = {
   description: string,
   id: number,
   isLive: ?boolean,
-  name: string
+  name: string,
 };
 
 export type UserInfoState = {
@@ -19,28 +19,28 @@ export type UserInfoState = {
   name: string, 
   netId: string,
   refreshToken: string,
-  sessionExpiration: number
+  sessionExpiration: number,
 };
 
 export type UserState = {
   adminSessions: SessionState[],
   memberSessions: SessionState[],
-  userInfo: UserInfoState
+  userInfo: UserInfoState,
 };
 
 const initialState: UserState = {
   adminSessions: [],
   memberSessions: [],
-  userInfo: null
+  userInfo: null,
 };
 
 export default function reducer(
   state: UserState = initialState,
-  action: Object
+  action: Object,
 ) {
   switch (action.type) {
   	case LOAD:
-  	  return { ...state, ...action.payload };
+  	  return { ...state, ...action.payload, };
   	case CLEAR:
   	  return initialState;
   	default:
@@ -49,9 +49,9 @@ export default function reducer(
 };
 
 export function loadUser(payload: Object) {
-  return { type: LOAD, payload }
+  return { type: LOAD, payload, };
 };
 
 export function clearUser() {
-  return { type: CLEAR }
+  return { type: CLEAR, };
 };
