@@ -1,0 +1,307 @@
+@import '../../colors.scss';
+
+.background {
+    width: 100vw;
+    height: 100vh;
+    background-color: $darkestGray;
+}
+
+.card-container {
+    position: absolute;
+    top: 117px;
+    left: auto;
+    right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.links-container {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    bottom: 37px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.link {
+    font-size: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0px 21px;
+    color: $mediumGrayTwo;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.polling-app-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.groups-view-container {
+    width: 322px;
+    height: 100%;
+}
+
+.polls-view-container {
+    width: calc(100vw - 322px);
+    height: 100%;
+    background-color: $darkestGray;
+}
+
+.corner-logo-container {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+}
+
+.export-card {
+    position: relative;
+    background-color: $whiteTwo;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.name-header-text {
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: $darkestGray;
+    margin: 24px 134px 16px 134px;
+}
+
+.card-border {
+    width: 100%;
+    height: 1px;
+    background-color: $borderGray;
+}
+
+.export-group-list-container {
+    width: 100%;
+    background-color: $white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    &.scrollable {
+        height: 260px;
+        overflow-y: scroll;
+    }
+}
+
+.export-group-button {
+    border: none;
+    outline: none;
+    background-color: $white;
+    width: 100%;
+    height: 65px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    &.bordered {
+        border-bottom: 1px solid $borderGray;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+}
+
+.export-group-name-text {
+    margin: 0px 20px;
+    font-size: 18px;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: $black;
+}
+
+.group-name-header-text-container {
+    width: 100%;
+    background-color: $white;
+}
+
+.group-name-header-text {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: $black;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 8px 20px;
+}
+
+.export-options-container {
+    width: 100%;
+    background-color: $white;
+
+    &.scrollable {
+        height: 195px;
+        overflow-y: scroll;
+        border-bottom: 1px solid $borderGray;
+    }
+}
+
+.select-export-date-button {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid $borderGray;
+    width: 100%;
+    height: 65px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $white;
+}
+
+.export-date-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: $black;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: left;
+    margin: 0px 20px;
+}
+
+.export-date-icon-border {
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 2px solid $blueGray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.selected-export-date-icon-container {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: $polloGreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.export-action-container {
+    width: 100%;
+    background-color: $white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.export-dropdown-button-container {
+    width: 100%;
+}
+
+.export-dropdown-button {
+    padding: 0;
+    border: none;
+    outline: none;
+    width: 172px;
+    height: 28px;
+    background-color: $white;
+    border-radius: 4px;
+    border: 0.6px solid $darkGray;
+    margin: 16px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-arrow-icon-container {
+    width: 32px;
+    height: 26.8px;
+    background-color: $polloGreen;
+    border-left: 0.6px solid $darkGray;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.6px;
+}
+
+.export-type-text {
+    font-size: 16px;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: $darkestGray;
+    text-align: left;
+    margin-left: 8px;
+}
+
+.export-dropdown-button-label {
+    position: absolute;
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    color: $darkestGray;
+    margin-left: 26px;
+    margin-top: 20px;
+}
+
+.export-button {
+    border: none;
+    outline: none;
+    width: 172px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: $polloGreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 22px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.export-button-text {
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: $white;
+    letter-spacing: 0.2px;
+}
+
+.export-dropdown-container {
+    position: absolute;
+    width: 172px;
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    border-radius: 4px;
+    box-shadow: 2px 3px 4px 0 rgba(0, 0, 0, 0.18);
+    border: 0.6px solid $darkGray;
+    margin-top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.export-dropdown-item {
+    background-color: $white;
+    border: none;
+    outline: none;
+    width: calc(100% - 16px);
+    font-size: 16px;
+    text-align: left;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    color: $darkestGray;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
