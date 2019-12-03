@@ -4,8 +4,8 @@ const googleRedirectUri = process.env.REACT_APP_BACKEND_CALLBACK_URI || '';
 const hostURL = process.env.REACT_APP_BACKEND_HOST_URL || '';
 
 export {
-  googleClientId,
-  googleClientSecret,
-  googleRedirectUri,
-  hostURL,
+    googleClientId,
+    googleClientSecret,
+    googleRedirectUri,
+    hostURL,
 };

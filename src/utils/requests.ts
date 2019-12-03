@@ -9,28 +9,28 @@ const api = axios.create({
   baseURL: 'http://' + hostURL + '/api/v2',
 });
 
-const get = async (url, params) => {
+const get = async (url: string, params?: any) => {
   const res = await api.get(url, params);
   const { success, data } = res.data;
   if (success) return data;
   throw Error(data.errors[0]);
 };
 
-const post = async (url, body) => {
+const post = async (url: string, body?: any) => {
   const res = await api.post(url, body);
   const { success, data } = res.data;
   if (success) return data;
   throw Error(data.errors[0]);
 };
 
-const put = async (url, body) => {
+const put = async (url: string, body?: any) => {
   const res = await api.put(url, body);
   const { success, data } = res.data;
   if (success) return data;
   throw Error(data.errors[0]);
 };
 
-const del = async (url) => {
+const del = async (url: string) => {
   const res = await api.delete(url);
   const { success, data } = res.data;
   if (success) return data;
@@ -41,9 +41,8 @@ const del = async (url) => {
             User
 *******************************/
 
-export const generateUserSession = async (response) => {
-  const body = { idToken: response.tokenId };
-  const data = await post('/auth/mobile/', body);
+export const generateUserSession = async (idToken: string) => {
+  const data = await post('/auth/mobile/', { idToken });
   console.log(data);
   localStorage.setItem('accessToken', data.accessToken);
 
@@ -52,11 +51,10 @@ export const generateUserSession = async (response) => {
   return data;
 };
 
-export const setAuthHeader = (token) => {
-  if (!token) {
-    token = localStorage.getItem('accessToken');
-  }
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+export const setAuthHeader = (token: string | null) => {
+  const header = `Bearer ${token ? token : localStorage.getItem('accessToken')}`;
+  console.log(header);
+  axios.defaults.headers.common['Authorization'] = header;
 };
 
 export const getCurrentUser = async () => {
@@ -68,33 +66,33 @@ export const getCurrentUser = async () => {
             Roles
 *******************************/
 
-export const getMembers = async (sessionId) => {
+export const getMembers = async (sessionId: string) => {
   const data = await get(`/sessions/${sessionId}/members/`);
   return data;
 };
 
-export const getAdmins = async (sessionId) => {
+export const getAdmins = async (sessionId: string) => {
   const data = await get(`/sessions/${sessionId}/admins/`);
   return data;
 };
 
-export const addMembers = async (sessionId, memberIds) => {
-  const data = await post(`/sessions/${sessionId}/members/`, { memberIds : memberIds });
+export const addMembers = async (sessionId: string, memberIds: string[]) => {
+  const data = await post(`/sessions/${sessionId}/members/`, { memberIds });
   return data;
 };
 
-export const removeMembers = async (sessionId, memberIds) => {
-  const data = await put(`/sessions/${sessionId}/members/`, { memberIds : memberIds });
+export const removeMembers = async (sessionId: string, memberIds: string[]) => {
+  const data = await put(`/sessions/${sessionId}/members/`, { memberIds });
   return data;
 };
 
-export const addAdmins = async (sessionId, adminIds) => {
-  const data = await post(`/sessions/${sessionId}/admins/`, { adminIds : adminIds });
+export const addAdmins = async (sessionId: string, adminIds: string[]) => {
+  const data = await post(`/sessions/${sessionId}/admins/`, { adminIds });
   return data;
 };
 
-export const removeAdmins = async (sessionId, adminIds) => {
-  const data = await put(`/sessions/${sessionId}/admins/`, { adminIds : adminIds });
+export const removeAdmins = async (sessionId: string, adminIds: string[]) => {
+  const data = await put(`/sessions/${sessionId}/admins/`, { adminIds });
   return data;
 };
 
@@ -107,12 +105,12 @@ export const generateNewCode = async () => {
   return data.code;
 };
 
-export const createNewSession = async (code) => {
+export const createNewSession = async (code: string) => {
   const data = await post('/sessions/', { name: null, code: code });
   return data.node;
 };
 
-export const getSession = async (code) => {
+export const getSession = async (code: string) => {
   const data = await get(`/sessions/${code}`);
   return data.node;
 };
@@ -121,34 +119,52 @@ export const getAllSessions = async () => {
   const adminSessions = await get('/sessions/all/admin');
   const memberSessions = await get('/sessions/all/member');
   return {
-    'adminSessions': adminSessions.map(session => session.node),
-    'memberSessions': memberSessions.map(session => session.node),
+    'adminSessions': adminSessions.map((session: any) => session.node),
+    'memberSessions': memberSessions.map((session: any) => session.node),
   };
 };
 
-export const deleteSession = async (sessionId) => {
+export const getAdminSessions = async () => {
+    const data = await get('/sessions/all/admin', {
+        headers: {
+            Authorization: axios.defaults.headers.common['Authorization'],
+        },
+    });
+    return data;
+};
+
+export const exportCsv = async (sessionId: string) => {
+    const data = await get(`/sessions/${sessionId}/csv/`, {
+        headers: {
+            Authorization: axios.defaults.headers.common['Authorization'],
+        },
+    });
+    return data;
+};
+
+export const deleteSession = async (sessionId: string) => {
   const data = await del(`/sessions/${sessionId}`);
   return data;
 };
 
-export const leaveSession = async (sessionId) => {
+export const leaveSession = async (sessionId: string) => {
   const data = await del(`/sessions/${sessionId}/members`);
   return data;
 };
 
-export const updateSession = async (sessionId, name, code) => {
+export const updateSession = async (sessionId: string, name: string, code: string) => {
   const data = await put(`/sessions/${sessionId}`, { id: sessionId, name: name, code: code });
   return data.node;
 };
 
 // TODO: Throw error if session code is invalid
-export const joinSession = async (code) => {
+export const joinSession = async (code: string) => {
   // const group= await get(`/groups/${code}`);
   const data = await post('/join/session/', { code: code });
   return data.node;
 };
 
-export const endSession = async (sessionId, shouldSave) => {
+export const endSession = async (sessionId: string, shouldSave: boolean) => {
   const data = await post(`/session/${sessionId}/end/`, { save: shouldSave });
   return data;
 };
@@ -174,9 +190,13 @@ export const getPoll = async (pollId) => {
   return data;
 };
 
-export const getPollsForSession = async (sessionId) => {
-  const data = await get(`/sessions/${sessionId}/polls/`);
-  return data;
+export const getPollsForSession = async (sessionId: string) => {
+    const data = await get(`/sessions/${sessionId}/polls`, {
+        headers: {
+            Authorization: axios.defaults.headers.common['Authorization'],
+        },
+    });
+    return data;
 };
 
 export const updatePoll = async (pollId, text, results, shared) => {
