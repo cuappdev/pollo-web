@@ -191,6 +191,9 @@ class HomeView extends React.Component<any, HomeViewState> {
                     <div className="export-group-name-text">
                         {session.name}
                     </div>
+                    <div className="export-group-arrow-container">
+                        <IconView type="export-group-arrow" />
+                    </div>
                 </button>
             );
         });
