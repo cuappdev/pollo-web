@@ -18,10 +18,11 @@ export interface AppState {
 }
 
 export type AppAction =
+    | { type: 'reset' }
     | { type: 'select-date'; date: PollDate }
     | { type: 'set-current-poll'; currentPoll?: Poll }
     | { type: 'set-groups-view-type'; groupsViewType?: GroupsViewType }
-    | { type: 'set-selected-session'; selectedSession: Session }
+    | { type: 'set-selected-session'; selectedSession?: Session }
     | { type: 'set-sessions'; groupsViewType?: GroupsViewType; sessions: Session[] }
     | { type: 'set-user'; user: User }
     | { type: 'set-user-session'; userSession: UserSession }
@@ -39,6 +40,8 @@ export const initialState: AppState = {
 
 export default function reducer(state: AppState = initialState, action: AppAction) {
     switch (action.type) {
+        case 'reset':
+            return initialState;
         case 'select-date':
             return { 
                 ...state, 

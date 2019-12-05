@@ -5,6 +5,7 @@ export type IconViewType =
     | 'ellipsis'
     | 'export-dropdown'
     | 'export-group-arrow'
+    | 'export-group-back-arrow'
     | 'plus';
 
 export interface IconViewProps {
@@ -37,6 +38,12 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
             return (
                 <svg width="9" height="15" fill="none" viewBox="0 0 9 15">
                     <path stroke="#3D3D3D" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1.154 14l6.5-6.5-6.5-6.5"/>
+                </svg>
+            );
+        case 'export-group-back-arrow':
+            return (
+                <svg width="9" height="15" fill="none" viewBox="0 0 9 15">
+                    <path stroke="#3D3D3D" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 1L1 7.5 7.5 14"/>
                 </svg>
             );
         case 'plus':

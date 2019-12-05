@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import React from 'react';
+import { GoogleLogout } from 'react-google-login';
 import { connect } from 'react-redux';
 
 import GroupsView from '../GroupsView';
@@ -11,6 +12,7 @@ import {
     AppAction,
     AppState,
 } from '../../reducer';
+import { googleClientId } from '../../utils/constants';
 import { 
     exportCsv,
     generateUserSession,
@@ -265,6 +267,18 @@ class HomeView extends React.Component<any, HomeViewState> {
         });
     };
 
+    public onLogOut = () => {
+        this.forgetCurrentUser();
+        this.props.dispatch({ type: 'reset' });
+    };
+
+    public unselectSelectedSession = () => {
+        this.props.dispatch({ 
+            type: 'set-selected-session', 
+            selectedSession: undefined,
+        });
+    };
+
     public renderExportApp = () => {
         // Clear access token anywhere??
         const { selectedSession, sessions } = this.props;
@@ -274,6 +288,12 @@ class HomeView extends React.Component<any, HomeViewState> {
                 <div className="corner-logo-container">
                     <LogoView type="small-background" />
                 </div>
+                <GoogleLogout
+                    className="export-log-out-button"
+                    clientId={googleClientId}
+                    buttonText="Log Out"
+                    onLogoutSuccess={this.onLogOut}
+                />
                 <div className="card-container">
                     <div className="export-card">
                         <div className="name-header-text">Pollo</div>
@@ -281,6 +301,12 @@ class HomeView extends React.Component<any, HomeViewState> {
                         {selectedSession ? (
                             <>
                                 <div className="group-name-header-text-container">
+                                    <button 
+                                        className="group-back-arrow-button"
+                                        onClick={this.unselectSelectedSession}
+                                    >
+                                        <IconView type="export-group-back-arrow" />
+                                    </button>
                                     <div className="group-name-header-text">
                                         {selectedSession.name}
                                     </div>
