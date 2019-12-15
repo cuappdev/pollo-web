@@ -394,7 +394,7 @@ class HomeView extends React.Component<any, HomeViewState> {
     };
 
     public renderPollingApp = () => {
-        const { currentPoll, sidebarViewType, selectedPollDate } = this.props;
+        const { currentPoll, sidebarViewType, selectedPollDate, selectedSession } = this.props;
         if (!sidebarViewType) {
             return null;
         }
@@ -419,6 +419,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                         onEndPoll={this.onEndPoll}
                         onStartPoll={this.onStartPoll}
                         pollDate={selectedPollDate}
+                        session={selectedSession}
                     />
                 </div>
             </div>
