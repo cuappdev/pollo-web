@@ -22,7 +22,7 @@ export type AppAction =
     | { type: 'reset' }
     | { type: 'select-date'; date: PollDate }
     | { type: 'set-current-poll'; currentPoll?: Poll }
-    | { type: 'set-groups-view-type'; sidebarViewType?: SidebarViewType }
+    | { type: 'set-sidebar-view-type'; sidebarViewType?: SidebarViewType }
     | { type: 'set-selected-poll-date'; selectedPollDate?: PollDate }
     | { type: 'set-selected-session'; selectedSession?: Session }
     | { type: 'set-sessions'; sidebarViewType?: SidebarViewType; sessions: Session[] }
@@ -52,7 +52,7 @@ export default function reducer(state: AppState = initialState, action: AppActio
             };
         case 'set-current-poll':
             return { ...state, currentPoll: action.currentPoll };
-        case 'set-groups-view-type':
+        case 'set-sidebar-view-type':
             return { ...state, sidebarViewType: action.sidebarViewType };
         case 'set-selected-poll-date':
             const { selectedPollDate } = action;

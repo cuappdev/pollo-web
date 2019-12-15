@@ -17,6 +17,7 @@ export type SidebarViewType =
     | { type: 'single-date'; pollDate: PollDate }
 
 export interface SidebarViewProps {
+    onBackButtonClick(): void;
     onCreateGroup(): void;
     onCreatePoll(): void;
     onEditPollDate(pollDate: PollDate);
@@ -28,6 +29,7 @@ export interface SidebarViewProps {
 }
 
 const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
+    onBackButtonClick,
     onCreateGroup,
     onCreatePoll,
     onEditPollDate,
@@ -158,18 +160,28 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
 
     return (
         <div className="sidebar">
-            <div className="groups-header-container">
-                <div className="groups-header-text">
-                    {getHeaderText()}
+            <div className="sidebar-header-container">
+                <div className="sidebar-header-text-container">
+                    {type.type !== 'group-list' && (
+                        <button 
+                            className="sidebar-header-arrow-button"
+                            onClick={onBackButtonClick}
+                        >
+                            
+                        </button>
+                    )}
+                    <div className="sidebar-header-text">
+                        {getHeaderText()}
+                    </div>
                 </div>
                 <button 
-                    className="groups-header-icon-button"
+                    className="sidebar-header-icon-button"
                     onClick={type.type === 'group-list' ? onCreateGroup : onCreatePoll}
                 >
                     <IconView type="plus" />
                 </button>
             </div>
-            <div className="group-content-container">
+            <div className="sidebar-content-container">
                 {renderSidebarContent()}
             </div>
         </div>

@@ -382,6 +382,17 @@ class HomeView extends React.Component<any, HomeViewState> {
         );
     };
 
+    public onSidebarViewBackButtonClick = () => {
+        const { dispatch, selectedSession, sessions, sidebarViewType } = this.props;
+        dispatch({
+            type: 'set-sidebar-view-type',
+            sidebarViewType: {
+                type: sidebarViewType.type === 'single-group' ? 'group-list' : 'single-group',
+                ...(sidebarViewType.type === 'single-group' ? { sessions } : { session: selectedSession }),
+            },
+        });
+    };
+
     public renderPollingApp = () => {
         const { currentPoll, sidebarViewType, selectedPollDate } = this.props;
         if (!sidebarViewType) {
@@ -391,6 +402,7 @@ class HomeView extends React.Component<any, HomeViewState> {
             <div className="polling-app-container">
                 <div className="groups-view-container">
                     <SidebarView
+                        onBackButtonClick={this.onSidebarViewBackButtonClick}
                         onCreateGroup={this.onCreateGroup}
                         onCreatePoll={this.onCreatePoll}
                         onEditPollDate={this.onEditPollDate}

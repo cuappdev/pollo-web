@@ -8,7 +8,7 @@
     flex-direction: column;
 }
 
-.groups-header-container {
+.sidebar-header-container {
     width: 100%;
     height: 56px;
     background-color: $white;
@@ -19,14 +19,28 @@
     align-items: center;
 }
 
-.group-content-container {
+.sidebar-content-container {
     width: 100%;
     overflow: scroll;
     height: calc(100vh - 56px);
 }
 
-.groups-header-text {
+.sidebar-header-text-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     margin-left: 16px;
+}
+
+.sidebar-header-arrow-button {
+    margin-right: 9.8px;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.sidebar-header-text {
     font-size: 18px;
     font-weight: 600;
     color: $black;
@@ -34,7 +48,7 @@
     text-align: left;
 }
 
-.groups-header-icon-button {
+.sidebar-header-icon-button {
     cursor: pointer;
     border: none;
     outline: none;
