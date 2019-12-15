@@ -3,7 +3,7 @@ import React from 'react';
 import { GoogleLogout } from 'react-google-login';
 import { connect } from 'react-redux';
 
-import GroupsView from '../GroupsView';
+import SidebarView from '../SidebarView';
 import IconView from '../IconView';
 import PollsView from '../PollsView';
 import LoginCardView from '../LoginCardView';
@@ -13,6 +13,7 @@ import {
     AppState,
 } from '../../reducer';
 import { googleClientId } from '../../utils/constants';
+import { getDateString } from '../../utils/functions';
 import { 
     exportCsv,
     generateUserSession,
@@ -65,7 +66,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                 console.log(adminSessions);
                 this.props.dispatch({ 
                     type: 'set-sessions', 
-                    groupsViewType: { type: 'group-list', sessions: adminSessions },
+                    sidebarViewType: { type: 'group-list', sessions: adminSessions },
                     sessions: adminSessions,
                 });
                 const email = localStorage.getItem('email');
@@ -99,6 +100,10 @@ class HomeView extends React.Component<any, HomeViewState> {
     };
 
     public onEditSession = (session: Session) => {
+
+    };
+
+    public onEditPollDate = (pollDate: PollDate) => {
 
     };
 
@@ -140,7 +145,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                 });
                 this.props.dispatch({ 
                     type: 'set-sessions', 
-                    groupsViewType: { type: 'group-list', sessions: adminSessions },
+                    sidebarViewType: { type: 'group-list', sessions: adminSessions },
                     sessions: adminSessions,
                 });
                 const { email } = response.profileObj;
@@ -164,8 +169,12 @@ class HomeView extends React.Component<any, HomeViewState> {
         }
     };
 
-    public onSelectPoll = (poll: Poll) => {
+    public onSelectPoll = (currentPoll: Poll) => {
+        this.props.dispatch({ type: 'set-current-poll', currentPoll });
+    };
 
+    public onSelectPollDate = (selectedPollDate: PollDate) => {
+        this.props.dispatch({ type: 'set-selected-poll-date', selectedPollDate });
     };
 
     public onSelectSession = (selectedSession: Session) => {
@@ -216,17 +225,13 @@ class HomeView extends React.Component<any, HomeViewState> {
             return null;
         }
         return selectedSession.dates.map((pollDate: PollDate) => {
-            const date = new Date(parseFloat(pollDate.date) * 1000);
-            const month = date.toLocaleString('default', { month: 'long' });
-            const day = date.getDate();
-            const year = date.getFullYear();
             return (
                 <button
                     className="select-export-date-button"
                     onClick={() => this.onSelectExportDate(pollDate)}
                 >
                     <div className="export-date-text">
-                        {`${month} ${day}, ${year}`}
+                        {getDateString(pollDate)}
                     </div>
                     <div className="export-date-icon-border">
                         {selectedPollDates.includes(pollDate) && (
@@ -378,20 +383,22 @@ class HomeView extends React.Component<any, HomeViewState> {
     };
 
     public renderPollingApp = () => {
-        const { currentPoll, groupsViewType, selectedSession } = this.props;
-        if (!groupsViewType) {
+        const { currentPoll, sidebarViewType, selectedPollDate } = this.props;
+        if (!sidebarViewType) {
             return null;
         }
         return (
             <div className="polling-app-container">
                 <div className="groups-view-container">
-                    <GroupsView
+                    <SidebarView
                         onCreateGroup={this.onCreateGroup}
                         onCreatePoll={this.onCreatePoll}
+                        onEditPollDate={this.onEditPollDate}
                         onEditSession={this.onEditSession}
                         onSelectPoll={this.onSelectPoll}
+                        onSelectPollDate={this.onSelectPollDate}
                         onSelectSession={this.onSelectSession}
-                        type={groupsViewType}
+                        type={sidebarViewType}
                     />
                 </div>
                 <div className="polls-view-container">
@@ -399,7 +406,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                         currentPoll={currentPoll}
                         onEndPoll={this.onEndPoll}
                         onStartPoll={this.onStartPoll}
-                        session={selectedSession}
+                        pollDate={selectedPollDate}
                     />
                 </div>
             </div>
@@ -439,11 +446,13 @@ class HomeView extends React.Component<any, HomeViewState> {
                 </div>
             );
         }
+        // Once the polling app is developed, the below snippet can be uncommented.
         return location.pathname === '/export' ? (
             this.renderExportApp()
         ) : (
             this.renderPollingApp()
         );
+        // return this.renderExportApp();
     }
 }
 

@@ -4,23 +4,22 @@ import LogoView from '../LogoView';
 import {
     Poll,
     PollDate,
-    Session,
 } from '../../types';
 
 export interface PollsViewProps {
     currentPoll?: Poll;
     onEndPoll(poll: Poll): void;
     onStartPoll(poll: Poll): void;
-    session?: Session;
+    pollDate?: PollDate;
 }
 
 const PollsView: React.FunctionComponent<PollsViewProps> = ({
     currentPoll,
     onEndPoll,
     onStartPoll,
-    session,
+    pollDate,
 }) => {
-    if (!session) {
+    if (!pollDate) {
         return (
             <div className="logo-container">
                 <LogoView type="no-background" />

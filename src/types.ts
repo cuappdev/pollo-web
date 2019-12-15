@@ -33,11 +33,11 @@ export interface PollDate {
 export type PollState = 'ended' | 'live' | 'shared';
 
 export interface Poll {
-    answerChoices: PollResult[];
     correctAnswer?: string;
     createdAt?: string;
     id?: number;
     pollFilter?: PollFilter;
+    results: { [letter: string]: PollResult };
     state: PollState;
     text: string;
     type: QuestionType;
