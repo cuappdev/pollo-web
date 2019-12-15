@@ -19,7 +19,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     onStartPoll,
     pollDate,
 }) => {
-    if (!pollDate) {
+    if (!currentPoll) {
         return (
             <div className="logo-container">
                 <LogoView type="no-background" />

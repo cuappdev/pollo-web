@@ -19,7 +19,7 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
         case 'check':
             return (
                 <svg width="9" height="7" fill="none" viewBox="0 0 9 7">
-                    <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" d="M.5 3.5L3 6 8.5.5"/>
+                    <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" d="M.5 3.5L3 6 8.5.5"/>
                 </svg>
             );
         case 'ellipsis':
@@ -37,13 +37,13 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
         case 'export-group-arrow':
             return (
                 <svg width="9" height="15" fill="none" viewBox="0 0 9 15">
-                    <path stroke="#3D3D3D" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1.154 14l6.5-6.5-6.5-6.5"/>
+                    <path stroke="#3D3D3D" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1.154 14l6.5-6.5-6.5-6.5"/>
                 </svg>
             );
         case 'export-group-back-arrow':
             return (
                 <svg width="9" height="15" fill="none" viewBox="0 0 9 15">
-                    <path stroke="#3D3D3D" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 1L1 7.5 7.5 14"/>
+                    <path stroke="#3D3D3D" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7.5 1L1 7.5 7.5 14"/>
                 </svg>
             );
         case 'plus':
