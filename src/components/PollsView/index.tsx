@@ -121,7 +121,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                 {getPollIndexLabel()}
             </div>
             <div className="polls-container">
-                {pollDate && shouldShowHiddenLeftPoll() && (
+                {shouldShowHiddenLeftPoll() && (
                     <div
                         className={cx(
                             'hidden-left-card',
@@ -131,7 +131,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     >
                         <PollCardView
                             poll={pollDate.polls[currentPollIndex - 2]}
-                            onEditPoll={() => onEditPoll(pollDate.polls[currentPollIndex - 2])}
+                            onEditPoll={() => {}}
                         />
                     </div>
                 )}
@@ -145,7 +145,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     >
                         <PollCardView
                             poll={pollDate.polls[currentPollIndex - 1]}
-                            onEditPoll={() => onEditPoll(pollDate.polls[currentPollIndex - 1])}
+                            onEditPoll={() => {}}
                         />
                     </div>
                 )}
@@ -186,7 +186,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     >
                         <PollCardView
                             poll={pollDate.polls[currentPollIndex + 1]}
-                            onEditPoll={() => onEditPoll(pollDate.polls[currentPollIndex + 1])}
+                            onEditPoll={() => {}}
                         />
                     </div>
                 )}
@@ -200,7 +200,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     >
                         <PollCardView
                             poll={pollDate.polls[currentPollIndex + 2]}
-                            onEditPoll={() => onEditPoll(pollDate.polls[currentPollIndex + 2])}
+                            onEditPoll={() => {}}
                         />
                     </div>
                 )}
