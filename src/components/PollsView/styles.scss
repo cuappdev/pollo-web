@@ -62,7 +62,15 @@
     border-radius: 50%;
     background-color: $white;
     position: absolute;
-    right: 182.2px;
+    
+    /*
+        Horizontally center between middle and right cards, where
+        - 249.5px is half the width of the middle card
+        - 114px is the visible width of the right card
+    */
+    right: calc(calc(50% - 249.5px + 114px) / 2);
+
+    transform: translateX(50%);
     top: 158px;
     cursor: pointer;
 }
@@ -76,7 +84,15 @@
     border-radius: 50%;
     background-color: $white;
     position: absolute;
-    left: 182.2px;
+
+    /*
+        Horizontally center between middle and left cards, where
+        - 249.5px is half the width of the middle card
+        - 114px is the visible width of the left card
+    */
+    left: calc(calc(50% - 249.5px + 114px) / 2);
+
+    transform: translateX(-50%);
     top: 158px;
     cursor: pointer;
 }
