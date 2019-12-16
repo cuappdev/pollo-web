@@ -107,6 +107,10 @@ class HomeView extends React.Component<any, HomeViewState> {
 
     };
 
+    public onEditPoll = (poll: Poll) => {
+
+    };
+
     public currentUserExists = () => {
         return localStorage.getItem('googleId') !== null;
     };
@@ -393,6 +397,10 @@ class HomeView extends React.Component<any, HomeViewState> {
         });
     };
 
+    public onSetCurrentPoll = (currentPoll: Poll) => {
+        this.props.dispatch({ type: 'set-current-poll', currentPoll });
+    };
+
     public renderPollingApp = () => {
         const { currentPoll, sidebarViewType, selectedPollDate, selectedSession } = this.props;
         if (!sidebarViewType) {
@@ -416,7 +424,9 @@ class HomeView extends React.Component<any, HomeViewState> {
                 <div className="polls-view-container">
                     <PollsView
                         currentPoll={currentPoll}
+                        onEditPoll={this.onEditPoll}
                         onEndPoll={this.onEndPoll}
+                        onSetCurrentPoll={this.onSetCurrentPoll}
                         onStartPoll={this.onStartPoll}
                         pollDate={selectedPollDate}
                         session={selectedSession}

@@ -41,3 +41,130 @@
     color: rgba(255, 255, 255, 0.9);
     text-align: center;
 }
+
+.middle-card, .right-card, .left-card, .hidden-left-card, .hidden-right-card {
+    position: absolute;
+}
+
+.polls-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.next-poll-button {
+    outline: none;
+    border: none;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: $white;
+    position: absolute;
+    right: 182.2px;
+    top: 158px;
+    cursor: pointer;
+}
+
+.previous-poll-button {
+    outline: none;
+    border: none;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: $white;
+    position: absolute;
+    left: 182.2px;
+    top: 158px;
+    cursor: pointer;
+}
+
+.hidden-left-card {
+    top: 20px;
+    right: 100%;
+    transform: translateX(0);
+    opacity: 0.3;
+
+    &.forward {
+        right: calc(100% - 114px);
+        transition: all 0.3s ease;
+    }
+}
+
+.left-card {
+    top: 20px;
+    right: calc(100% - 114px);
+    transform: translateX(0);
+    opacity: 0.3;
+
+    &.back {
+        right: 100%;
+        transition: all 0.3s ease;
+    }
+
+    &.forward {
+        right: 50%;
+        transform: translateX(50%);
+        top: 0px;
+        transition: all 0.3s ease;
+        opacity: 1;
+    }
+}
+
+.middle-card {
+    right: 50%;
+    transform: translateX(50%);
+    top: 0px;
+    opacity: 1;
+
+    &.back {
+        transform: translateX(0);
+        right: calc(100% - 114px);
+        top: 20px;
+        transition: all 0.3s ease;
+        opacity: 0.3;
+    }
+
+    &.forward {
+        right: 0px;
+        transform: translateX(calc(100% - 114px));
+        top: 20px;
+        transition: all 0.3s ease;
+        opacity: 0.3;
+    }
+}
+
+.right-card {
+    left: calc(100% - 114px);
+    transform: translateX(0);
+    top: 20px;
+    opacity: 0.3;
+
+    &.back {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0px;
+        transition: all 0.3s ease;
+        opacity: 1;
+    }
+
+    &.forward {
+        left: 100%;
+        transform: translateX(0);
+        transition: all 0.3s ease;
+    }
+}
+
+.hidden-right-card {
+    left: 100%;
+    top: 20px;
+    transform: translateX(0);
+    opacity: 0.3;
+
+    &.back {
+        left: calc(100% - 114px);
+        transition: all 0.3s ease;
+    }
+}

@@ -1,0 +1,126 @@
+@import '../../colors.scss';
+
+.poll-card-view-container {
+    width: 499px;
+    display: flex;
+    flex-direction: column;
+}
+
+.poll-card-view-header-container {
+    display: flex;
+    flex-direction: column;
+    background-color: $whiteTwo;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.poll-card-view-question-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 30px 23px 27px 23px;
+}
+
+.poll-card-view-question-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    color: $black;
+    margin-right: 23px;
+}
+
+.poll-card-view-edit-button {
+    outline: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.poll-card-view-header-info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 23px;
+    margin-right: 23px;
+    margin-bottom: 16px;
+}
+
+.poll-card-view-header-prompt-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.poll-card-view-header-prompt-icon {
+    margin-right: 10px;
+}
+
+.poll-card-view-header-prompt-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: $blueGray;
+    margin-right: 23px;
+}
+
+.poll-card-view-response-count-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: $blueGray;
+    text-align: right;
+}
+
+.poll-card-view-divider {
+    width: 100%;
+    height: 1px;
+    background-color: $borderGray;
+}
+
+.poll-card-view-responses-container {
+    background-color: $white;
+    padding-top: 26px;
+    padding-bottom: 14px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    &.scrollable {
+        height: 292px;
+        overflow-y: scroll;
+    }
+}
+
+.poll-card-view-response-container {
+    margin-left: 18px;
+    margin-right: 18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $lightGray;
+    border-radius: 3px;
+    border: 0.3px solid $mediumGrayTwo;
+    margin-bottom: 12px;
+
+    &.correct-answer {
+        background-color: $lightGreen;
+    }
+}
+
+.poll-card-view-response-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: $black;
+    margin: 23px 19px;
+}
+
+.poll-card-view-response-percentage {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: $black;
+    margin-right: 19px;
+}
