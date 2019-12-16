@@ -16,7 +16,6 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     onEditPoll,
     poll,
 }) => {
-
     const renderResponses = (responseCount: number, resultLetters: string[]) => {
         return resultLetters.map((resultLetter: string) => {
             const result = poll.results[resultLetter];
