@@ -13,7 +13,7 @@ import {
     AppState,
 } from '../../reducer';
 import { googleClientId } from '../../utils/constants';
-import { getDateString } from '../../utils/functions';
+import { condenseDates, getDateString } from '../../utils/functions';
 import { 
     exportCsv,
     generateUserSession,
@@ -61,7 +61,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                     return getPollsForSession(session.id);
                 }));
                 pollDatesArray.forEach((pollDates: any, sessionIndex: number) => {
-                    adminSessions[sessionIndex].dates = pollDates as PollDate[];
+                    adminSessions[sessionIndex].dates = condenseDates(pollDates as PollDate[]);
                 });
                 console.log(adminSessions);
                 this.props.dispatch({ 
@@ -145,7 +145,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                     return getPollsForSession(session.id);
                 }));
                 pollDatesArray.forEach((pollDates: any, sessionIndex: number) => {
-                    adminSessions[sessionIndex].dates = pollDates as PollDate[];
+                    adminSessions[sessionIndex].dates = condenseDates(pollDates as PollDate[]);
                 });
                 this.props.dispatch({ 
                     type: 'set-sessions', 

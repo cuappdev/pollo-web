@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import LogoView from '../LogoView';
 import PollCardView from '../PollCardView';

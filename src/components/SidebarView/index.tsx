@@ -4,6 +4,7 @@ import React from 'react';
 import IconView from '../IconView';
 import {
     Poll,
+    PollAnswerChoice,
     PollDate,
     Session,
 } from '../../types';
@@ -41,10 +42,13 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
 }) => {
     const getDefaultAnswer = (poll: Poll) => {
         if (poll.correctAnswer) {
-            return poll.results[poll.correctAnswer].text;
+            const answerChoice = poll.answerChoices.find((answerChoice: PollAnswerChoice) => {
+                return answerChoice.letter === poll.correctAnswer;
+            }) as PollAnswerChoice;
+            return answerChoice.text;
         }
-        const firstResultLetter = Object.keys(poll.results)[0];
-        return poll.results[firstResultLetter].text;
+        const firstChoiceLetter = Object.keys(poll.answerChoices)[0];
+        return poll.answerChoices[firstChoiceLetter].text;
     };
 
     const getHeaderText = () => {
@@ -137,7 +141,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                                     )}
                                     onClick={() => onSelectPoll(poll)}
                                 >
-                                    {poll.text}
+                                    {poll.text === '' ? 'Untitled' : poll.text}
                                 </button>
                                 {poll.state === 'live' ? (
                                     <div className="sidebar-cell-live-text-container">

@@ -8,6 +8,12 @@ export type ExportType = 'Canvas' | 'CMS';
 
 export type QuestionType = 'multiple-choice' | 'free-response';
 
+export interface PollAnswerChoice {
+    count?: number;
+    letter?: string;
+    text: string;
+}
+
 export interface PollChoice {
     letter?: string;
     text: string;
@@ -19,12 +25,6 @@ export interface PollFilter {
     filter?: string[];
 }
 
-export interface PollResult {
-    count?: number;
-    letter?: string;
-    text: string;
-}
-
 export interface PollDate {
     date: string;
     polls: Poll[];
@@ -33,11 +33,11 @@ export interface PollDate {
 export type PollState = 'ended' | 'live' | 'shared';
 
 export interface Poll {
+    answerChoices: PollAnswerChoice[];
     correctAnswer?: string;
     createdAt?: string;
     id?: number;
     pollFilter?: PollFilter;
-    results: { [letter: string]: PollResult };
     state: PollState;
     text: string;
     type: QuestionType;

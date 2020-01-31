@@ -3,7 +3,7 @@ import React from 'react';
 
 import IconView from '../IconView';
 
-import { Poll } from '../../types';
+import { Poll, PollAnswerChoice } from '../../types';
 
 import './styles.scss';
 
@@ -16,11 +16,10 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     onEditPoll,
     poll,
 }) => {
-    const renderResponses = (responseCount: number, resultLetters: string[]) => {
-        return resultLetters.map((resultLetter: string) => {
-            const result = poll.results[resultLetter];
-            const count = result.count ? result.count : 0;
-            const isCorrectAnswer = poll.correctAnswer && poll.correctAnswer === resultLetter;
+    const renderResponses = (responseCount: number) => {
+        return poll.answerChoices.map((answerChoice: PollAnswerChoice) => {
+            const count = answerChoice.count ? answerChoice.count : 0;
+            const isCorrectAnswer = poll.correctAnswer && poll.correctAnswer === answerChoice.letter;
             return (
                 <div 
                     className={cx(
@@ -29,10 +28,10 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                     )}
                 >
                     <div className="poll-card-view-response-text">
-                        {result.text}
+                        {answerChoice.text}
                     </div>
                     <div className="poll-card-view-response-percentage">
-                        {`${responseCount > 0 ? Math.floor(count / responseCount) : 0}%`}
+                        {`${responseCount > 0 ? Math.floor(count / responseCount) * 100 : 0}%`}
                     </div>
                 </div>
             );
@@ -40,9 +39,8 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     };
     
     let responseCount = 0;
-    const resultLetters = Object.keys(poll.results);
-    resultLetters.forEach((resultLetter: string) => {
-        const { count } = poll.results[resultLetter];
+    poll.answerChoices.forEach((answerChoice: PollAnswerChoice) => {
+        const { count } = answerChoice;
         responseCount += count ? count : 0;
     });
 
@@ -51,7 +49,7 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
             <div className="poll-card-view-header-container">
                 <div className="poll-card-view-question-container">
                     <div className="poll-card-view-question-text">
-                        {poll.text}
+                        {poll.text === '' ? 'Untitled' : poll.text}
                     </div>
                     <button
                         className="poll-card-view-edit-button"
@@ -77,10 +75,10 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
             <div
                 className={cx(
                     'poll-card-view-responses-container',
-                    resultLetters.length >= 3 && 'scrollable',
+                    poll.answerChoices.length >= 3 && 'scrollable',
                 )}
             >
-                {renderResponses(responseCount, resultLetters)}
+                {renderResponses(responseCount)}
             </div>
         </div>
     );
