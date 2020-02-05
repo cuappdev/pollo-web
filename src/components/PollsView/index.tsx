@@ -18,6 +18,7 @@ export interface PollsViewProps {
     onEditPoll(poll: Poll): void;
     onEndPoll(poll: Poll): void;
     onSetCurrentPoll(poll: Poll): void;
+    onShareResults(poll: Poll): void;
     onStartPoll(poll: Poll): void;
     pollDate?: PollDate;
     session?: Session;
@@ -30,6 +31,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     onEditPoll,
     onEndPoll,
     onSetCurrentPoll,
+    onShareResults,
     onStartPoll,
     pollDate,
     session,

@@ -13,7 +13,11 @@ import {
     AppState,
 } from '../../reducer';
 import { googleClientId } from '../../utils/constants';
-import { condenseDates, getDateString } from '../../utils/functions';
+import { 
+    condenseDates, 
+    getDateString,
+    isSameDay,
+} from '../../utils/functions';
 import { 
     exportCsv,
     generateUserSession,
@@ -21,6 +25,13 @@ import {
     getPollsForSession,
     setAuthHeader, 
 } from '../../utils/requests';
+import {
+    adminPollEnded,
+    adminPollUpdates,
+    connectSocket,
+    disconnectSocket,
+    shareResults,
+} from '../../utils/sockets';
 import { 
     ExportType,
     Poll,
@@ -181,7 +192,76 @@ class HomeView extends React.Component<any, HomeViewState> {
         this.props.dispatch({ type: 'set-selected-poll-date', selectedPollDate });
     };
 
+    public shouldUpdateSelectedPollDate = (poll: Poll, selectedPollDate?: PollDate) => {
+        if (!selectedPollDate) {
+            return false;
+        }
+        if (!poll.createdAt) {
+            return false;
+        }
+        return isSameDay(poll.createdAt, selectedPollDate.date);
+    };
+
+    public onAdminPollEnded = (poll: Poll) => {
+        console.log(poll);
+        const { currentPoll, dispatch, selectedPollDate, selectedSession } = this.props;
+        const pollDateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
+            return isSameDay(date.date, poll.createdAt ? poll.createdAt : '0');
+        });
+        if (pollDateIndex >= 0) {
+            // Poll date already exists
+            const polls: Poll[] = selectedSession.dates[pollDateIndex].polls;
+            const pollIndex = polls.findIndex((otherPoll: Poll) => {
+                return poll.id === otherPoll.id;
+            });
+            if (pollIndex >= 0) {
+                const oldPoll = selectedSession.dates[pollDateIndex].polls[pollIndex];
+                if (oldPoll.state === 'ended') {
+                    // Admin created poll on web and has already updated state
+                    return;
+                }
+                // Admin ended poll on mobile
+                selectedSession.dates[pollDateIndex].polls[pollIndex] = poll;
+            } else {
+                // Admin created and ended poll on mobile
+                selectedSession.dates[pollDateIndex].polls.push(poll);
+            }
+            dispatch({
+                type: 'set-selected-session',
+                ...(currentPoll && currentPoll.id === poll.id ? 
+                    { currentPoll: poll } : { currentPoll }
+                ),
+                fullUpdate: true,
+                selectedPollDate: this.shouldUpdateSelectedPollDate(poll, selectedPollDate) ?
+                    selectedSession.dates[pollDateIndex] : selectedPollDate,
+                selectedSession,
+            });
+        } else {
+            // Poll date does not exist
+            selectedSession.dates.unshift({
+                date: poll.createdAt ? poll.createdAt : '',
+                polls: [poll],
+            });
+            dispatch({ 
+                type: 'set-selected-session', 
+                currentPoll,
+                fullUpdate: true, 
+                selectedPollDate,
+                selectedSession,
+            });
+        }
+    };
+
+    public onAdminPollUpdates = (poll: Poll) => {
+        console.log(poll);
+    };
+
     public onSelectSession = (selectedSession: Session) => {
+        const accessToken = localStorage.getItem('accessToken');
+        disconnectSocket();
+        connectSocket(selectedSession.id, accessToken ? accessToken : '');
+        adminPollEnded(this.onAdminPollEnded);
+        adminPollUpdates(this.onAdminPollUpdates);
         this.props.dispatch({ type: 'set-selected-session', selectedSession });
     };
 
@@ -401,11 +481,23 @@ class HomeView extends React.Component<any, HomeViewState> {
         this.props.dispatch({ type: 'set-current-poll', currentPoll });
     };
 
+    public onShareResults = (poll: Poll) => {
+        try {
+            shareResults(poll.id ? poll.id : '');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     public renderPollingApp = () => {
         const { currentPoll, sidebarViewType, selectedPollDate, selectedSession } = this.props;
         if (!sidebarViewType) {
             return null;
         }
+        console.log('--');
+        console.log(selectedPollDate);
+        console.log(sidebarViewType);
+        console.log(this.props);
         return (
             <div className="polling-app-container">
                 <div className="groups-view-container">
@@ -427,6 +519,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                         onEditPoll={this.onEditPoll}
                         onEndPoll={this.onEndPoll}
                         onSetCurrentPoll={this.onSetCurrentPoll}
+                        onShareResults={this.onShareResults}
                         onStartPoll={this.onStartPoll}
                         pollDate={selectedPollDate}
                         session={selectedSession}

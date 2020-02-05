@@ -4,9 +4,7 @@ export const condenseDates = (pollDates: PollDate[]) => {
     let condensedDates: PollDate[] = [];
     pollDates.forEach((pollDate: PollDate) => {
         const condensedDateIndex = condensedDates.findIndex((condensedDate: PollDate) => {
-            const condensed = parseFloat(condensedDate.date) * 1000;
-            const date = parseFloat(pollDate.date) * 1000;
-            return isSameDay(new Date(condensed), new Date(date));
+            return isSameDay(condensedDate.date, pollDate.date);
         });
         if (condensedDateIndex >= 0) {
             condensedDates[condensedDateIndex].polls.push(...pollDate.polls);
@@ -25,7 +23,9 @@ export const getDateString = (pollDate: PollDate) => {
     return `${month} ${day}, ${year}`;
 };
 
-export const isSameDay = (one: Date, two: Date) => {
+export const isSameDay = (timestampOne: string, timestampTwo: string) => {
+    const one = new Date(parseFloat(timestampOne) * 1000);
+    const two = new Date(parseFloat(timestampTwo) * 1000);
     return one.getMonth() === two.getMonth() &&
         one.getDate() === two.getDate() &&
         one.getFullYear() === two.getFullYear();

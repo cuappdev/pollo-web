@@ -1,22 +1,31 @@
 import io from 'socket.io-client';
-import { hostURL } from './constants';
+import { hostUrl } from './constants';
+import {
+    Poll,
+} from '../types';
 
 let socket;
 
-export const connect = (sessionID, googleID, userType) => {
-    socket = io(
-        `${hostURL}/${sessionID}`,
-        {
-            query: {
-                googleID,
-                userType,
+export const connectSocket = (sessionId: string, accessToken: string) => {
+    try {
+        socket = io.connect(
+            `${hostUrl}/${sessionId}`,
+            {
+                query: {
+                    accessToken,
+                },
+                reconnection: true,
             },
-        },
-    );
+        );
+    } catch (error) {
+        console.log(error);
+    }
 };
 
-export const disconnect = () => {
-    socket.disconnect();
+export const disconnectSocket = () => {
+    if (socket) {
+        socket.disconnect();
+    }
 };
 
 /** *****************************
@@ -31,8 +40,8 @@ export const endPoll = () => {
     socket.emit('server/poll/end');
 };
 
-export const shareResults = () => {
-    socket.emit('server/poll/results');
+export const shareResults = (pollId: string) => {
+    socket.emit('server/poll/results', pollId);
 };
 
 export const sendAnswer = (answer) => {
@@ -79,6 +88,14 @@ export const updateTally = (callback) => {
     socket.on('admin/poll/updateTally', currentState => callback(currentState));
 };
 
-export const adminPollEnded = (callback) => {
-    socket.on('admin/poll/ended', poll => callback(poll));
+export const adminPollEnded = callback => {
+    socket.on('admin/poll/ended', poll => callback(poll as Poll));
+};
+
+export const adminPollStart = callback => {
+    socket.on('admin/poll/start', poll => callback(poll as Poll));
+};
+
+export const adminPollUpdates = callback => {
+    socket.on('admin/poll/updates', poll => callback(poll as Poll))
 };

@@ -24,7 +24,7 @@ export type AppAction =
     | { type: 'set-current-poll'; currentPoll?: Poll }
     | { type: 'set-sidebar-view-type'; sidebarViewType?: SidebarViewType }
     | { type: 'set-selected-poll-date'; selectedPollDate?: PollDate }
-    | { type: 'set-selected-session'; selectedSession?: Session }
+    | { type: 'set-selected-session'; currentPoll?: Poll; fullUpdate?: boolean; selectedPollDate?: PollDate; selectedSession?: Session }
     | { type: 'set-sessions'; sidebarViewType?: SidebarViewType; sessions: Session[] }
     | { type: 'set-user'; user: User }
     | { type: 'set-user-session'; userSession: UserSession }
@@ -57,7 +57,8 @@ export default function reducer(state: AppState = initialState, action: AppActio
             return { 
                 ...state, 
                 ...(sidebarViewType && sidebarViewType.type !== 'single-date' && { 
-                    currentPoll: undefined, 
+                    currentPoll: undefined,
+                    selectedPollDate: undefined,
                 }),
                 sidebarViewType,
             };
@@ -74,11 +75,32 @@ export default function reducer(state: AppState = initialState, action: AppActio
             }
         case 'set-selected-session':
             const { selectedSession } = action;
+            if (action.fullUpdate && selectedSession) {
+                const sessionIndex = state.sessions.findIndex((session: Session) => {
+                    return session.id === selectedSession.id;
+                });
+                state.sessions[sessionIndex] = selectedSession;
+            }
             return { 
                 ...state, 
                 currentPoll: undefined,
-                sidebarViewType: { type: 'single-group', session: selectedSession },
+                sidebarViewType: action.selectedPollDate ? { 
+                    type: 'single-date',
+                    pollDate: action.selectedPollDate,
+                } : {
+                    type: 'single-group', 
+                    session: selectedSession, 
+                },
                 selectedSession,
+                ...(action.fullUpdate && { 
+                    ...(action.currentPoll && {
+                        currentPoll: action.currentPoll,
+                    }),
+                    ...(action.selectedPollDate && { 
+                        selectedPollDate: action.selectedPollDate, 
+                    }),
+                    sessions: state.sessions, 
+                }),
             };
         case 'set-sessions':
             return { 

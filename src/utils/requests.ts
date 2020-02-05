@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { hostURL } from './constants';
+import { hostUrl } from './constants';
 
 /*******************************
             General
 *******************************/
 
 const api = axios.create({
-  baseURL: 'http://' + hostURL + '/api/v2',
+  baseURL: 'http://' + hostUrl + '/api/v2',
 });
 
 const get = async (url: string, params?: any) => {

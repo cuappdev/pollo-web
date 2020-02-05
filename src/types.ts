@@ -36,7 +36,7 @@ export interface Poll {
     answerChoices: PollAnswerChoice[];
     correctAnswer?: string;
     createdAt?: string;
-    id?: number;
+    id?: string;
     pollFilter?: PollFilter;
     state: PollState;
     text: string;
