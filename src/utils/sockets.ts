@@ -6,7 +6,11 @@ import {
 
 let socket;
 
-export const connectSocket = (sessionId: string, accessToken: string) => {
+export const connectSocket = (
+    sessionId: string, 
+    accessToken: string, 
+    handleConnectionError: () => void,
+) => {
     try {
         socket = io.connect(
             `${hostUrl}/${sessionId}`,
@@ -17,8 +21,12 @@ export const connectSocket = (sessionId: string, accessToken: string) => {
                 reconnection: true,
             },
         );
-    } catch (error) {
-        console.log(error);
+        socket.on('connect_error', handleConnectionError);
+        socket.on('error', handleConnectionError);
+        socket.on('reconnect_failed', handleConnectionError);
+        socket.on('reconnect_error', handleConnectionError);
+    } catch {
+        handleConnectionError();
     }
 };
 

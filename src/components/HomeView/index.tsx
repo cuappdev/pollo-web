@@ -27,6 +27,7 @@ import {
 } from '../../utils/requests';
 import {
     adminPollEnded,
+    adminPollStart,
     adminPollUpdates,
     connectSocket,
     disconnectSocket,
@@ -192,6 +193,13 @@ class HomeView extends React.Component<any, HomeViewState> {
         this.props.dispatch({ type: 'set-selected-poll-date', selectedPollDate });
     };
 
+    public shouldUpdateCurrentPoll = (poll: Poll, currentPoll?: Poll) => {
+        if (!currentPoll) {
+            return false;
+        }
+        return poll.state === 'shared' ? currentPoll.id === poll.id : currentPoll.state === 'live';
+    };
+
     public shouldUpdateSelectedPollDate = (poll: Poll, selectedPollDate?: PollDate) => {
         if (!selectedPollDate) {
             return false;
@@ -202,42 +210,38 @@ class HomeView extends React.Component<any, HomeViewState> {
         return isSameDay(poll.createdAt, selectedPollDate.date);
     };
 
-    public onAdminPollEnded = (poll: Poll) => {
+    public updatePollFromSocket = (poll: Poll) => {
         console.log(poll);
         const { currentPoll, dispatch, selectedPollDate, selectedSession } = this.props;
         const pollDateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
             return isSameDay(date.date, poll.createdAt ? poll.createdAt : '0');
         });
         if (pollDateIndex >= 0) {
-            // Poll date already exists
             const polls: Poll[] = selectedSession.dates[pollDateIndex].polls;
             const pollIndex = polls.findIndex((otherPoll: Poll) => {
+                if (poll.state === 'live' || poll.state === 'ended') {
+                    return otherPoll.state === 'live';
+                }
                 return poll.id === otherPoll.id;
             });
             if (pollIndex >= 0) {
                 const oldPoll = selectedSession.dates[pollDateIndex].polls[pollIndex];
                 if (oldPoll.state === 'ended') {
-                    // Admin created poll on web and has already updated state
                     return;
                 }
-                // Admin ended poll on mobile
                 selectedSession.dates[pollDateIndex].polls[pollIndex] = poll;
             } else {
-                // Admin created and ended poll on mobile
                 selectedSession.dates[pollDateIndex].polls.push(poll);
             }
             dispatch({
                 type: 'set-selected-session',
-                ...(currentPoll && currentPoll.id === poll.id ? 
-                    { currentPoll: poll } : { currentPoll }
-                ),
+                currentPoll: this.shouldUpdateCurrentPoll(poll, currentPoll) ? poll : currentPoll,
                 fullUpdate: true,
                 selectedPollDate: this.shouldUpdateSelectedPollDate(poll, selectedPollDate) ?
                     selectedSession.dates[pollDateIndex] : selectedPollDate,
                 selectedSession,
             });
         } else {
-            // Poll date does not exist
             selectedSession.dates.unshift({
                 date: poll.createdAt ? poll.createdAt : '',
                 polls: [poll],
@@ -252,16 +256,23 @@ class HomeView extends React.Component<any, HomeViewState> {
         }
     };
 
-    public onAdminPollUpdates = (poll: Poll) => {
-        console.log(poll);
+    public handleSocketConnectionError = () => {
+        // Perhaps display a banner that asks user to check their internet connection
+        // and maybe prompts them with a button that when clicked tries to reconnect to
+        // the socket (talk to design).
     };
 
     public onSelectSession = (selectedSession: Session) => {
         const accessToken = localStorage.getItem('accessToken');
         disconnectSocket();
-        connectSocket(selectedSession.id, accessToken ? accessToken : '');
-        adminPollEnded(this.onAdminPollEnded);
-        adminPollUpdates(this.onAdminPollUpdates);
+        connectSocket(
+            selectedSession.id, 
+            accessToken ? accessToken : '',
+            this.handleSocketConnectionError,
+        );
+        adminPollEnded(this.updatePollFromSocket);
+        adminPollStart(this.updatePollFromSocket);
+        adminPollUpdates(this.updatePollFromSocket);
         this.props.dispatch({ type: 'set-selected-session', selectedSession });
     };
 
@@ -364,6 +375,7 @@ class HomeView extends React.Component<any, HomeViewState> {
     public unselectSelectedSession = () => {
         this.props.dispatch({ 
             type: 'set-selected-session', 
+            selectedPollDate: undefined,
             selectedSession: undefined,
         });
     };
@@ -494,10 +506,6 @@ class HomeView extends React.Component<any, HomeViewState> {
         if (!sidebarViewType) {
             return null;
         }
-        console.log('--');
-        console.log(selectedPollDate);
-        console.log(sidebarViewType);
-        console.log(this.props);
         return (
             <div className="polling-app-container">
                 <div className="groups-view-container">
