@@ -31,7 +31,7 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                         {answerChoice.text}
                     </div>
                     <div className="poll-card-view-response-percentage">
-                        {`${responseCount > 0 ? Math.floor(count / responseCount) * 100 : 0}%`}
+                        {`${responseCount > 0 ? Math.floor((count / responseCount) * 100) : 0}%`}
                     </div>
                 </div>
             );
