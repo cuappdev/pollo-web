@@ -31,6 +31,7 @@ import {
     adminPollUpdates,
     connectSocket,
     disconnectSocket,
+    endPoll,
     shareResults,
 } from '../../utils/sockets';
 import { 
@@ -225,10 +226,6 @@ class HomeView extends React.Component<any, HomeViewState> {
                 return poll.id === otherPoll.id;
             });
             if (pollIndex >= 0) {
-                // const oldPoll = selectedSession.dates[pollDateIndex].polls[pollIndex];
-                // if (oldPoll.state === 'ended') {
-                //     return;
-                // }
                 selectedSession.dates[pollDateIndex].polls[pollIndex] = poll;
             } else {
                 selectedSession.dates[pollDateIndex].polls.push(poll);
@@ -514,6 +511,7 @@ class HomeView extends React.Component<any, HomeViewState> {
     public onPollButtonClick = (poll: Poll) => {
         if (poll.state === 'live') {
             // End question here
+            endPoll();
             return;
         }
         // Share results here
