@@ -210,7 +210,7 @@ class HomeView extends React.Component<any, HomeViewState> {
         return isSameDay(poll.createdAt, selectedPollDate.date);
     };
 
-    public updatePollFromSocket = (poll: Poll) => {
+    public updatePoll = (poll: Poll) => {
         console.log(poll);
         const { currentPoll, dispatch, selectedPollDate, selectedSession } = this.props;
         const pollDateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
@@ -225,10 +225,10 @@ class HomeView extends React.Component<any, HomeViewState> {
                 return poll.id === otherPoll.id;
             });
             if (pollIndex >= 0) {
-                const oldPoll = selectedSession.dates[pollDateIndex].polls[pollIndex];
-                if (oldPoll.state === 'ended') {
-                    return;
-                }
+                // const oldPoll = selectedSession.dates[pollDateIndex].polls[pollIndex];
+                // if (oldPoll.state === 'ended') {
+                //     return;
+                // }
                 selectedSession.dates[pollDateIndex].polls[pollIndex] = poll;
             } else {
                 selectedSession.dates[pollDateIndex].polls.push(poll);
@@ -270,9 +270,9 @@ class HomeView extends React.Component<any, HomeViewState> {
             accessToken ? accessToken : '',
             this.handleSocketConnectionError,
         );
-        adminPollEnded(this.updatePollFromSocket);
-        adminPollStart(this.updatePollFromSocket);
-        adminPollUpdates(this.updatePollFromSocket);
+        adminPollEnded(this.updatePoll);
+        adminPollStart(this.updatePoll);
+        adminPollUpdates(this.updatePoll);
         this.props.dispatch({ type: 'set-selected-session', selectedSession });
     };
 
@@ -517,6 +517,13 @@ class HomeView extends React.Component<any, HomeViewState> {
             return;
         }
         // Share results here
+        try {
+            shareResults(poll.id ? poll.id : '');
+            this.updatePoll({ ...poll, state: 'shared' });
+        } catch (error) {
+            console.log(error);
+            // Show some banner or alert here to notify that it didn't work
+        }
     };
 
     public renderPollingApp = () => {
