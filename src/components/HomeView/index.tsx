@@ -350,8 +350,13 @@ class HomeView extends React.Component<any, HomeViewState> {
         this.setState({ isExporting: true });
         try {
             const { data } = await exportCsv(selectedSession.id);
+            let csv = `data:text/csv;charset=utf-8,${encodeURI(data)}`;
+            console.log(csv);
+            window.open(csv);
+            this.setState({ isExporting: false });
             console.log(data);
         } catch (error) {
+            this.setState({ isExporting: false });
             console.log(error);
         }
     };
@@ -380,10 +385,14 @@ class HomeView extends React.Component<any, HomeViewState> {
         });
     };
 
+    public isExportButtonDisabled = () => {
+        return this.props.selectedPollDates.length === 0 || this.state.isExporting;
+    };
+
     public renderExportApp = () => {
         // Clear access token anywhere??
         const { selectedSession, sessions } = this.props;
-        const { isExporting, selectedExportType, showExportDropdown } = this.state;
+        const { selectedExportType, showExportDropdown } = this.state;
         return (
             <div className="background">
                 <div className="corner-logo-container">
@@ -452,7 +461,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                                     )}
                                     <button
                                         className="export-button"
-                                        disabled={isExporting}
+                                        disabled={this.isExportButtonDisabled()}
                                         onClick={this.onExportButtonClicked}
                                     >
                                         <div className="export-button-text">

@@ -13,7 +13,7 @@ const get = async (url: string, params?: any) => {
   const res = await api.get(url, params);
   const { success, data } = res.data;
   if (success) return data;
-  throw Error(data.errors[0]);
+  throw Error(data);
 };
 
 const post = async (url: string, body?: any) => {
@@ -134,12 +134,15 @@ export const getAdminSessions = async () => {
 };
 
 export const exportCsv = async (sessionId: string) => {
-    const data = await get(`/sessions/${sessionId}/csv/`, {
+    const response = await api.get(`/sessions/${sessionId}/csv/`, {
         headers: {
             Authorization: axios.defaults.headers.common['Authorization'],
         },
     });
-    return data;
+    if (!response.data.success) {
+        return response;
+    }
+    throw Error(response.data.error);
 };
 
 export const deleteSession = async (sessionId: string) => {
