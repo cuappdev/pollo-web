@@ -9,11 +9,13 @@ import './styles.scss';
 
 export interface PollCardViewProps {
     onEditPoll(poll: Poll): void;
+    onPollButtonClick(poll: Poll): void;
     poll: Poll;
 }
 
 const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     onEditPoll,
+    onPollButtonClick,
     poll,
 }) => {
     const renderResponses = (responseCount: number) => {
@@ -46,40 +48,54 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
 
     return (
         <div className="poll-card-view-container">
-            <div className="poll-card-view-header-container">
-                <div className="poll-card-view-question-container">
-                    <div className="poll-card-view-question-text">
-                        {poll.text === '' ? 'Untitled' : poll.text}
+            <div className="poll-card-view-card-container">
+                <div className="poll-card-view-header-container">
+                    <div className="poll-card-view-question-container">
+                        <div className="poll-card-view-question-text">
+                            {poll.text === '' ? 'Untitled' : poll.text}
+                        </div>
+                        <button
+                            className="poll-card-view-edit-button"
+                            onClick={() => onEditPoll(poll)}
+                        >
+                            <IconView type="ellipsis" />
+                        </button>
                     </div>
-                    <button
-                        className="poll-card-view-edit-button"
-                        onClick={() => onEditPoll(poll)}
-                    >
-                        <IconView type="ellipsis" />
-                    </button>
+                    <div className="poll-card-view-header-info-container">
+                        <div className="poll-card-view-header-prompt-container">
+                            <div className="poll-card-view-header-prompt-icon">
+                            </div>
+                            <div className="poll-card-view-header-prompt-text">
+                                Only you can see results
+                            </div>
+                        </div>
+                        <div className="poll-card-view-response-count-text">
+                            {`${responseCount} ${responseCount === 1 ? 'Response' : 'Responses'}`}
+                        </div>
+                    </div>
                 </div>
-                <div className="poll-card-view-header-info-container">
-                    <div className="poll-card-view-header-prompt-container">
-                        <div className="poll-card-view-header-prompt-icon">
-                        </div>
-                        <div className="poll-card-view-header-prompt-text">
-                            Only you can see results
-                        </div>
-                    </div>
-                    <div className="poll-card-view-response-count-text">
-                        {`${responseCount} ${responseCount === 1 ? 'Response' : 'Responses'}`}
-                    </div>
+                <div className="poll-card-view-divider" />
+                <div
+                    className={cx(
+                        'poll-card-view-responses-container',
+                        poll.answerChoices.length >= 3 && 'scrollable',
+                    )}
+                >
+                    {renderResponses(responseCount)}
                 </div>
             </div>
-            <div className="poll-card-view-divider" />
-            <div
-                className={cx(
-                    'poll-card-view-responses-container',
-                    poll.answerChoices.length >= 3 && 'scrollable',
-                )}
-            >
-                {renderResponses(responseCount)}
-            </div>
+            {poll.state === 'shared' ? (
+                <div className="poll-card-view-poll-label">
+                    Results Shared
+                </div>
+            ) : (
+                <button 
+                    className={cx('poll-card-view-poll-button', poll.state)}
+                    onClick={() => onPollButtonClick(poll)}
+                >
+                    {poll.state === 'live' ? 'End Question' : 'Share Results'}
+                </button>
+            )}
         </div>
     );
 };

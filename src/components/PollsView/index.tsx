@@ -17,6 +17,7 @@ export interface PollsViewProps {
     currentPoll?: Poll;
     onEditPoll(poll: Poll): void;
     onEndPoll(poll: Poll): void;
+    onPollButtonClick(poll: Poll): void;
     onSetCurrentPoll(poll: Poll): void;
     onShareResults(poll: Poll): void;
     onStartPoll(poll: Poll): void;
@@ -30,6 +31,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     currentPoll,
     onEditPoll,
     onEndPoll,
+    onPollButtonClick,
     onSetCurrentPoll,
     onShareResults,
     onStartPoll,
@@ -107,7 +109,9 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
         );
     }
     
-    const currentPollIndex = pollDate.polls.findIndex((poll: Poll) => poll.id === currentPoll.id);
+    const currentPollIndex = pollDate.polls.findIndex((poll: Poll) => {
+        return currentPoll.state === 'live' ? poll.state === 'live' : currentPoll.id === poll.id;
+    });
     const showLeftPoll = shouldShowLeftPoll();
     const showRightPoll = shouldShowRightPoll();
 
@@ -134,6 +138,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         <PollCardView
                             poll={pollDate.polls[currentPollIndex - 2]}
                             onEditPoll={() => {}}
+                            onPollButtonClick={() => {}}
                         />
                     </div>
                 )}
@@ -148,6 +153,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         <PollCardView
                             poll={pollDate.polls[currentPollIndex - 1]}
                             onEditPoll={() => {}}
+                            onPollButtonClick={() => {}}
                         />
                     </div>
                 )}
@@ -162,6 +168,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     <PollCardView
                         poll={currentPoll}
                         onEditPoll={() => onEditPoll(currentPoll)}
+                        onPollButtonClick={onPollButtonClick}
                     />
                 </div>
                 {showLeftPoll && (
@@ -189,6 +196,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         <PollCardView
                             poll={pollDate.polls[currentPollIndex + 1]}
                             onEditPoll={() => {}}
+                            onPollButtonClick={() => {}}
                         />
                     </div>
                 )}
@@ -203,6 +211,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         <PollCardView
                             poll={pollDate.polls[currentPollIndex + 2]}
                             onEditPoll={() => {}}
+                            onPollButtonClick={() => {}}
                         />
                     </div>
                 )}

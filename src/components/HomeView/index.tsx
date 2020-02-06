@@ -285,6 +285,7 @@ class HomeView extends React.Component<any, HomeViewState> {
     };
 
     public renderGroups = (sessions: Session[]) => {
+        // Need to separate onSelectSession here for export app
         return sessions.map((session: Session, index: number) => {
             return (
                 <button
@@ -510,6 +511,14 @@ class HomeView extends React.Component<any, HomeViewState> {
         }
     };
 
+    public onPollButtonClick = (poll: Poll) => {
+        if (poll.state === 'live') {
+            // End question here
+            return;
+        }
+        // Share results here
+    };
+
     public renderPollingApp = () => {
         const { currentPoll, sidebarViewType, selectedPollDate, selectedSession } = this.props;
         if (!sidebarViewType) {
@@ -535,6 +544,7 @@ class HomeView extends React.Component<any, HomeViewState> {
                         currentPoll={currentPoll}
                         onEditPoll={this.onEditPoll}
                         onEndPoll={this.onEndPoll}
+                        onPollButtonClick={this.onPollButtonClick}
                         onSetCurrentPoll={this.onSetCurrentPoll}
                         onShareResults={this.onShareResults}
                         onStartPoll={this.onStartPoll}
