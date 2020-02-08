@@ -1,8 +1,9 @@
 import cx from 'classnames';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import IconView from '../IconView';
 
+import { secondsBetween } from '../../utils/functions';
 import { Poll, PollAnswerChoice } from '../../types';
 
 import './styles.scss';
@@ -18,6 +19,62 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     onPollButtonClick,
     poll,
 }) => {
+    const timerId = useRef<number | undefined>(undefined);
+
+    const getTimerText = (secondsElapsed: number) => {
+        if (secondsElapsed < 10) {
+            return `00:0${secondsElapsed}`;
+        }
+        if (secondsElapsed < 60) {
+            return `00:${secondsElapsed}`;
+        }
+        const minutes = Math.floor(secondsElapsed / 60);
+        const seconds = secondsElapsed - minutes * 60;
+        if (secondsElapsed < 600) {
+            return seconds < 10 ? `0${minutes}:0${seconds}` : `0${minutes}:${seconds}`;
+        }
+        return seconds < 10 ? `${minutes}:0${seconds}` : `${minutes}:${seconds}`;
+    };
+
+    const getInitialTimerText = () => {
+        if (!poll.createdAt) {
+            return undefined;
+        }
+        const secondsElapsed = secondsBetween(
+            new Date(parseFloat(poll.createdAt) * 1000), 
+            new Date(),
+        );
+        return getTimerText(secondsElapsed);
+    };
+
+    const [timerText, setTimerText] = useState<string | undefined>(getInitialTimerText());
+
+    const updateTimer = () => {
+        if (!poll.createdAt) {
+            return;
+        }
+        const secondsElapsed = secondsBetween(
+            new Date(parseFloat(poll.createdAt) * 1000), 
+            new Date(),
+        );
+        setTimerText(getTimerText(secondsElapsed));
+    };
+
+    useEffect(() => {
+        if (timerId.current) {
+            return;
+        }
+        timerId.current = window.setInterval(updateTimer, 1000);
+        const resetTimer = () => {
+            if (!timerId.current) {
+                return;
+            }
+            window.clearInterval(timerId.current);
+            timerId.current = undefined;
+        };
+        return resetTimer;
+    }, []);
+
     const renderResponses = (responseCount: number) => {
         return poll.answerChoices.map((answerChoice: PollAnswerChoice) => {
             const count = answerChoice.count ? answerChoice.count : 0;
@@ -84,18 +141,25 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                     {renderResponses(responseCount)}
                 </div>
             </div>
-            {poll.state === 'shared' ? (
-                <div className="poll-card-view-poll-label">
-                    Results Shared
-                </div>
-            ) : (
-                <button 
-                    className={cx('poll-card-view-poll-button', poll.state)}
-                    onClick={() => onPollButtonClick(poll)}
-                >
-                    {poll.state === 'live' ? 'End Question' : 'Share Results'}
-                </button>
-            )}
+            <div className="poll-card-view-button-container">
+                {poll.state === 'shared' ? (
+                    <div className="poll-card-view-poll-label">
+                        Results Shared
+                    </div>
+                ) : (
+                    <button 
+                        className={cx('poll-card-view-poll-button', poll.state)}
+                        onClick={() => onPollButtonClick(poll)}
+                    >
+                        {poll.state === 'live' ? 'End Question' : 'Share Results'}
+                    </button>
+                )}
+                {poll.state === 'live' && timerText && (
+                    <div className="poll-card-view-timer-label">
+                        {timerText}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

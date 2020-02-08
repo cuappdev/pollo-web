@@ -30,3 +30,8 @@ export const isSameDay = (timestampOne: string, timestampTwo: string) => {
         one.getDate() === two.getDate() &&
         one.getFullYear() === two.getFullYear();
 };
+
+export const secondsBetween = (one: Date, two: Date) => {
+    const difference = two.getTime() - one.getTime();
+    return Math.floor(Math.abs(difference / 1000));
+};
