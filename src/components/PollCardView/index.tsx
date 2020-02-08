@@ -65,14 +65,14 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
             return;
         }
         timerId.current = window.setInterval(updateTimer, 1000);
-        const resetTimer = () => {
+        const clearTimer = () => {
             if (!timerId.current) {
                 return;
             }
             window.clearInterval(timerId.current);
             timerId.current = undefined;
         };
-        return resetTimer;
+        return clearTimer;
     }, []);
 
     const renderResponses = (responseCount: number) => {
