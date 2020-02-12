@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import React, { useState } from 'react';
 
+import IconView from '../IconView';
 import LogoView from '../LogoView';
 import PollCardView from '../PollCardView';
 import {
@@ -136,6 +137,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         )}
                     >
                         <PollCardView
+                            isCurrentPoll={false}
                             poll={pollDate.polls[currentPollIndex - 2]}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
@@ -151,6 +153,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         )}
                     >
                         <PollCardView
+                            isCurrentPoll={false}
                             poll={pollDate.polls[currentPollIndex - 1]}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
@@ -166,6 +169,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     onTransitionEnd={onTransitionEnd}
                 >
                     <PollCardView
+                        isCurrentPoll={true}
                         poll={currentPoll}
                         onEditPoll={() => onEditPoll(currentPoll)}
                         onPollButtonClick={onPollButtonClick}
@@ -176,6 +180,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         className="previous-poll-button"
                         onClick={showPreviousPoll}
                     >
+                        <IconView type="previous-poll-arrow" />
                     </button>
                 )}
                 {showRightPoll && (
@@ -183,6 +188,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         className="next-poll-button"
                         onClick={showNextPoll}
                     >
+                        <IconView type="next-poll-arrow" />
                     </button>
                 )}
                 {showRightPoll && (
@@ -194,6 +200,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         )}
                     >
                         <PollCardView
+                            isCurrentPoll={false}
                             poll={pollDate.polls[currentPollIndex + 1]}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
@@ -209,6 +216,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         )}
                     >
                         <PollCardView
+                            isCurrentPoll={false}
                             poll={pollDate.polls[currentPollIndex + 2]}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}

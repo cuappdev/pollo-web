@@ -9,12 +9,14 @@ import { Poll, PollAnswerChoice } from '../../types';
 import './styles.scss';
 
 export interface PollCardViewProps {
+    isCurrentPoll: boolean;
     onEditPoll(poll: Poll): void;
     onPollButtonClick(poll: Poll): void;
     poll: Poll;
 }
 
 const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
+    isCurrentPoll,
     onEditPoll,
     onPollButtonClick,
     poll,
@@ -50,7 +52,7 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     const [timerText, setTimerText] = useState<string | undefined>(getInitialTimerText());
 
     const updateTimer = () => {
-        if (!poll.createdAt) {
+        if (!poll.createdAt || !isCurrentPoll || poll.state !== 'live') {
             return;
         }
         const secondsElapsed = secondsBetween(
@@ -61,19 +63,17 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     };
 
     useEffect(() => {
-        if (timerId.current) {
-            return;
+        if (!timerId.current) {
+            timerId.current = window.setInterval(updateTimer, 1000);
         }
-        timerId.current = window.setInterval(updateTimer, 1000);
         const clearTimer = () => {
-            if (!timerId.current) {
-                return;
+            if (timerId.current) {
+                window.clearInterval(timerId.current);
+                timerId.current = undefined;
             }
-            window.clearInterval(timerId.current);
-            timerId.current = undefined;
         };
         return clearTimer;
-    }, []);
+    }, [poll]);
 
     const renderResponses = (responseCount: number) => {
         return poll.answerChoices.map((answerChoice: PollAnswerChoice) => {
@@ -121,6 +121,7 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                     <div className="poll-card-view-header-info-container">
                         <div className="poll-card-view-header-prompt-container">
                             <div className="poll-card-view-header-prompt-icon">
+                                
                             </div>
                             <div className="poll-card-view-header-prompt-text">
                                 Only you can see results

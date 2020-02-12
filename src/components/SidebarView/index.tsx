@@ -171,7 +171,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                             className="sidebar-header-arrow-button"
                             onClick={onBackButtonClick}
                         >
-                            hi
+                            <IconView type="sidebar-back-arrow" />
                         </button>
                     )}
                     <div className="sidebar-header-text">

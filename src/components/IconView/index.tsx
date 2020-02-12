@@ -6,7 +6,10 @@ export type IconViewType =
     | 'export-dropdown'
     | 'export-group-arrow'
     | 'export-group-back-arrow'
-    | 'plus';
+    | 'next-poll-arrow'
+    | 'plus'
+    | 'previous-poll-arrow'
+    | 'sidebar-back-arrow';
 
 export interface IconViewProps {
     type: IconViewType;
@@ -46,11 +49,29 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
                     <path stroke="#3D3D3D" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7.5 1L1 7.5 7.5 14"/>
                 </svg>
             );
+        case 'next-poll-arrow':
+            return (
+                <svg width="18" height="31" fill="none" viewBox="0 0 18 31">
+                    <path fill="#fff" fillRule="evenodd" d="M1.374 30.703a1.012 1.012 0 0 0 1.432 0l14.25-14.25c.258-.258.348-.622.268-.953.08-.331-.01-.695-.268-.953L2.806.297a1.012 1.012 0 0 0-1.432 0L.297 1.374a1.012 1.012 0 0 0 0 1.432L12.99 15.5.297 28.194a1.012 1.012 0 0 0 0 1.432l1.077 1.077z" clipRule="evenodd"/>
+                </svg>
+            );
         case 'plus':
             return (
                 <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
                     <rect width="1.778" height="16" x="7.111" fill="#202020" rx=".889"/>
                     <rect width="1.778" height="16" x="16" y="7.111" fill="#202020" rx=".889" transform="rotate(90 16 7.111)"/>
+                </svg>
+            );
+        case 'previous-poll-arrow':
+            return (
+                <svg width="18" height="31" fill="none" viewBox="0 0 18 31">
+                    <path fill="#fff" fillRule="evenodd" d="M15.978.296a1.012 1.012 0 0 0-1.431 0L.297 14.546a1.012 1.012 0 0 0-.269.954c-.08.331.01.695.269.953l14.25 14.25a1.012 1.012 0 0 0 1.431 0l1.078-1.077a1.012 1.012 0 0 0 0-1.432L4.36 15.5 17.056 2.806a1.012 1.012 0 0 0 0-1.432L15.978.296z" clipRule="evenodd"/>
+                </svg>
+            );
+        case 'sidebar-back-arrow':
+            return (
+                <svg width="9" height="15" fill="none" viewBox="0 0 9 15">
+                    <path stroke="#202020" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7.5 1L1 7.5 7.5 14"/>
                 </svg>
             );
     }
