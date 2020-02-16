@@ -239,6 +239,20 @@ class HomeView extends React.Component<any, HomeViewState> {
                 selectedSession,
             });
         } else {
+            if (poll.state === 'ended') {
+                // If the poll exists, then remove it from other poll date bc it will
+                // become a new poll date with the unshift below. Don't want duplicates.
+                const dateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
+                    return date.polls.find((otherPoll: Poll) => {
+                        return otherPoll.state === 'live';
+                    }) !== undefined;
+                });
+                if (dateIndex >= 0) {
+                    const polls = (selectedSession.dates as PollDate[])[dateIndex].polls;
+                    const updatedPolls = polls.filter((otherPoll: Poll) => otherPoll.state === 'live');
+                    (selectedSession.dates as PollDate[])[dateIndex].polls = updatedPolls;
+                }
+            }
             selectedSession.dates.unshift({
                 date: poll.createdAt ? poll.createdAt : '',
                 polls: [poll],

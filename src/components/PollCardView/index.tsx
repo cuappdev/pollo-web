@@ -121,14 +121,18 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                     <div className="poll-card-view-header-info-container">
                         <div className="poll-card-view-header-prompt-container">
                             <div className="poll-card-view-header-prompt-icon">
-                                
+                                <img 
+                                    width="41.2px"
+                                    height="41.2px"
+                                    src={require('../../images/eye.png')} 
+                                />
                             </div>
                             <div className="poll-card-view-header-prompt-text">
-                                Only you can see results
+                                {poll.state === 'shared' ? 'Shared with group' : 'Only you can see results'}
                             </div>
                         </div>
                         <div className="poll-card-view-response-count-text">
-                            {`${responseCount} ${responseCount === 1 ? 'Response' : 'Responses'}`}
+                            {`${responseCount} ${responseCount === 1 ? 'Vote' : 'Votes'}`}
                         </div>
                     </div>
                 </div>
