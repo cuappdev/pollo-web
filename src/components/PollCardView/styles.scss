@@ -144,6 +144,78 @@
     margin-bottom: 84px;
 }
 
+.poll-card-view-result-container {
+    margin-left: 18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.poll-card-view-result-text-container {
+    position: relative;
+    width: calc(100% - 81px);
+    background-color: $white;
+    border-radius: 3px;
+    border: 1.5px solid $mediumGrayTwo;
+
+    &.correct-answer {
+        border: 1.5px solid $polloGreen;
+    }
+}
+
+.poll-card-view-result-bar {
+    position: absolute;
+    left: -1.5px;
+    top: -1.5px;
+    bottom: -1.5px;
+    border-radius: 3px;
+    border: 1.5px solid $mediumGrayTwo;
+    background-color: $lightGray;
+
+    &.correct-answer {
+        background-color: $lightGreen;
+        border: 1px solid $polloGreen;
+    }
+}
+
+.poll-card-view-result-text {
+    position: relative;
+    width: calc(100% - 38px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: $black;
+    margin: 23px 19px;
+}
+
+.poll-card-view-result-info {
+    width: 81px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.poll-card-view-result-count {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: $black;
+    text-align: center;
+}
+
+.poll-card-view-result-percentage {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: $mediumGrayThree;
+    text-align: center;
+}
+
 .poll-card-view-poll-button {
     cursor: pointer;
     border: none;

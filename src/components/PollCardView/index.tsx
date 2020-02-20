@@ -79,10 +79,41 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     }, [poll]);
 
     const renderResponses = (responseCount: number) => {
+        const isShared = poll.state === 'shared';
         return poll.answerChoices.map((answerChoice: PollAnswerChoice) => {
             const count = answerChoice.count ? answerChoice.count : 0;
             const isCorrectAnswer = poll.correctAnswer && poll.correctAnswer === answerChoice.letter;
-            return (
+            const responsePercentage = responseCount > 0 ? Math.floor((count / responseCount) * 100) : 0;
+            return isShared ? (
+                <div className="poll-card-view-result-container">
+                    <div
+                        className={cx(
+                            'poll-card-view-result-text-container',
+                            isCorrectAnswer && 'correct-answer',
+                        )}
+                    >
+                        {responsePercentage > 0 && (
+                            <div
+                                className="poll-card-view-result-bar"
+                                style={{
+                                    right: `${100 - responsePercentage}%`,
+                                }}
+                            />
+                        )}
+                        <div className="poll-card-view-result-text">
+                            {answerChoice.text}
+                        </div>
+                    </div>
+                    <div className="poll-card-view-result-info">
+                        <div className="poll-card-view-result-count">
+                            {count}
+                        </div>
+                        <div className="poll-card-view-result-percentage">
+                            {`(${responsePercentage}%)`}
+                        </div>
+                    </div>
+                </div>
+            ) : (
                 <div 
                     className={cx(
                         'poll-card-view-response-container',
@@ -93,7 +124,7 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                         {answerChoice.text}
                     </div>
                     <div className="poll-card-view-response-percentage">
-                        {`${responseCount > 0 ? Math.floor((count / responseCount) * 100) : 0}%`}
+                        {`${responsePercentage}%`}
                     </div>
                 </div>
             );
