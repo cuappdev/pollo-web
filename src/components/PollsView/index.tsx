@@ -115,6 +115,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     });
     const showLeftPoll = shouldShowLeftPoll();
     const showRightPoll = shouldShowRightPoll();
+    const livePoll = pollDate.polls.find((poll: Poll) => poll.state === 'live');
 
     return (
         <div className="polls-view-container">
@@ -138,6 +139,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     >
                         <PollCardView
                             isCurrentPoll={false}
+                            livePoll={livePoll}
                             poll={pollDate.polls[currentPollIndex - 2]}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
@@ -154,6 +156,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     >
                         <PollCardView
                             isCurrentPoll={false}
+                            livePoll={livePoll}
                             poll={pollDate.polls[currentPollIndex - 1]}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
@@ -170,6 +173,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                 >
                     <PollCardView
                         isCurrentPoll={true}
+                        livePoll={livePoll}
                         poll={currentPoll}
                         onEditPoll={() => onEditPoll(currentPoll)}
                         onPollButtonClick={onPollButtonClick}
@@ -201,6 +205,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     >
                         <PollCardView
                             isCurrentPoll={false}
+                            livePoll={livePoll}
                             poll={pollDate.polls[currentPollIndex + 1]}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
@@ -217,6 +222,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                     >
                         <PollCardView
                             isCurrentPoll={false}
+                            livePoll={livePoll}
                             poll={pollDate.polls[currentPollIndex + 2]}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}

@@ -10,6 +10,7 @@ import './styles.scss';
 
 export interface PollCardViewProps {
     isCurrentPoll: boolean;
+    livePoll?: Poll;
     onEditPoll(poll: Poll): void;
     onPollButtonClick(poll: Poll): void;
     poll: Poll;
@@ -17,6 +18,7 @@ export interface PollCardViewProps {
 
 const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     isCurrentPoll,
+    livePoll,
     onEditPoll,
     onPollButtonClick,
     poll,
@@ -33,17 +35,17 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
         const minutes = Math.floor(secondsElapsed / 60);
         const seconds = secondsElapsed - minutes * 60;
         if (secondsElapsed < 600) {
-            return seconds < 10 ? `0${minutes}:0${seconds}` : `0${minutes}:${seconds}`;
+            return `0${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         }
-        return seconds < 10 ? `${minutes}:0${seconds}` : `${minutes}:${seconds}`;
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
     const getInitialTimerText = () => {
-        if (!poll.createdAt) {
+        if (!livePoll || !livePoll.createdAt) {
             return undefined;
         }
         const secondsElapsed = secondsBetween(
-            new Date(parseFloat(poll.createdAt) * 1000), 
+            new Date(parseFloat(livePoll.createdAt) * 1000), 
             new Date(),
         );
         return getTimerText(secondsElapsed);
@@ -52,13 +54,14 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     const [timerText, setTimerText] = useState<string | undefined>(getInitialTimerText());
 
     const updateTimer = () => {
-        if (!poll.createdAt || !isCurrentPoll || poll.state !== 'live') {
+        if (!livePoll || !livePoll.createdAt || !isCurrentPoll) {
             return;
         }
         const secondsElapsed = secondsBetween(
-            new Date(parseFloat(poll.createdAt) * 1000), 
+            new Date(parseFloat(livePoll.createdAt) * 1000), 
             new Date(),
         );
+        console.log(getTimerText(secondsElapsed));
         setTimerText(getTimerText(secondsElapsed));
     };
 
@@ -121,11 +124,12 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                     <div className="poll-card-view-header-info-container">
                         <div className="poll-card-view-header-prompt-container">
                             <div className="poll-card-view-header-prompt-icon">
-                                <img 
+                                {/* <img 
                                     width="41.2px"
                                     height="41.2px"
                                     src={require('../../images/eye.png')} 
-                                />
+                                /> */}
+                                <IconView type="eye" />
                             </div>
                             <div className="poll-card-view-header-prompt-text">
                                 {poll.state === 'shared' ? 'Shared with group' : 'Only you can see results'}

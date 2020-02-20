@@ -214,6 +214,7 @@ class HomeView extends React.Component<any, HomeViewState> {
     public updatePoll = (poll: Poll) => {
         console.log(poll);
         const { currentPoll, dispatch, selectedPollDate, selectedSession } = this.props;
+        console.log(selectedSession);
         const pollDateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
             return isSameDay(date.date, poll.createdAt ? poll.createdAt : '0');
         });
@@ -242,6 +243,7 @@ class HomeView extends React.Component<any, HomeViewState> {
             if (poll.state === 'ended') {
                 // If the poll exists, then remove it from other poll date bc it will
                 // become a new poll date with the unshift below. Don't want duplicates.
+                // This isn't working properly!
                 const dateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
                     return date.polls.find((otherPoll: Poll) => {
                         return otherPoll.state === 'live';
@@ -251,12 +253,13 @@ class HomeView extends React.Component<any, HomeViewState> {
                     const polls = (selectedSession.dates as PollDate[])[dateIndex].polls;
                     const updatedPolls = polls.filter((otherPoll: Poll) => otherPoll.state === 'live');
                     (selectedSession.dates as PollDate[])[dateIndex].polls = updatedPolls;
+                } else {
+                    selectedSession.dates.unshift({
+                        date: poll.createdAt ? poll.createdAt : '',
+                        polls: [poll],
+                    });
                 }
             }
-            selectedSession.dates.unshift({
-                date: poll.createdAt ? poll.createdAt : '',
-                polls: [poll],
-            });
             dispatch({ 
                 type: 'set-selected-session', 
                 currentPoll,
