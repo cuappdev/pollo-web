@@ -94,7 +94,10 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                     >
                         {responsePercentage > 0 && (
                             <div
-                                className="poll-card-view-result-bar"
+                                className={cx(
+                                    'poll-card-view-result-bar',
+                                    isCorrectAnswer && 'correct-answer',
+                                )}
                                 style={{
                                     right: `${100 - responsePercentage}%`,
                                 }}
