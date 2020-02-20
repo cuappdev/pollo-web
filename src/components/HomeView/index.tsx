@@ -252,13 +252,12 @@ class HomeView extends React.Component<any, HomeViewState> {
                     const polls = (selectedSession.dates as PollDate[])[dateIndex].polls;
                     const updatedPolls = polls.filter((otherPoll: Poll) => otherPoll.state !== 'live');
                     (selectedSession.dates as PollDate[])[dateIndex].polls = updatedPolls;
-                } else {
-                    selectedSession.dates.unshift({
-                        date: poll.createdAt ? poll.createdAt : '',
-                        polls: [poll],
-                    });
                 }
             }
+            selectedSession.dates.unshift({
+                date: poll.createdAt ? poll.createdAt : '',
+                polls: [poll],
+            });
             dispatch({ 
                 type: 'set-selected-session', 
                 currentPoll,
