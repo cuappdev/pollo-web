@@ -62,9 +62,8 @@
     align-items: center;
 }
 
-.poll-card-view-header-prompt-icon svg defs image {
-    // margin-right: 0.5px;
-    color: $blueGray!important;
+.poll-card-view-header-prompt-icon {
+    margin-right: 0.5px;
 }
 
 .poll-card-view-header-prompt-text {
