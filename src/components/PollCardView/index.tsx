@@ -99,7 +99,7 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                                     isCorrectAnswer && 'correct-answer',
                                 )}
                                 style={{
-                                    right: `${100 - responsePercentage}%`,
+                                    right: `calc(${100 - responsePercentage}% - 1.5px)`,
                                 }}
                             />
                         )}
