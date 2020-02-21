@@ -128,7 +128,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
             <div className="polls-view-poll-index-label">
                 {getPollIndexLabel()}
             </div>
-            <div className="polls-container">
+            <div className="polls-view-polls-container">
                 {shouldShowHiddenLeftPoll() && (
                     <div
                         className={cx(

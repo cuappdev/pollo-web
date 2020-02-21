@@ -1,14 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import HomeView from '../HomeView';
+import ExportApp from '../ExportApp';
+import PollingApp from '../PollingApp';
 
 const Navigator: React.FunctionComponent = () => {
     return (
         <BrowserRouter>
             <Switch>
-                <Route exact path="/" component={HomeView} />
-                <Route exact path="/export" component={HomeView} />
+                <Route exact path="/" component={PollingApp} />
+                <Route exact path="/export" component={ExportApp} />
             </Switch>
         </BrowserRouter>
     );
