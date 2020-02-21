@@ -18,6 +18,7 @@ export type SidebarViewType =
     | { type: 'single-date'; pollDate: PollDate }
 
 export interface SidebarViewProps {
+    currentPoll?: Poll;
     onBackButtonClick(): void;
     onCreateGroup(): void;
     onCreatePoll(): void;
@@ -30,6 +31,7 @@ export interface SidebarViewProps {
 }
 
 const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
+    currentPoll,
     onBackButtonClick,
     onCreateGroup,
     onCreatePoll,
@@ -62,9 +64,50 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
         }
     };
 
+    const getEmptyStateDescription = () => {
+        if (type.type === 'group-list') {
+            return 'Tap "+" above to create a group!';
+        }
+        return 'Tap "+" above to create a poll!';
+    }
+
+    const getEmptyStateImage = () => {
+        return type.type === 'group-list' ? 'blondeman.png' : 'blondelady.png';
+    };
+
+    const getEmptyStateMessage = () => {
+        if (type.type === 'group-list') {
+            return 'No groups created';
+        }
+        return 'No polls created';
+    };
+
+    const renderEmptyState = () => {
+        return (
+            <div className="sidebar-view-empty-state-container">
+                <div className="sidebar-view-empty-state-icon">
+                    <img
+                        src={require(`../../images/${getEmptyStateImage()}`)}
+                        width="50px"
+                        height="50px"
+                    />
+                </div>
+                <div className="sidebar-view-empty-state-message">
+                    {getEmptyStateMessage()}
+                </div>
+                <div className="sidebar-view-empty-state-description">
+                    {getEmptyStateDescription()}
+                </div>
+            </div>
+        );
+    };
+
     const renderSidebarContent = () => {
         switch (type.type) {
             case 'group-list':
+                if (type.sessions.length === 0) {
+                    return renderEmptyState();
+                }
                 return type.sessions.map((session: Session) => {
                     return (
                         <div className="sidebar-cell-container">
@@ -102,8 +145,8 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                 });
             case 'single-group':
                 const { dates } = type.session;
-                if (!dates) {
-                    return null;
+                if (!dates || dates.length === 0) {
+                    return renderEmptyState();
                 }
                 return dates.map((pollDate: PollDate) => {
                     const pollCount = pollDate.polls.length;
@@ -130,6 +173,9 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                     );
                 });
             case 'single-date':
+                if (type.pollDate.polls.length === 0) {
+                    return renderEmptyState();
+                }
                 return type.pollDate.polls.map((poll: Poll) => {
                     return (
                         <div className="sidebar-cell-container">
@@ -137,6 +183,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                                 <button 
                                     className={cx(
                                         'sidebar-cell-title-text',
+                                        currentPoll && currentPoll.id === poll.id && 'bold',
                                         poll.state === 'live' && 'bold',
                                     )}
                                     onClick={() => onSelectPoll(poll)}

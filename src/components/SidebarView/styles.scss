@@ -132,3 +132,35 @@
     margin-right: 4px;
     background-color: $white;
 }
+
+.sidebar-view-empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-view-empty-state-icon {
+    margin-top: 44px;
+}
+
+.sidebar-view-empty-state-message {
+    margin-top: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 21px;
+    color: $black;
+    text-align: center;
+    width: calc(100% - 16px);
+}
+
+.sidebar-view-empty-state-description {
+    margin-top: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: center;
+    color: $blueGray;
+    width: calc(100% - 16px);
+}

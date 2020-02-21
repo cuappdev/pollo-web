@@ -275,16 +275,20 @@ class HomeView extends React.Component<any, HomeViewState> {
     };
 
     public onSelectSession = (selectedSession: Session) => {
-        const accessToken = localStorage.getItem('accessToken');
-        disconnectSocket();
-        connectSocket(
-            selectedSession.id, 
-            accessToken ? accessToken : '',
-            this.handleSocketConnectionError,
-        );
-        adminPollEnded(this.updatePoll);
-        adminPollStart(this.updatePoll);
-        adminPollUpdates(this.updatePoll);
+        const { location } = this.props;
+        const isPollingApp = location.pathname !== '/export';
+        if (isPollingApp) {
+            const accessToken = localStorage.getItem('accessToken');
+            disconnectSocket();
+            connectSocket(
+                selectedSession.id, 
+                accessToken ? accessToken : '',
+                this.handleSocketConnectionError,
+            );
+            adminPollEnded(this.updatePoll);
+            adminPollStart(this.updatePoll);
+            adminPollUpdates(this.updatePoll);
+        }
         this.props.dispatch({ type: 'set-selected-session', selectedSession });
     };
 
@@ -297,7 +301,6 @@ class HomeView extends React.Component<any, HomeViewState> {
     };
 
     public renderGroups = (sessions: Session[]) => {
-        // Need to separate onSelectSession here for export app
         return sessions.map((session: Session, index: number) => {
             return (
                 <button

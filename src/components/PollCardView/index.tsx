@@ -170,7 +170,7 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                             </div>
                         </div>
                         <div className="poll-card-view-response-count-text">
-                            {`${responseCount} ${responseCount === 1 ? 'Vote' : 'Votes'}`}
+                            {`${responseCount} ${responseCount === 1 ? 'Response' : 'Responses'}`}
                         </div>
                     </div>
                 </div>
