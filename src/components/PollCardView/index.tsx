@@ -155,15 +155,32 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                             <IconView type="ellipsis" />
                         </button>
                     </div>
-                    <div className="poll-card-view-header-info-container">
+                    <div 
+                        className={cx(
+                            'poll-card-view-header-info-container',
+                            poll.state === 'shared' && 'padded',
+                        )}
+                    >
                         <div className="poll-card-view-header-prompt-container">
-                            <div className="poll-card-view-header-prompt-icon">
-                                {/* <img 
-                                    width="41.2px"
-                                    height="41.2px"
-                                    src={require('../../images/eye.png')} 
-                                /> */}
-                                <IconView type="eye" />
+                            <div 
+                                className={cx(
+                                    'poll-card-view-header-prompt-icon',
+                                    poll.state === 'shared' && 'padded',
+                                )}
+                            >
+                                {poll.state === 'shared' ? (
+                                    <img
+                                        width="26px"
+                                        height="26px"
+                                        src={require('../../images/globe.png')}
+                                    />
+                                ) : (
+                                    <img
+                                        width="41.2px"
+                                        height="49.27px"
+                                        src={require('../../images/eye.png')}
+                                    />
+                                )}
                             </div>
                             <div className="poll-card-view-header-prompt-text">
                                 {poll.state === 'shared' ? 'Shared with group' : 'Only you can see results'}

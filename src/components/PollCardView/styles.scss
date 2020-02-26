@@ -54,6 +54,11 @@
     align-items: center;
     margin-left: 23px;
     margin-right: 23px;
+    margin-bottom: 6.73px;
+
+    &.padded {
+        margin-bottom: 17px;
+    }
 }
 
 .poll-card-view-header-prompt-container {
@@ -64,6 +69,10 @@
 
 .poll-card-view-header-prompt-icon {
     margin-right: 0.5px;
+
+    &.padded {
+        margin-right: 11px;
+    }
 }
 
 .poll-card-view-header-prompt-text {
