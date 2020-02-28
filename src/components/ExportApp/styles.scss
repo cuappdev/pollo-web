@@ -232,6 +232,7 @@
 }
 
 .export-app-export-button {
+    text-decoration: none;
     background: none;
     border: none;
     outline: none;
@@ -257,6 +258,13 @@
     font-weight: bold;
     color: $white;
     letter-spacing: 0.2px;
+
+    &.fixed-width {
+        width: calc(100% - 32px);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .export-app-group-list-container {

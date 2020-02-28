@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import React from 'react';
+import { CSVLink } from 'react-csv';
 import { GoogleLogout } from 'react-google-login';
 import { connect } from 'react-redux';
 
@@ -28,6 +29,7 @@ import {
 import './styles.scss';
 
 export interface ExportAppState {
+    csv?: string;
     isExporting: boolean;
     isLoading: boolean;
     selectedExportType: ExportType;
@@ -39,6 +41,7 @@ class ExportApp extends React.Component<any, ExportAppState> {
     constructor(props: any) {
         super(props);
         this.state = {
+            csv: undefined,
             isExporting: false,
             isLoading: currentUserExists(),
             selectedExportType: 'CMS',
@@ -71,15 +74,10 @@ class ExportApp extends React.Component<any, ExportAppState> {
         if (isExporting || !selectedSession) {
             return;
         }
-        console.log(selectedSession);
         this.setState({ isExporting: true });
         try {
             const { data } = await exportCsv(selectedSession.id);
-            let csv = `data:text/csv;charset=utf-8,${encodeURI(data)}`;
-            console.log(csv);
-            window.open(csv);
-            this.setState({ isExporting: false });
-            console.log(data);
+            this.setState({ csv: data, isExporting: false });
         } catch (error) {
             this.setState({ isExporting: false });
             console.log(error);
@@ -207,7 +205,7 @@ class ExportApp extends React.Component<any, ExportAppState> {
             );
         }
         const { selectedSession, sessions } = this.props;
-        const { selectedExportType, showExportDropdown } = this.state;
+        const { csv, selectedExportType, showExportDropdown } = this.state;
         return (
             <div className="export-app-background">
                 <div className="export-app-corner-logo-container">
@@ -274,15 +272,28 @@ class ExportApp extends React.Component<any, ExportAppState> {
                                             </button>
                                         </div>
                                     )}
-                                    <button
-                                        className="export-app-export-button"
-                                        disabled={this.isExportButtonDisabled()}
-                                        onClick={this.onExportButtonClicked}
-                                    >
-                                        <div className="export-app-export-button-text">
-                                            Export CSV
-                                        </div>
-                                    </button>
+                                    {csv ? (
+                                        <CSVLink
+                                            className="export-app-export-button"
+                                            data={csv}
+                                            filename={`${selectedSession.name}.csv`}
+                                            target="_blank"
+                                        >
+                                            <div className="export-app-export-button-text">
+                                                Open CSV
+                                            </div>
+                                        </CSVLink>
+                                    ) : (
+                                        <button
+                                            className="export-app-export-button"
+                                            disabled={this.isExportButtonDisabled()}
+                                            onClick={this.onExportButtonClicked}
+                                        >
+                                            <div className="export-app-export-button-text">
+                                                Export CSV
+                                            </div>
+                                        </button>
+                                    )}
                                 </div>
                             </>
                         ) : (
