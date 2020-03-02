@@ -20,7 +20,7 @@ export type SidebarViewType =
 export interface SidebarViewProps {
     currentPoll?: Poll;
     onBackButtonClick(): void;
-    onCreateGroup(): void;
+    onComposeGroup(): void;
     onCreatePoll(): void;
     onEditPollDate(pollDate: PollDate);
     onEditSession(session: Session): void;
@@ -33,7 +33,7 @@ export interface SidebarViewProps {
 const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     currentPoll,
     onBackButtonClick,
-    onCreateGroup,
+    onComposeGroup,
     onCreatePoll,
     onEditPollDate,
     onEditSession,
@@ -227,7 +227,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                 </div>
                 <button 
                     className="sidebar-header-icon-button"
-                    onClick={type.type === 'group-list' ? onCreateGroup : onCreatePoll}
+                    onClick={type.type === 'group-list' ? onComposeGroup : onCreatePoll}
                 >
                     <IconView type="plus" />
                 </button>

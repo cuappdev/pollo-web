@@ -1,6 +1,8 @@
+import cx from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import CreateGroupView from '../CreateGroupView';
 import LoginView from '../LoginView';
 import PollsView from '../PollsView';
 import SidebarView from '../SidebarView';
@@ -20,6 +22,8 @@ import {
     rememberCurrentUser,
 } from '../../utils/functions';
 import {
+    createSession,
+    generateCode,
     generateUserSession,
     setAuthHeader,
 } from '../../utils/requests';
@@ -36,6 +40,8 @@ import {
 import './styles.scss';
 
 export interface PollingAppState {
+    isComposingGroup: boolean;
+    isCreatingGroup: boolean;
     isLoading: boolean;
     showLoginError: boolean;
 }
@@ -44,6 +50,8 @@ class PollingApp extends React.Component<any, PollingAppState> {
     constructor(props: any) {
         super(props);
         this.state = {
+            isComposingGroup: false,
+            isCreatingGroup: false,
             isLoading: currentUserExists(),
             showLoginError: false,
         };
@@ -73,8 +81,23 @@ class PollingApp extends React.Component<any, PollingAppState> {
         // the socket (talk to design).
     };
 
-    public onCreateGroup = () => {
+    public onComposeGroup = () => {
+        this.setState({ isComposingGroup: true });
+    };
 
+    public onCreateGroupViewCreateButtonClick = async (name?: string) => {
+        if (!name || name === '') {
+            return;
+        }
+        this.setState({ isComposingGroup: false, isCreatingGroup: true });
+        try {
+            const { code } = await generateCode();
+            const response = await createSession(code, name);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+            this.setState({ isComposingGroup: true, isCreatingGroup: false });
+        }
     };
 
     public onCreatePoll = () => {
@@ -157,6 +180,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
         adminPollStart(this.updatePoll);
         adminPollUpdates(this.updatePoll);
         this.props.dispatch({ type: 'set-selected-session', selectedSession });
+        this.setState({ isComposingGroup: false, isCreatingGroup: false });
     };
 
     public onSetCurrentPoll = (currentPoll: Poll) => {
@@ -274,12 +298,13 @@ class PollingApp extends React.Component<any, PollingAppState> {
         if (!sidebarViewType) {
             return null;
         }
+        const { isComposingGroup, isCreatingGroup } = this.state;
         return (
             <div className="polling-app-container">
-                <div className="polling-app-groups-view-container">
+                <div className="polling-app-sidebar-view-container">
                     <SidebarView
                         onBackButtonClick={this.onSidebarViewBackButtonClick}
-                        onCreateGroup={this.onCreateGroup}
+                        onComposeGroup={this.onComposeGroup}
                         onCreatePoll={this.onCreatePoll}
                         onEditPollDate={this.onEditPollDate}
                         onEditSession={this.onEditSession}
@@ -289,18 +314,35 @@ class PollingApp extends React.Component<any, PollingAppState> {
                         type={sidebarViewType}
                     />
                 </div>
-                <div className="polling-app-polls-view-container">
-                    <PollsView
-                        currentPoll={currentPoll}
-                        onEditPoll={this.onEditPoll}
-                        onEndPoll={this.onEndPoll}
-                        onPollButtonClick={this.onPollButtonClick}
-                        onSetCurrentPoll={this.onSetCurrentPoll}
-                        onShareResults={this.onShareResults}
-                        onStartPoll={this.onStartPoll}
-                        pollDate={selectedPollDate}
-                        session={selectedSession}
-                    />
+                <div
+                    className={cx(
+                        'polling-app-content-view-container',
+                        (isComposingGroup || isCreatingGroup) && 'centered',
+                    )}
+                >
+                    <>
+                        {(isComposingGroup || isCreatingGroup) && (
+                            <div className="polling-app-create-group-view-container">
+                                <CreateGroupView
+                                    isCreatingGroup={isCreatingGroup}
+                                    onCreateButtonClick={this.onCreateGroupViewCreateButtonClick}
+                                />
+                            </div>
+                        )}
+                        {!isComposingGroup && !isCreatingGroup && (
+                            <PollsView
+                                currentPoll={currentPoll}
+                                onEditPoll={this.onEditPoll}
+                                onEndPoll={this.onEndPoll}
+                                onPollButtonClick={this.onPollButtonClick}
+                                onSetCurrentPoll={this.onSetCurrentPoll}
+                                onShareResults={this.onShareResults}
+                                onStartPoll={this.onStartPoll}
+                                pollDate={selectedPollDate}
+                                session={selectedSession}
+                            />
+                        )}
+                    </>
                 </div>
             </div>
         );

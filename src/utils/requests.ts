@@ -16,8 +16,8 @@ const get = async (url: string, params?: any) => {
   throw Error(data);
 };
 
-const post = async (url: string, body?: any) => {
-  const res = await api.post(url, body);
+const post = async (url: string, headers: any, body?: any) => {
+  const res = await api.post(url, body, headers);
   const { success, data } = res.data;
   if (success) return data;
   throw Error(data.errors[0]);
@@ -100,9 +100,17 @@ export const removeAdmins = async (sessionId: string, adminIds: string[]) => {
             Session
 *******************************/
 
-export const generateNewCode = async () => {
-  const data = await get('/generate/code/');
-  return data.code;
+export const createSession = async (code: string, name: string) => {
+    const data = await post('/sessions/', {
+        headers: {
+            Authorization: axios.defaults.headers.common['Authorization'],
+        },
+    }, {
+        code,
+        isGroup: false,
+        name,
+    });
+    return data;
 };
 
 export const createNewSession = async (code: string) => {
@@ -122,6 +130,15 @@ export const getAllSessions = async () => {
     'adminSessions': adminSessions.map((session: any) => session.node),
     'memberSessions': memberSessions.map((session: any) => session.node),
   };
+};
+
+export const generateCode = async () => {
+    const data = await get('/generate/code', {
+        headers: {
+            Authorization: axios.defaults.headers.common['Authorization'],
+        },
+    });
+    return data;
 };
 
 export const getAdminSessions = async () => {

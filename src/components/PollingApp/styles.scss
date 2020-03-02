@@ -9,13 +9,23 @@
     justify-content: space-between;
 }
 
-.polling-app-groups-view-container {
+.polling-app-sidebar-view-container {
     width: 322px;
     height: 100%;
 }
 
-.polling-app-polls-view-container {
+.polling-app-content-view-container {
     width: calc(100vw - 322px);
     height: 100%;
     background-color: $darkestGray;
+
+    &.centered {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.polling-app-create-group-view-container {
+    width: 336px;
 }
