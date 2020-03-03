@@ -92,8 +92,8 @@ class PollingApp extends React.Component<any, PollingAppState> {
         this.setState({ isComposingGroup: false, isCreatingGroup: true });
         try {
             const { code } = await generateCode();
-            const response = await createSession(code, name);
-            console.log(response);
+            const session: Session = await createSession(code, name);
+            this.onSelectSession(session, true);
         } catch (error) {
             console.log(error);
             this.setState({ isComposingGroup: true, isCreatingGroup: false });
@@ -168,7 +168,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
         this.props.dispatch({ type: 'set-selected-poll-date', selectedPollDate });
     };
 
-    public onSelectSession = (selectedSession: Session) => {
+    public onSelectSession = (selectedSession: Session, justCreatedSession?: boolean) => {
         const accessToken = localStorage.getItem('accessToken');
         disconnectSocket();
         connectSocket(
@@ -179,7 +179,11 @@ class PollingApp extends React.Component<any, PollingAppState> {
         adminPollEnded(this.updatePoll);
         adminPollStart(this.updatePoll);
         adminPollUpdates(this.updatePoll);
-        this.props.dispatch({ type: 'set-selected-session', selectedSession });
+        this.props.dispatch({ 
+            type: 'set-selected-session', 
+            justCreatedSession,
+            selectedSession, 
+        });
         this.setState({ isComposingGroup: false, isCreatingGroup: false });
     };
 

@@ -5,13 +5,27 @@ import {
 import { PollDate, Session, User } from '../types';
 
 export const condenseAdminSessions = async () => {
-    const adminSessions = await getAdminSessions();
+    const adminSessions = await getAdminSessions() as Session[];
     console.log(adminSessions);
     const pollDatesArray = await Promise.all(adminSessions.map((session: Session) => {
         return getPollsForSession(session.id);
     }));
     pollDatesArray.forEach((pollDates: any, sessionIndex: number) => {
         adminSessions[sessionIndex].dates = condenseDates(pollDates as PollDate[]);
+    });
+    adminSessions.sort((one: Session, two: Session) => {
+        if (!one.updatedAt && !two.updatedAt) {
+            return 0;
+        }
+        if (!one.updatedAt) {
+            return 1;
+        }
+        if (!two.updatedAt) {
+            return -1;
+        }
+        const updatedOne = new Date(parseFloat(one.updatedAt) * 1000);
+        const updatedTwo = new Date(parseFloat(two.updatedAt) * 1000);
+        return updatedOne.getTime() > updatedTwo.getTime() ? -1 : 1;
     });
     return adminSessions;
 };

@@ -24,7 +24,7 @@ export type AppAction =
     | { type: 'set-current-poll'; currentPoll?: Poll }
     | { type: 'set-sidebar-view-type'; sidebarViewType?: SidebarViewType }
     | { type: 'set-selected-poll-date'; selectedPollDate?: PollDate }
-    | { type: 'set-selected-session'; currentPoll?: Poll; fullUpdate?: boolean; selectedPollDate?: PollDate; selectedSession?: Session }
+    | { type: 'set-selected-session'; currentPoll?: Poll; fullUpdate?: boolean; justCreatedSession?: boolean; selectedPollDate?: PollDate; selectedSession?: Session }
     | { type: 'set-sessions'; sidebarViewType?: SidebarViewType; sessions: Session[] }
     | { type: 'set-user'; user: User }
     | { type: 'set-user-session'; userSession: UserSession }
@@ -80,6 +80,9 @@ export default function reducer(state: AppState = initialState, action: AppActio
                     return session.id === selectedSession.id;
                 });
                 state.sessions[sessionIndex] = selectedSession;
+            }
+            if (action.justCreatedSession && selectedSession) {
+                state.sessions.unshift(selectedSession);
             }
             return { 
                 ...state, 
