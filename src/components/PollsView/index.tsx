@@ -125,7 +125,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                         code: session.code, 
                         currentPollIndex,
                         pollCount: pollDate.polls.length,
-                        title: `${session.name} - ${getDateString(pollDate)}`, 
+                        title: `${session.name} - ${getDateString(pollDate.date)}`, 
                     }}
                 />
             )}

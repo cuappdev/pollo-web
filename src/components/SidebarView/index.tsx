@@ -8,7 +8,7 @@ import {
     PollDate,
     Session,
 } from '../../types';
-import { getDateString } from '../../utils/functions';
+import { getDateString, secondsBetween } from '../../utils/functions';
 
 import './styles.scss';
 
@@ -63,7 +63,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
             case 'single-group':
                 return type.session.name;
             case 'single-date':
-                return getDateString(type.pollDate);
+                return getDateString(type.pollDate.date);
         }
     };
 
@@ -83,6 +83,33 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
             return 'No groups created';
         }
         return 'No polls created';
+    };
+
+    const getGroupLivenessDescription = (session: Session) => {
+        if (!session.updatedAt) {
+            return null;
+        }
+        const secondsElapsed = secondsBetween(
+            new Date(parseFloat(session.updatedAt) * 1000), 
+            new Date(),
+        );
+        const oneMinuteSeconds = 60;
+        const oneHourSeconds = 3600;
+        const oneDaySeconds = 86400;
+        const oneWeekSeconds = 604800;
+        if (secondsElapsed < oneHourSeconds) {
+            const minutes = Math.ceil(secondsElapsed / oneMinuteSeconds);
+            return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+        }
+        if (secondsElapsed < oneDaySeconds) {
+            const hours = Math.floor(secondsElapsed / oneHourSeconds);
+            return `${hours} ${hours === 1 ? 'hr' : 'hrs'} ago`;
+        }
+        if (secondsElapsed < oneWeekSeconds) {
+            const days = Math.floor(secondsElapsed / oneDaySeconds);
+            return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+        }
+        return getDateString(session.updatedAt, true);
     };
 
     const livePollExists = () => {
@@ -150,7 +177,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                                     </div>
                                 ) : (
                                     <div className="sidebar-cell-subtitle-text">
-                                        Last live
+                                        Last live {getGroupLivenessDescription(session)}
                                     </div>
                                 )}
                             </div>
@@ -177,7 +204,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                                     className="sidebar-cell-title-text"
                                     onClick={() => onSelectPollDate(pollDate)}
                                 >
-                                    {getDateString(pollDate)}
+                                    {getDateString(pollDate.date)}
                                 </button>
                                 <div className="sidebar-cell-subtitle-text">
                                     {`${pollCount} ${pollCount === 1 ? 'Question' : 'Questions'}`}

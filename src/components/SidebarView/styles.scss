@@ -126,11 +126,11 @@
 
 .sidebar-cell-icon-button {
     cursor: pointer;
-    background: none;
+    background: inherit;
     border: none;
     outline: none;
+    padding: 0;
     margin-right: 4px;
-    background-color: $white;
 }
 
 .sidebar-view-empty-state-container {

@@ -61,7 +61,6 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
             new Date(parseFloat(livePoll.createdAt) * 1000), 
             new Date(),
         );
-        console.log(getTimerText(secondsElapsed));
         setTimerText(getTimerText(secondsElapsed));
     };
 

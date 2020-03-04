@@ -150,7 +150,7 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
                     type={{ 
                         type: 'plain', 
                         code: session.code, 
-                        title: pollDate ? `${session.name} - ${getDateString(pollDate)}` : session.name,
+                        title: pollDate ? `${session.name} - ${getDateString(pollDate.date)}` : session.name,
                     }} 
                 />
             )}

@@ -16,7 +16,6 @@ const CreateGroupView: React.FunctionComponent<CreateGroupViewProps> = ({
 
     const onNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const name: string = event.target.value;
-        console.log(name);
         setName(name === '' ? undefined : name);
     };
 

@@ -75,12 +75,12 @@ export const getCurrentUser = () => {
     return currentUser;
 };
 
-export const getDateString = (pollDate: PollDate) => {
-    const date = new Date(parseFloat(pollDate.date) * 1000);
+export const getDateString = (timestamp: string, isShort?: boolean) => {
+    const date = new Date(parseFloat(timestamp) * 1000);
     const month = date.toLocaleString('default', { month: 'long' });
     const day = date.getDate();
     const year = date.getFullYear();
-    return `${month} ${day}, ${year}`;
+    return isShort ? `${month.slice(0, 3)} ${day}` : `${month} ${day}, ${year}`;
 };
 
 export const isSameDay = (timestampOne: string, timestampTwo: string) => {

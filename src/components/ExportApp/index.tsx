@@ -151,7 +151,7 @@ class ExportApp extends React.Component<any, ExportAppState> {
                     onClick={() => this.onSelectExportDate(pollDate)}
                 >
                     <div className="export-app-date-text">
-                        {getDateString(pollDate)}
+                        {getDateString(pollDate.date)}
                     </div>
                     <div className="export-app-date-icon-border">
                         {selectedPollDates.includes(pollDate) && (
