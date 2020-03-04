@@ -79,12 +79,13 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     }, [poll]);
 
     const renderResponses = (responseCount: number) => {
-        const isShared = poll.state === 'shared';
         return poll.answerChoices.map((answerChoice: PollAnswerChoice) => {
             const count = answerChoice.count ? answerChoice.count : 0;
+            const letter = answerChoice.letter ? answerChoice.letter : '';
+            const text = answerChoice.text;
             const isCorrectAnswer = poll.correctAnswer && poll.correctAnswer === answerChoice.letter;
             const responsePercentage = responseCount > 0 ? Math.floor((count / responseCount) * 100) : 0;
-            return isShared ? (
+            return (
                 <div className="poll-card-view-result-container">
                     <div
                         className={cx(
@@ -104,7 +105,7 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                             />
                         )}
                         <div className="poll-card-view-result-text">
-                            {answerChoice.text}
+                            {text === '' ? letter : text}
                         </div>
                     </div>
                     <div className="poll-card-view-result-info">
@@ -114,20 +115,6 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                         <div className="poll-card-view-result-percentage">
                             {`(${responsePercentage}%)`}
                         </div>
-                    </div>
-                </div>
-            ) : (
-                <div 
-                    className={cx(
-                        'poll-card-view-response-container',
-                        isCorrectAnswer && 'correct-answer',
-                    )}
-                >
-                    <div className="poll-card-view-response-text">
-                        {answerChoice.text}
-                    </div>
-                    <div className="poll-card-view-response-percentage">
-                        {`${responsePercentage}%`}
                     </div>
                 </div>
             );

@@ -1,12 +1,16 @@
 import React from 'react';
 
 export type IconViewType =
+    | 'add-option-plus'
+    | 'black-x'
     | 'check'
     | 'ellipsis'
     | 'export-dropdown'
     | 'export-group-arrow'
     | 'export-group-back-arrow'
     | 'next-poll-arrow'
+    | 'option-selected-check'
+    | 'option-unselected-check'
     | 'plus'
     | 'previous-poll-arrow'
     | 'sidebar-back-arrow';
@@ -19,6 +23,19 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
     type,
 }) => {
     switch (type) {
+        case 'add-option-plus':
+            return (
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <path d="M5.78711 4.13574H9.35547V5.67383H5.78711V9.7168H4.15234V5.67383H0.583984V4.13574H4.15234V0.400391H5.78711V4.13574Z" fill="#9EA7B3"/>
+                </svg>
+            );
+        case 'black-x':
+            return (
+                <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+                    <rect x="15.5547" width="2" height="22" rx="1" transform="rotate(45 15.5547 0)" fill="#202020"/>
+                    <rect width="2" height="22" rx="1" transform="matrix(-0.707107 0.707107 0.707107 0.707107 1.41406 0)" fill="#202020"/>
+                </svg>
+            );
         case 'check':
             return (
                 <svg width="9" height="7" fill="none" viewBox="0 0 9 7">
@@ -53,6 +70,21 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
             return (
                 <svg width="18" height="31" fill="none" viewBox="0 0 18 31">
                     <path fill="#fff" fillRule="evenodd" d="M1.374 30.703a1.012 1.012 0 0 0 1.432 0l14.25-14.25c.258-.258.348-.622.268-.953.08-.331-.01-.695-.268-.953L2.806.297a1.012 1.012 0 0 0-1.432 0L.297 1.374a1.012 1.012 0 0 0 0 1.432L12.99 15.5.297 28.194a1.012 1.012 0 0 0 0 1.432l1.077 1.077z" clipRule="evenodd"/>
+                </svg>
+            );
+        case 'option-selected-check':
+            return (
+                <svg width="23" height="23" viewBox="0 0 23 23" fill="none">
+                    <path opacity="0.5" d="M22 11.5C22 17.299 17.299 22 11.5 22C5.70101 22 1 17.299 1 11.5C1 5.70101 5.70101 1 11.5 1C17.299 1 22 5.70101 22 11.5Z" stroke="#9EA7B3" strokeWidth="2"/>
+                    <path fillRule="evenodd" clipRule="evenodd" d="M11.5 23C17.8513 23 23 17.8513 23 11.5C23 5.14873 17.8513 0 11.5 0C5.14873 0 0 5.14873 0 11.5C0 17.8513 5.14873 23 11.5 23Z" fill="#29C09E"/>
+                    <path d="M7 12.5L10 15.5L16.5 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+            );
+        case 'option-unselected-check':
+            return (
+                <svg width="23" height="23" viewBox="0 0 23 23" fill="none">
+                    <path opacity="0.5" d="M22 11.5C22 17.299 17.299 22 11.5 22C5.70101 22 1 17.299 1 11.5C1 5.70101 5.70101 1 11.5 1C17.299 1 22 5.70101 22 11.5Z" stroke="#9EA7B3" strokeWidth="2"/>
+                    <path opacity="0.5" d="M7 12.5L10 15.5L16.5 9" stroke="#9EA7B3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
             );
         case 'plus':

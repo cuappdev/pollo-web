@@ -21,7 +21,7 @@ export interface SidebarViewProps {
     currentPoll?: Poll;
     onBackButtonClick(): void;
     onComposeGroup(): void;
-    onCreatePoll(): void;
+    onComposePoll(): void;
     onEditPollDate(pollDate: PollDate);
     onEditSession(session: Session): void;
     onSelectPoll(poll: Poll): void;
@@ -34,7 +34,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     currentPoll,
     onBackButtonClick,
     onComposeGroup,
-    onCreatePoll,
+    onComposePoll,
     onEditPollDate,
     onEditSession,
     onSelectPoll,
@@ -47,10 +47,13 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
             const answerChoice = poll.answerChoices.find((answerChoice: PollAnswerChoice) => {
                 return answerChoice.letter === poll.correctAnswer;
             }) as PollAnswerChoice;
-            return answerChoice.text;
+            const { letter, text } = answerChoice;
+            return text === '' && letter ? letter : text;
         }
         const firstChoiceLetter = Object.keys(poll.answerChoices)[0];
-        return poll.answerChoices[firstChoiceLetter].text;
+        const text = poll.answerChoices[firstChoiceLetter].text;
+        const letter = poll.answerChoices[firstChoiceLetter].letter;
+        return text === '' && letter ? letter : text;
     };
 
     const getHeaderText = () => {
@@ -80,6 +83,23 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
             return 'No groups created';
         }
         return 'No polls created';
+    };
+
+    const livePollExists = () => {
+        if (type.type === 'single-group') {
+            if (!type.session.dates) {
+                return false;
+            }
+            const liveDate = type.session.dates.find((date: PollDate) => {
+                const livePoll = date.polls.find((poll: Poll) => poll.state === 'live');
+                return livePoll !== undefined;
+            });
+            return liveDate !== undefined;
+        } else if (type.type === 'single-date') {
+            const livePoll = type.pollDate.polls.find((poll: Poll) => poll.state === 'live');
+            return livePoll !== undefined;
+        }
+        return false;
     };
 
     const renderEmptyState = () => {
@@ -225,12 +245,14 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                         {getHeaderText()}
                     </div>
                 </div>
-                <button 
-                    className="sidebar-header-icon-button"
-                    onClick={type.type === 'group-list' ? onComposeGroup : onCreatePoll}
-                >
-                    <IconView type="plus" />
-                </button>
+                {(type.type === 'group-list' || !livePollExists()) && (
+                    <button 
+                        className="sidebar-header-icon-button"
+                        onClick={type.type === 'group-list' ? onComposeGroup : onComposePoll}
+                    >
+                        <IconView type="plus" />
+                    </button>
+                )}
             </div>
             <div className="sidebar-content-container">
                 {renderSidebarContent()}

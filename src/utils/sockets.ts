@@ -9,7 +9,7 @@ let socket;
 export const connectSocket = (
     sessionId: string, 
     accessToken: string, 
-    handleConnectionError: () => void,
+    handleConnectionError: (error?: any) => void,
 ) => {
     try {
         socket = io.connect(
@@ -40,7 +40,7 @@ export const disconnectSocket = () => {
             Server
 ****************************** */
 
-export const startPoll = (poll) => {
+export const startPoll = (poll: any) => {
     socket.emit('server/poll/start', poll);
 };
 

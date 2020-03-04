@@ -1,15 +1,16 @@
 import cx from 'classnames';
 import React, { useState } from 'react';
 
+import GroupHeaderView from '../GroupHeaderView';
 import IconView from '../IconView';
 import LogoView from '../LogoView';
 import PollCardView from '../PollCardView';
+
 import {
     Poll,
     PollDate,
     Session,
 } from '../../types';
-
 import { getDateString } from '../../utils/functions';
 
 import './styles.scss';
@@ -21,7 +22,6 @@ export interface PollsViewProps {
     onPollButtonClick(poll: Poll): void;
     onSetCurrentPoll(poll: Poll): void;
     onShareResults(poll: Poll): void;
-    onStartPoll(poll: Poll): void;
     pollDate?: PollDate;
     session?: Session;
 }
@@ -35,7 +35,6 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     onPollButtonClick,
     onSetCurrentPoll,
     onShareResults,
-    onStartPoll,
     pollDate,
     session,
 }) => {
@@ -119,15 +118,17 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
 
     return (
         <div className="polls-view-container">
-            <div className="polls-view-title">
-                {session && session.name} - {pollDate && getDateString(pollDate)}
-            </div>
-            <div className="polls-view-code-text">
-                Code: {session && session.code}
-            </div>
-            <div className="polls-view-poll-index-label">
-                {getPollIndexLabel()}
-            </div>
+            {session && (
+                <GroupHeaderView
+                    type={{ 
+                        type: 'polls', 
+                        code: session.code, 
+                        currentPollIndex,
+                        pollCount: pollDate.polls.length,
+                        title: `${session.name} - ${getDateString(pollDate)}`, 
+                    }}
+                />
+            )}
             <div className="polls-view-polls-container">
                 {shouldShowHiddenLeftPoll() && (
                     <div

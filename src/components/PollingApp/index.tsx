@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import CreateGroupView from '../CreateGroupView';
+import CreatePollView from '../CreatePollView';
 import LoginView from '../LoginView';
 import PollsView from '../PollsView';
 import SidebarView from '../SidebarView';
@@ -10,6 +11,7 @@ import SidebarView from '../SidebarView';
 import { AppAction, AppState } from '../../reducer';
 import {
     Poll,
+    PollAnswerChoice,
     PollDate,
     Session,
 } from '../../types';
@@ -35,6 +37,7 @@ import {
     disconnectSocket,
     endPoll,
     shareResults,
+    startPoll,
 } from '../../utils/sockets';
 
 import './styles.scss';
@@ -42,6 +45,8 @@ import './styles.scss';
 export interface PollingAppState {
     isComposingGroup: boolean;
     isCreatingGroup: boolean;
+    isComposingPoll: boolean;
+    isStartingPoll: boolean;
     isLoading: boolean;
     showLoginError: boolean;
 }
@@ -52,6 +57,8 @@ class PollingApp extends React.Component<any, PollingAppState> {
         this.state = {
             isComposingGroup: false,
             isCreatingGroup: false,
+            isComposingPoll: false,
+            isStartingPoll: false,
             isLoading: currentUserExists(),
             showLoginError: false,
         };
@@ -75,10 +82,11 @@ class PollingApp extends React.Component<any, PollingAppState> {
         }
     }
 
-    public handleSocketConnectionError = () => {
+    public handleSocketConnectionError = (error?: any) => {
         // Perhaps display a banner that asks user to check their internet connection
         // and maybe prompts them with a button that when clicked tries to reconnect to
         // the socket (talk to design).
+        console.log(error);
     };
 
     public onComposeGroup = () => {
@@ -100,8 +108,12 @@ class PollingApp extends React.Component<any, PollingAppState> {
         }
     };
 
-    public onCreatePoll = () => {
+    public onCreatePollViewDismiss = () => {
+        this.setState({ isComposingPoll: false, isStartingPoll: false });
+    };
 
+    public onComposePoll = () => {
+        this.setState({ isComposingPoll: true });
     };
 
     public onEditPoll = (poll: Poll) => {
@@ -162,10 +174,16 @@ class PollingApp extends React.Component<any, PollingAppState> {
 
     public onSelectPoll = (currentPoll: Poll) => {
         this.props.dispatch({ type: 'set-current-poll', currentPoll });
+        if (this.state.isComposingPoll || this.state.isStartingPoll) {
+            this.setState({ isComposingPoll: false, isStartingPoll: false });
+        }
     };
 
     public onSelectPollDate = (selectedPollDate: PollDate) => {
         this.props.dispatch({ type: 'set-selected-poll-date', selectedPollDate });
+        if (this.state.isComposingPoll || this.state.isStartingPoll) {
+            this.setState({ isComposingPoll: false, isStartingPoll: false });
+        }
     };
 
     public onSelectSession = (selectedSession: Session, justCreatedSession?: boolean) => {
@@ -189,6 +207,9 @@ class PollingApp extends React.Component<any, PollingAppState> {
 
     public onSetCurrentPoll = (currentPoll: Poll) => {
         this.props.dispatch({ type: 'set-current-poll', currentPoll });
+        if (this.state.isComposingPoll || this.state.isStartingPoll) {
+            this.setState({ isComposingPoll: false, isStartingPoll: false });
+        }
     };
 
     public onShareResults = (poll: Poll) => {
@@ -208,10 +229,39 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 ...(sidebarViewType.type === 'single-group' ? { sessions } : { session: selectedSession }),
             },
         });
+        if (this.state.isComposingPoll || this.state.isStartingPoll) {
+            this.setState({ isComposingPoll: false, isStartingPoll: false });
+        }
     };
 
-    public onStartPoll = (poll: Poll) => {
-
+    public onStartPoll = async (answerChoices: PollAnswerChoice[], correctAnswer?: string, question?: string) => {
+        this.setState({ isComposingPoll: false, isStartingPoll: true });
+        try {
+            startPoll({
+                text: question ? question : '',
+                answerChoices,
+                state: 'live',
+                correctAnswer: correctAnswer ? correctAnswer : '',
+                userAnswers: {},
+                type: 'multipleChoice',
+            });
+            const createdAt = `${(new Date()).getTime() / 1000}`;
+            const poll: Poll = {
+                answerChoices,
+                correctAnswer,
+                createdAt,
+                state: 'live',
+                text: question ? question : '',
+                type: 'multiple-choice',
+                updatedAt: createdAt,
+                userAnswers: {},
+            };
+            this.updatePoll(poll, true);
+            this.setState({ isComposingPoll: false, isStartingPoll: false });
+        } catch (error) {
+            console.log(error);
+            this.setState({ isComposingPoll: true, isStartingPoll: false });
+        }
     };
 
     public shouldUpdateCurrentPoll = (updatedPoll: Poll, currentPoll?: Poll) => {
@@ -231,7 +281,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
         return isSameDay(updatedPoll.createdAt, selectedPollDate.date);
     };
 
-    public updatePoll = (poll: Poll) => {
+    public updatePoll = (poll: Poll, setCurrentPoll?: boolean) => {
         console.log(poll);
         const { currentPoll, dispatch, selectedPollDate, selectedSession } = this.props;
         console.log(selectedSession);
@@ -253,7 +303,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             }
             dispatch({
                 type: 'set-selected-session',
-                currentPoll: this.shouldUpdateCurrentPoll(poll, currentPoll) ? poll : currentPoll,
+                currentPoll: this.shouldUpdateCurrentPoll(poll, currentPoll) || setCurrentPoll ? poll : currentPoll,
                 fullUpdate: true,
                 selectedPollDate: this.shouldUpdateSelectedPollDate(poll, selectedPollDate) ?
                     selectedSession.dates[pollDateIndex] : selectedPollDate,
@@ -280,7 +330,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             });
             dispatch({ 
                 type: 'set-selected-session', 
-                currentPoll,
+                currentPoll: setCurrentPoll ? poll : currentPoll,
                 fullUpdate: true, 
                 selectedPollDate,
                 selectedSession,
@@ -302,14 +352,14 @@ class PollingApp extends React.Component<any, PollingAppState> {
         if (!sidebarViewType) {
             return null;
         }
-        const { isComposingGroup, isCreatingGroup } = this.state;
+        const { isComposingGroup, isCreatingGroup, isComposingPoll, isStartingPoll } = this.state;
         return (
             <div className="polling-app-container">
                 <div className="polling-app-sidebar-view-container">
                     <SidebarView
                         onBackButtonClick={this.onSidebarViewBackButtonClick}
                         onComposeGroup={this.onComposeGroup}
-                        onCreatePoll={this.onCreatePoll}
+                        onComposePoll={this.onComposePoll}
                         onEditPollDate={this.onEditPollDate}
                         onEditSession={this.onEditSession}
                         onSelectPoll={this.onSelectPoll}
@@ -321,7 +371,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 <div
                     className={cx(
                         'polling-app-content-view-container',
-                        (isComposingGroup || isCreatingGroup) && 'centered',
+                        (isComposingGroup || isCreatingGroup || isComposingPoll || isStartingPoll) && 'centered',
                     )}
                 >
                     <>
@@ -333,7 +383,17 @@ class PollingApp extends React.Component<any, PollingAppState> {
                                 />
                             </div>
                         )}
-                        {!isComposingGroup && !isCreatingGroup && (
+                        {(isComposingPoll || isStartingPoll) && (
+                            <div className="polling-app-create-poll-view-container">
+                                <CreatePollView
+                                    isStartingPoll={isStartingPoll}
+                                    onDismiss={this.onCreatePollViewDismiss}
+                                    onStartButtonClick={this.onStartPoll}
+                                    session={selectedSession}
+                                />
+                            </div>
+                        )}
+                        {!isComposingGroup && !isCreatingGroup && !isComposingPoll && !isStartingPoll && (
                             <PollsView
                                 currentPoll={currentPoll}
                                 onEditPoll={this.onEditPoll}
@@ -341,7 +401,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
                                 onPollButtonClick={this.onPollButtonClick}
                                 onSetCurrentPoll={this.onSetCurrentPoll}
                                 onShareResults={this.onShareResults}
-                                onStartPoll={this.onStartPoll}
                                 pollDate={selectedPollDate}
                                 session={selectedSession}
                             />

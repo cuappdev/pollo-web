@@ -42,7 +42,11 @@ const del = async (url: string) => {
 *******************************/
 
 export const generateUserSession = async (idToken: string) => {
-  const data = await post('/auth/mobile/', { idToken });
+  const data = await post('/auth/mobile/', {
+      headers: {
+          Authorization: axios.defaults.headers.common['Authorization'],
+      },
+  }, { idToken });
   console.log(data);
   localStorage.setItem('accessToken', data.accessToken);
 
