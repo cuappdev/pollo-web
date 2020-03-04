@@ -102,7 +102,13 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
     };
 
     const onStartPollButtonClick = () => {
-        onStartButtonClick(state.answerChoices, state.correctAnswer, state.question);
+        const { answerChoices } = state;
+        for (let index = 0; index < answerChoices.length; index++) {
+            const answerChoice = answerChoices[index];
+            const { letter, text } = answerChoice;
+            answerChoices[index].text = text === '' && letter ? letter : text;
+        }
+        onStartButtonClick(answerChoices, state.correctAnswer, state.question);
     };
 
     const renderChoices = () => {
