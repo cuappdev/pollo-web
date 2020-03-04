@@ -189,6 +189,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
     public onSelectSession = (selectedSession: Session, justCreatedSession?: boolean) => {
         const accessToken = localStorage.getItem('accessToken');
         disconnectSocket();
+        console.log(selectedSession);
         connectSocket(
             selectedSession.id, 
             accessToken ? accessToken : '',
@@ -285,9 +286,12 @@ class PollingApp extends React.Component<any, PollingAppState> {
         console.log(poll);
         const { currentPoll, dispatch, selectedPollDate, selectedSession } = this.props;
         console.log(selectedSession);
-        const pollDateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
-            return isSameDay(date.date, poll.createdAt ? poll.createdAt : '0');
-        });
+        let pollDateIndex = -1;
+        if (selectedSession.dates) {
+            pollDateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
+                return isSameDay(date.date, poll.createdAt ? poll.createdAt : '0');
+            });
+        }
         if (pollDateIndex >= 0) {
             const polls: Poll[] = selectedSession.dates[pollDateIndex].polls;
             const pollIndex = polls.findIndex((otherPoll: Poll) => {
@@ -313,21 +317,29 @@ class PollingApp extends React.Component<any, PollingAppState> {
             if (poll.state === 'ended') {
                 // If the poll exists, then remove it from other poll date bc it will
                 // become a new poll date with the unshift below. Don't want duplicates.
-                const dateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
-                    return date.polls.find((otherPoll: Poll) => {
-                        return otherPoll.state === 'live';
-                    }) !== undefined;
-                });
+                let dateIndex = -1;
+                if (selectedSession.dates) {
+                    dateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
+                        return date.polls.find((otherPoll: Poll) => {
+                            return otherPoll.state === 'live';
+                        }) !== undefined;
+                    });
+                }
                 if (dateIndex >= 0) {
                     const polls = (selectedSession.dates as PollDate[])[dateIndex].polls;
                     const updatedPolls = polls.filter((otherPoll: Poll) => otherPoll.state !== 'live');
                     (selectedSession.dates as PollDate[])[dateIndex].polls = updatedPolls;
                 }
             }
-            selectedSession.dates.unshift({
+            const date: PollDate = {
                 date: poll.createdAt ? poll.createdAt : '',
                 polls: [poll],
-            });
+            };
+            if (selectedSession.dates) {
+                selectedSession.dates.unshift(date);
+            } else {
+                selectedSession.dates = [date];
+            }
             dispatch({ 
                 type: 'set-selected-session', 
                 currentPoll: setCurrentPoll ? poll : currentPoll,

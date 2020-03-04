@@ -105,7 +105,7 @@ export const removeAdmins = async (sessionId: string, adminIds: string[]) => {
 *******************************/
 
 export const createSession = async (code: string, name: string) => {
-    const data = await post('/sessions/', {
+    const data = await post('/start/session', {
         headers: {
             Authorization: axios.defaults.headers.common['Authorization'],
         },
