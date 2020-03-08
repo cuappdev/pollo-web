@@ -8,6 +8,7 @@ export type IconViewType =
     | 'export-dropdown'
     | 'export-group-arrow'
     | 'export-group-back-arrow'
+    | 'new-group-close'
     | 'next-poll-arrow'
     | 'option-selected-check'
     | 'option-unselected-check'
@@ -64,6 +65,13 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
             return (
                 <svg width="9" height="15" fill="none" viewBox="0 0 9 15">
                     <path stroke="#3D3D3D" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7.5 1L1 7.5 7.5 14"/>
+                </svg>
+            );
+        case 'new-group-close':
+            return (
+                <svg width="12" height="11" viewBox="0 0 12 11" fill="none">
+                    <rect x="10.0859" width="1.29635" height="14.2599" rx="0.648177" transform="rotate(45 10.0859 0)" fill="#202020"/>
+                    <rect width="1.29635" height="14.2599" rx="0.648177" transform="matrix(-0.707107 0.707107 0.707107 0.707107 0.916016 0)" fill="#202020"/>
                 </svg>
             );
         case 'next-poll-arrow':

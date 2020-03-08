@@ -1,6 +1,7 @@
 @import '../../colors.scss';
 
 .sidebar {
+    position: relative;
     width: 100%;
     height: 100%;
     background-color: $white;
@@ -163,4 +164,11 @@
     text-align: center;
     color: $blueGray;
     width: calc(100% - 16px);
+}
+
+.sidebar-view-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(32, 32, 32, 0.25);
 }

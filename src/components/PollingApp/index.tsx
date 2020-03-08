@@ -108,6 +108,10 @@ class PollingApp extends React.Component<any, PollingAppState> {
         }
     };
 
+    public onCreateGroupViewDismiss = () => {
+        this.setState({ isComposingGroup: false, isCreatingGroup: false });
+    };
+
     public onCreatePollViewDismiss = () => {
         this.setState({ isComposingPoll: false, isStartingPoll: false });
     };
@@ -377,6 +381,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                         onSelectPoll={this.onSelectPoll}
                         onSelectPollDate={this.onSelectPollDate}
                         onSelectSession={this.onSelectSession}
+                        showOverlay={isComposingGroup || isCreatingGroup || isComposingPoll || isStartingPoll}
                         type={sidebarViewType}
                     />
                 </div>
@@ -392,6 +397,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                                 <CreateGroupView
                                     isCreatingGroup={isCreatingGroup}
                                     onCreateButtonClick={this.onCreateGroupViewCreateButtonClick}
+                                    onDismiss={this.onCreateGroupViewDismiss}
                                 />
                             </div>
                         )}

@@ -27,6 +27,7 @@ export interface SidebarViewProps {
     onSelectPoll(poll: Poll): void;
     onSelectPollDate(pollDate: PollDate): void;
     onSelectSession(session: Session): void;
+    showOverlay: boolean;
     type: SidebarViewType;
 }
 
@@ -40,6 +41,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     onSelectPoll,
     onSelectPollDate,
     onSelectSession,
+    showOverlay,
     type,
 }) => {
     const getDefaultAnswer = (poll: Poll) => {
@@ -284,6 +286,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
             <div className="sidebar-content-container">
                 {renderSidebarContent()}
             </div>
+            {showOverlay && <div className="sidebar-view-overlay" />}
         </div>
     );
 };
