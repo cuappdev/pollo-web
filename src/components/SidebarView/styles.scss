@@ -1,6 +1,6 @@
 @import '../../colors.scss';
 
-.sidebar {
+.sidebar-view-container {
     position: relative;
     width: 100%;
     height: 100%;
@@ -9,7 +9,7 @@
     flex-direction: column;
 }
 
-.sidebar-header-container {
+.sidebar-view-header-container {
     width: 100%;
     height: 56px;
     background-color: $white;
@@ -20,20 +20,20 @@
     align-items: center;
 }
 
-.sidebar-content-container {
+.sidebar-view-content-container {
     width: 100%;
     overflow: scroll;
     height: calc(100vh - 56px);
 }
 
-.sidebar-header-text-container {
+.sidebar-view-header-text-container {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-left: 16px;
 }
 
-.sidebar-header-arrow-button {
+.sidebar-view-header-arrow-button {
     margin-right: 9.8px;
     background: none;
     border: none;
@@ -42,7 +42,7 @@
     cursor: pointer;
 }
 
-.sidebar-header-text {
+.sidebar-view-header-text {
     font-size: 18px;
     font-weight: 600;
     color: $black;
@@ -50,7 +50,7 @@
     text-align: left;
 }
 
-.sidebar-header-icon-button {
+.sidebar-view-header-icon-button {
     cursor: pointer;
     background: none;
     border: none;
@@ -60,7 +60,7 @@
     background-color: $white;
 }
 
-.sidebar-cell-container {
+.sidebar-view-cell-container {
     margin-left: 8px;
     margin-right: 8px;
     display: flex;
@@ -71,7 +71,7 @@
     width: calc(100% - 16px);
 }
 
-.sidebar-cell-text-container {
+.sidebar-view-cell-text-container {
     display: flex;
     flex-direction: column;
     margin-top: 12px;
@@ -79,7 +79,7 @@
     margin-left: 4px;
 }
 
-.sidebar-cell-title-text {
+.sidebar-view-cell-title-text {
     background: none;
     border: none;
     outline: none;
@@ -96,20 +96,20 @@
     }
 }
 
-.sidebar-cell-subtitle-text {
+.sidebar-view-cell-subtitle-text {
     font-size: 16px;
     color: $blueGray;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     text-align: left;
 }
 
-.sidebar-cell-live-text-container {
+.sidebar-view-cell-live-text-container {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.sidebar-cell-live-dot {
+.sidebar-view-cell-live-dot {
     width: 6.64px;
     height: 6.64px;
     border-radius: 3.32px;
@@ -117,7 +117,7 @@
     margin-right: 7.4px;
 }
 
-.sidebar-cell-live-text {
+.sidebar-view-cell-live-text {
     font-size: 16px;
     font-weight: 600;
     text-align: left;
@@ -125,12 +125,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.sidebar-cell-icon-button {
-    cursor: pointer;
-    background: inherit;
-    border: none;
-    outline: none;
-    padding: 0;
+.sidebar-view-cell-icon {
     margin-right: 4px;
 }
 

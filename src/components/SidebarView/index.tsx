@@ -22,8 +22,6 @@ export interface SidebarViewProps {
     onBackButtonClick(): void;
     onComposeGroup(): void;
     onComposePoll(): void;
-    onEditPollDate(pollDate: PollDate);
-    onEditSession(session: Session): void;
     onSelectPoll(poll: Poll): void;
     onSelectPollDate(pollDate: PollDate): void;
     onSelectSession(session: Session): void;
@@ -36,8 +34,6 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     onBackButtonClick,
     onComposeGroup,
     onComposePoll,
-    onEditPollDate,
-    onEditSession,
     onSelectPoll,
     onSelectPollDate,
     onSelectSession,
@@ -159,11 +155,11 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                 }
                 return type.sessions.map((session: Session) => {
                     return (
-                        <div className="sidebar-cell-container">
-                            <div className="sidebar-cell-text-container">
+                        <div className="sidebar-view-cell-container">
+                            <div className="sidebar-view-cell-text-container">
                                 <button 
                                     className={cx(
-                                        'sidebar-cell-title-text',
+                                        'sidebar-view-cell-title-text',
                                         session.isLive && 'bold',
                                     )}
                                     onClick={() => onSelectSession(session)}
@@ -171,24 +167,21 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                                     {session.name}
                                 </button>
                                 {session.isLive ? (
-                                    <div className="sidebar-cell-live-text-container">
+                                    <div className="sidebar-view-cell-live-text-container">
                                         <div className="sidebar-cell-live-dot" />
                                         <div className="sidebar-cell-live-text">
                                             Live Now
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="sidebar-cell-subtitle-text">
+                                    <div className="sidebar-view-cell-subtitle-text">
                                         Last live {getGroupLivenessDescription(session)}
                                     </div>
                                 )}
                             </div>
-                            <button
-                                className="sidebar-cell-icon-button"
-                                onClick={() => onEditSession(session)}
-                            >
-                                <IconView type="ellipsis" />
-                            </button>
+                            <div className="sidebar-view-cell-icon">
+                                <IconView type="right-arrow" />
+                            </div>
                         </div>
                     );
                 });
@@ -199,25 +192,25 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                 }
                 return dates.map((pollDate: PollDate) => {
                     const pollCount = pollDate.polls.length;
+                    if (pollCount === 0) {
+                        return null;
+                    }
                     return (
-                        <div className="sidebar-cell-container">
-                            <div className="sidebar-cell-text-container">
+                        <div className="sidebar-view-cell-container">
+                            <div className="sidebar-view-cell-text-container">
                                 <button 
-                                    className="sidebar-cell-title-text"
+                                    className="sidebar-view-cell-title-text"
                                     onClick={() => onSelectPollDate(pollDate)}
                                 >
                                     {getDateString(pollDate.date)}
                                 </button>
-                                <div className="sidebar-cell-subtitle-text">
+                                <div className="sidebar-view-cell-subtitle-text">
                                     {`${pollCount} ${pollCount === 1 ? 'Question' : 'Questions'}`}
                                 </div>
                             </div>
-                            <button
-                                className="sidebar-cell-icon-button"
-                                onClick={() => onEditPollDate(pollDate)}
-                            >
-                                <IconView type="ellipsis" />
-                            </button>
+                            <div className="sidebar-view-cell-icon">
+                                <IconView type="right-arrow" />
+                            </div>
                         </div>
                     );
                 });
@@ -227,11 +220,11 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                 }
                 return type.pollDate.polls.map((poll: Poll) => {
                     return (
-                        <div className="sidebar-cell-container">
-                            <div className="sidebar-cell-text-container">
+                        <div className="sidebar-view-cell-container">
+                            <div className="sidebar-view-cell-text-container">
                                 <button 
                                     className={cx(
-                                        'sidebar-cell-title-text',
+                                        'sidebar-view-cell-title-text',
                                         currentPoll && currentPoll.id === poll.id && 'bold',
                                         poll.state === 'live' && 'bold',
                                     )}
@@ -240,14 +233,14 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                                     {poll.text === '' ? 'Untitled' : poll.text}
                                 </button>
                                 {poll.state === 'live' ? (
-                                    <div className="sidebar-cell-live-text-container">
-                                        <div className="sidebar-cell-live-dot" />
-                                        <div className="sidebar-cell-live-text">
+                                    <div className="sidebar-view-cell-live-text-container">
+                                        <div className="sidebar-view-cell-live-dot" />
+                                        <div className="sidebar-view-cell-live-text">
                                             Live Now
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="sidebar-cell-subtitle-text">
+                                    <div className="sidebar-view-cell-subtitle-text">
                                         {getDefaultAnswer(poll)}
                                     </div>
                                 )}
@@ -259,31 +252,31 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     };
 
     return (
-        <div className="sidebar">
-            <div className="sidebar-header-container">
-                <div className="sidebar-header-text-container">
+        <div className="sidebar-view-container">
+            <div className="sidebar-view-header-container">
+                <div className="sidebar-view-header-text-container">
                     {type.type !== 'group-list' && (
                         <button 
-                            className="sidebar-header-arrow-button"
+                            className="sidebar-view-header-arrow-button"
                             onClick={onBackButtonClick}
                         >
                             <IconView type="sidebar-back-arrow" />
                         </button>
                     )}
-                    <div className="sidebar-header-text">
+                    <div className="sidebar-view-header-text">
                         {getHeaderText()}
                     </div>
                 </div>
                 {(type.type === 'group-list' || !livePollExists()) && (
                     <button 
-                        className="sidebar-header-icon-button"
+                        className="sidebar-view-header-icon-button"
                         onClick={type.type === 'group-list' ? onComposeGroup : onComposePoll}
                     >
                         <IconView type="plus" />
                     </button>
                 )}
             </div>
-            <div className="sidebar-content-container">
+            <div className="sidebar-view-content-container">
                 {renderSidebarContent()}
             </div>
             {showOverlay && <div className="sidebar-view-overlay" />}

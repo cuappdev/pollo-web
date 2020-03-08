@@ -124,14 +124,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
 
     };
 
-    public onEditPollDate = (pollDate: PollDate) => {
-
-    };
-
-    public onEditSession = (session: Session) => {
-
-    };
-
     public onEndPoll = (poll: Poll) => {
         
     };
@@ -376,8 +368,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
                         onBackButtonClick={this.onSidebarViewBackButtonClick}
                         onComposeGroup={this.onComposeGroup}
                         onComposePoll={this.onComposePoll}
-                        onEditPollDate={this.onEditPollDate}
-                        onEditSession={this.onEditSession}
                         onSelectPoll={this.onSelectPoll}
                         onSelectPollDate={this.onSelectPollDate}
                         onSelectSession={this.onSelectSession}

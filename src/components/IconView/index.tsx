@@ -14,6 +14,7 @@ export type IconViewType =
     | 'option-unselected-check'
     | 'plus'
     | 'previous-poll-arrow'
+    | 'right-arrow'
     | 'sidebar-back-arrow';
 
 export interface IconViewProps {
@@ -106,6 +107,12 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
             return (
                 <svg width="18" height="31" fill="none" viewBox="0 0 18 31">
                     <path fill="#fff" fillRule="evenodd" d="M15.978.296a1.012 1.012 0 0 0-1.431 0L.297 14.546a1.012 1.012 0 0 0-.269.954c-.08.331.01.695.269.953l14.25 14.25a1.012 1.012 0 0 0 1.431 0l1.078-1.077a1.012 1.012 0 0 0 0-1.432L4.36 15.5 17.056 2.806a1.012 1.012 0 0 0 0-1.432L15.978.296z" clipRule="evenodd"/>
+                </svg>
+            );
+        case 'right-arrow':
+            return (
+                <svg width="9" height="15" viewBox="0 0 9 15" fill="none">
+                    <path d="M1.1543 14L7.6543 7.5L1.1543 1" stroke="#3D3D3D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
             );
         case 'sidebar-back-arrow':
