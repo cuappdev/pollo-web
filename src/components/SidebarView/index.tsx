@@ -168,8 +168,8 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                                 </button>
                                 {session.isLive ? (
                                     <div className="sidebar-view-cell-live-text-container">
-                                        <div className="sidebar-cell-live-dot" />
-                                        <div className="sidebar-cell-live-text">
+                                        <div className="sidebar-view-cell-live-dot" />
+                                        <div className="sidebar-view-cell-live-text">
                                             Live Now
                                         </div>
                                     </div>
