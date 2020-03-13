@@ -69,11 +69,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             setAuthHeader(null);
             try {
                 const adminSessions = await condenseAdminSessions();
-                this.props.dispatch({ 
-                    type: 'set-sessions', 
-                    sidebarViewType: { type: 'group-list', sessions: adminSessions },
-                    sessions: adminSessions,
-                });
+                this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
                 this.props.dispatch({ type: 'set-user', user: getCurrentUser() });
                 this.setState({ isLoading: false });
             } catch {
@@ -137,11 +133,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             try {
                 await generateUserSession(response.tokenId);
                 const adminSessions = await condenseAdminSessions();
-                this.props.dispatch({ 
-                    type: 'set-sessions', 
-                    sidebarViewType: { type: 'group-list', sessions: adminSessions },
-                    sessions: adminSessions,
-                });
+                this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
                 const currentUser = getCurrentUser();
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser });
@@ -218,14 +210,12 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public onSidebarViewBackButtonClick = () => {
-        const { dispatch, selectedSession, sessions, sidebarViewType } = this.props;
-        dispatch({
-            type: 'set-sidebar-view-type',
-            sidebarViewType: {
-                type: sidebarViewType.type === 'single-group' ? 'group-list' : 'single-group',
-                ...(sidebarViewType.type === 'single-group' ? { sessions } : { session: selectedSession }),
-            },
-        });
+        const { dispatch, selectedPollDate } = this.props;
+        if (selectedPollDate) {
+            dispatch({ type: 'set-selected-poll-date', selectedPollDate: undefined });
+        } else {
+            dispatch({ type: 'set-selected-session', selectedSession: undefined });
+        }
         if (this.state.isComposingPoll || this.state.isStartingPoll) {
             this.setState({ isComposingPoll: false, isStartingPoll: false });
         }
@@ -356,10 +346,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 />
             );
         }
-        const { currentPoll, sidebarViewType, selectedPollDate, selectedSession } = this.props;
-        if (!sidebarViewType) {
-            return null;
-        }
+        const { currentPoll, selectedPollDate, selectedSession, sessions } = this.props;
         const { isComposingGroup, isCreatingGroup, isComposingPoll, isStartingPoll } = this.state;
         return (
             <div className="polling-app-container">
@@ -371,8 +358,10 @@ class PollingApp extends React.Component<any, PollingAppState> {
                         onSelectPoll={this.onSelectPoll}
                         onSelectPollDate={this.onSelectPollDate}
                         onSelectSession={this.onSelectSession}
+                        pollDate={selectedPollDate}
+                        session={selectedSession}
+                        sessions={sessions}
                         showOverlay={isComposingGroup || isCreatingGroup || isComposingPoll || isStartingPoll}
-                        type={sidebarViewType}
                     />
                 </div>
                 <div

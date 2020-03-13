@@ -1,4 +1,3 @@
-import { SidebarViewType } from './components/SidebarView';
 import { 
     Poll,
     PollDate,
@@ -9,7 +8,6 @@ import {
 
 export interface AppState {
     currentPoll?: Poll;
-    sidebarViewType?: SidebarViewType;
     selectedPollDate?: PollDate;
     selectedPollDates: PollDate[];
     selectedSession?: Session;
@@ -22,17 +20,15 @@ export type AppAction =
     | { type: 'reset' }
     | { type: 'select-date'; date: PollDate }
     | { type: 'set-current-poll'; currentPoll?: Poll }
-    | { type: 'set-sidebar-view-type'; sidebarViewType?: SidebarViewType }
     | { type: 'set-selected-poll-date'; selectedPollDate?: PollDate }
     | { type: 'set-selected-session'; currentPoll?: Poll; fullUpdate?: boolean; justCreatedSession?: boolean; selectedPollDate?: PollDate; selectedSession?: Session }
-    | { type: 'set-sessions'; sidebarViewType?: SidebarViewType; sessions: Session[] }
+    | { type: 'set-sessions'; sessions: Session[] }
     | { type: 'set-user'; user: User }
     | { type: 'set-user-session'; userSession: UserSession }
     | { type: 'unselect-date'; date: PollDate };
 
 export const initialState: AppState = {
     currentPoll: undefined,
-    sidebarViewType: undefined,
     selectedPollDate: undefined,
     selectedPollDates: [],
     selectedSession: undefined,
@@ -52,16 +48,6 @@ export default function reducer(state: AppState = initialState, action: AppActio
             };
         case 'set-current-poll':
             return { ...state, currentPoll: action.currentPoll };
-        case 'set-sidebar-view-type':
-            const { sidebarViewType } = action;
-            return { 
-                ...state, 
-                ...(sidebarViewType && sidebarViewType.type !== 'single-date' && { 
-                    currentPoll: undefined,
-                    selectedPollDate: undefined,
-                }),
-                sidebarViewType,
-            };
         case 'set-selected-poll-date':
             const { selectedPollDate } = action;
             const firstPoll = 
@@ -70,7 +56,6 @@ export default function reducer(state: AppState = initialState, action: AppActio
             return {
                 ...state,
                 currentPoll: firstPoll,
-                sidebarViewType: { type: 'single-date', pollDate: selectedPollDate },
                 selectedPollDate,
             }
         case 'set-selected-session':
@@ -87,13 +72,6 @@ export default function reducer(state: AppState = initialState, action: AppActio
             return { 
                 ...state, 
                 currentPoll: undefined,
-                sidebarViewType: action.selectedPollDate ? { 
-                    type: 'single-date',
-                    pollDate: action.selectedPollDate,
-                } : {
-                    type: 'single-group', 
-                    session: selectedSession, 
-                },
                 selectedSession,
                 ...(action.fullUpdate && { 
                     ...(action.currentPoll && {
@@ -106,11 +84,7 @@ export default function reducer(state: AppState = initialState, action: AppActio
                 }),
             };
         case 'set-sessions':
-            return { 
-                ...state, 
-                sidebarViewType: action.sidebarViewType,
-                sessions: action.sessions, 
-            };
+            return { ...state, sessions: action.sessions };
         case 'set-user':
             return { ...state, user: action.user };
         case 'set-user-session':

@@ -55,11 +55,7 @@ class ExportApp extends React.Component<any, ExportAppState> {
             setAuthHeader(null);
             try {
                 const adminSessions = await condenseAdminSessions();
-                this.props.dispatch({ 
-                    type: 'set-sessions', 
-                    sidebarViewType: { type: 'group-list', sessions: adminSessions },
-                    sessions: adminSessions,
-                });
+                this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
                 this.props.dispatch({ type: 'set-user', user: getCurrentUser() });
                 this.setState({ isLoading: false });
             } catch {
@@ -97,11 +93,7 @@ class ExportApp extends React.Component<any, ExportAppState> {
             try {
                 await generateUserSession(response.tokenId);
                 const adminSessions = await condenseAdminSessions();
-                this.props.dispatch({ 
-                    type: 'set-sessions', 
-                    sidebarViewType: { type: 'group-list', sessions: adminSessions },
-                    sessions: adminSessions,
-                });
+                this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
                 const currentUser = getCurrentUser();
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser });

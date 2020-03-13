@@ -12,11 +12,6 @@ import { getDateString, secondsBetween } from '../../utils/functions';
 
 import './styles.scss';
 
-export type SidebarViewType =
-    | { type: 'group-list'; sessions: Session[] }
-    | { type: 'single-group'; session: Session }
-    | { type: 'single-date'; pollDate: PollDate }
-
 export interface SidebarViewProps {
     currentPoll?: Poll;
     onBackButtonClick(): void;
@@ -25,8 +20,10 @@ export interface SidebarViewProps {
     onSelectPoll(poll: Poll): void;
     onSelectPollDate(pollDate: PollDate): void;
     onSelectSession(session: Session): void;
+    pollDate?: PollDate;
+    session?: Session;
+    sessions: Session[];
     showOverlay: boolean;
-    type: SidebarViewType;
 }
 
 const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
@@ -37,8 +34,10 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     onSelectPoll,
     onSelectPollDate,
     onSelectSession,
+    pollDate,
+    session,
+    sessions,
     showOverlay,
-    type,
 }) => {
     const getDefaultAnswer = (poll: Poll) => {
         if (poll.correctAnswer) {
@@ -55,29 +54,28 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     };
 
     const getHeaderText = () => {
-        switch (type.type) {
-            case 'group-list':
-                return 'Groups';
-            case 'single-group':
-                return type.session.name;
-            case 'single-date':
-                return getDateString(type.pollDate.date);
+        if (session && pollDate) {
+            return getDateString(pollDate.date);
         }
+        if (session) {
+            return session.name;
+        }
+        return 'Groups';
     };
 
     const getEmptyStateDescription = () => {
-        if (type.type === 'group-list') {
+        if (!session) {
             return 'Tap "+" above to create a group!';
         }
         return 'Tap "+" above to create a poll!';
     }
 
     const getEmptyStateImage = () => {
-        return type.type === 'group-list' ? 'blondeman.png' : 'blondelady.png';
+        return !session ? 'blondeman.png' : 'blondelady.png';
     };
 
     const getEmptyStateMessage = () => {
-        if (type.type === 'group-list') {
+        if (!session) {
             return 'No groups created';
         }
         return 'No polls created';
@@ -111,17 +109,17 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     };
 
     const livePollExists = () => {
-        if (type.type === 'single-group') {
-            if (!type.session.dates) {
+        if (session && !pollDate) {
+            if (!session.dates) {
                 return false;
             }
-            const liveDate = type.session.dates.find((date: PollDate) => {
+            const liveDate = session.dates.find((date: PollDate) => {
                 const livePoll = date.polls.find((poll: Poll) => poll.state === 'live');
                 return livePoll !== undefined;
             });
             return liveDate !== undefined;
-        } else if (type.type === 'single-date') {
-            const livePoll = type.pollDate.polls.find((poll: Poll) => poll.state === 'live');
+        } else if (pollDate) {
+            const livePoll = pollDate.polls.find((poll: Poll) => poll.state === 'live');
             return livePoll !== undefined;
         }
         return false;
@@ -148,114 +146,113 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     };
 
     const renderSidebarContent = () => {
-        switch (type.type) {
-            case 'group-list':
-                if (type.sessions.length === 0) {
-                    return renderEmptyState();
-                }
-                return type.sessions.map((session: Session) => {
-                    return (
-                        <div className="sidebar-view-cell-container">
-                            <div className="sidebar-view-cell-text-container">
-                                <button 
-                                    className={cx(
-                                        'sidebar-view-cell-title-text',
-                                        session.isLive && 'bold',
-                                    )}
-                                    onClick={() => onSelectSession(session)}
-                                >
-                                    {session.name}
-                                </button>
-                                {session.isLive ? (
-                                    <div className="sidebar-view-cell-live-text-container">
-                                        <div className="sidebar-view-cell-live-dot" />
-                                        <div className="sidebar-view-cell-live-text">
-                                            Live Now
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="sidebar-view-cell-subtitle-text">
-                                        Last live {getGroupLivenessDescription(session)}
-                                    </div>
+        if (!session) {
+            if (sessions.length === 0) {
+                return renderEmptyState();
+            }
+            return sessions.map((session: Session) => {
+                return (
+                    <div className="sidebar-view-cell-container">
+                        <div className="sidebar-view-cell-text-container">
+                            <button 
+                                className={cx(
+                                    'sidebar-view-cell-title-text',
+                                    session.isLive && 'bold',
                                 )}
-                            </div>
-                            <div className="sidebar-view-cell-icon">
-                                <IconView type="right-arrow" />
+                                onClick={() => onSelectSession(session)}
+                            >
+                                {session.name}
+                            </button>
+                            {session.isLive ? (
+                                <div className="sidebar-view-cell-live-text-container">
+                                    <div className="sidebar-view-cell-live-dot" />
+                                    <div className="sidebar-view-cell-live-text">
+                                        Live Now
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="sidebar-view-cell-subtitle-text">
+                                    Last live {getGroupLivenessDescription(session)}
+                                </div>
+                            )}
+                        </div>
+                        <div className="sidebar-view-cell-icon">
+                            <IconView type="right-arrow" />
+                        </div>
+                    </div>
+                );
+            });
+        }
+        if (!pollDate) {
+            const { dates } = session;
+            if (!dates || dates.length === 0) {
+                return renderEmptyState();
+            }
+            return dates.map((pollDate: PollDate) => {
+                const pollCount = pollDate.polls.length;
+                if (pollCount === 0) {
+                    return null;
+                }
+                return (
+                    <div className="sidebar-view-cell-container">
+                        <div className="sidebar-view-cell-text-container">
+                            <button 
+                                className="sidebar-view-cell-title-text"
+                                onClick={() => onSelectPollDate(pollDate)}
+                            >
+                                {getDateString(pollDate.date)}
+                            </button>
+                            <div className="sidebar-view-cell-subtitle-text">
+                                {`${pollCount} ${pollCount === 1 ? 'Question' : 'Questions'}`}
                             </div>
                         </div>
-                    );
-                });
-            case 'single-group':
-                const { dates } = type.session;
-                if (!dates || dates.length === 0) {
-                    return renderEmptyState();
-                }
-                return dates.map((pollDate: PollDate) => {
-                    const pollCount = pollDate.polls.length;
-                    if (pollCount === 0) {
-                        return null;
-                    }
-                    return (
-                        <div className="sidebar-view-cell-container">
-                            <div className="sidebar-view-cell-text-container">
-                                <button 
-                                    className="sidebar-view-cell-title-text"
-                                    onClick={() => onSelectPollDate(pollDate)}
-                                >
-                                    {getDateString(pollDate.date)}
-                                </button>
-                                <div className="sidebar-view-cell-subtitle-text">
-                                    {`${pollCount} ${pollCount === 1 ? 'Question' : 'Questions'}`}
+                        <div className="sidebar-view-cell-icon">
+                            <IconView type="right-arrow" />
+                        </div>
+                    </div>
+                );
+            });
+        }
+        if (pollDate.polls.length === 0) {
+            return renderEmptyState();
+        }
+        return pollDate.polls.map((poll: Poll) => {
+            return (
+                <div className="sidebar-view-cell-container">
+                    <div className="sidebar-view-cell-text-container">
+                        <button 
+                            className={cx(
+                                'sidebar-view-cell-title-text',
+                                currentPoll && currentPoll.id === poll.id && 'bold',
+                                poll.state === 'live' && 'bold',
+                            )}
+                            onClick={() => onSelectPoll(poll)}
+                        >
+                            {poll.text === '' ? 'Untitled' : poll.text}
+                        </button>
+                        {poll.state === 'live' ? (
+                            <div className="sidebar-view-cell-live-text-container">
+                                <div className="sidebar-view-cell-live-dot" />
+                                <div className="sidebar-view-cell-live-text">
+                                    Live Now
                                 </div>
                             </div>
-                            <div className="sidebar-view-cell-icon">
-                                <IconView type="right-arrow" />
+                        ) : (
+                            <div className="sidebar-view-cell-subtitle-text">
+                                {getDefaultAnswer(poll)}
                             </div>
-                        </div>
-                    );
-                });
-            case 'single-date':
-                if (type.pollDate.polls.length === 0) {
-                    return renderEmptyState();
-                }
-                return type.pollDate.polls.map((poll: Poll) => {
-                    return (
-                        <div className="sidebar-view-cell-container">
-                            <div className="sidebar-view-cell-text-container">
-                                <button 
-                                    className={cx(
-                                        'sidebar-view-cell-title-text',
-                                        currentPoll && currentPoll.id === poll.id && 'bold',
-                                        poll.state === 'live' && 'bold',
-                                    )}
-                                    onClick={() => onSelectPoll(poll)}
-                                >
-                                    {poll.text === '' ? 'Untitled' : poll.text}
-                                </button>
-                                {poll.state === 'live' ? (
-                                    <div className="sidebar-view-cell-live-text-container">
-                                        <div className="sidebar-view-cell-live-dot" />
-                                        <div className="sidebar-view-cell-live-text">
-                                            Live Now
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="sidebar-view-cell-subtitle-text">
-                                        {getDefaultAnswer(poll)}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    );
-                });
-        }
+                        )}
+                    </div>
+                </div>
+            );
+        });
     };
 
     return (
         <div className="sidebar-view-container">
             <div className="sidebar-view-header-container">
                 <div className="sidebar-view-header-text-container">
-                    {type.type !== 'group-list' && (
+                    {session && (
                         <button 
                             className="sidebar-view-header-arrow-button"
                             onClick={onBackButtonClick}
@@ -267,10 +264,10 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                         {getHeaderText()}
                     </div>
                 </div>
-                {(type.type === 'group-list' || !livePollExists()) && (
+                {(session || !livePollExists()) && (
                     <button 
                         className="sidebar-view-header-icon-button"
-                        onClick={type.type === 'group-list' ? onComposeGroup : onComposePoll}
+                        onClick={session ? onComposePoll : onComposeGroup}
                     >
                         <IconView type="plus" />
                     </button>
