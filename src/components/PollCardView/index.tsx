@@ -213,13 +213,19 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
             </div>
             <div className="poll-card-view-button-container">
                 {poll.isDraft ? (
-                    <button
-                        className={cx('poll-card-view-poll-button', 'draft')}
-                        disabled={isStartingPoll}
-                        onClick={() => onPollButtonClick(poll)}
-                    >
-                        {isStartingPoll ? 'Starting Question...' : 'Start Question'}
-                    </button>
+                    livePoll ? (
+                        <div className="poll-card-view-poll-label">
+                            End current poll before starting new question
+                        </div>
+                    ) : (
+                        <button
+                            className={cx('poll-card-view-poll-button', 'draft')}
+                            disabled={isStartingPoll}
+                            onClick={() => onPollButtonClick(poll)}
+                        >
+                            {isStartingPoll ? 'Starting Question...' : 'Start Question'}
+                        </button>
+                    )
                 ) : (
                     poll.state === 'shared' ? (
                         <div className="poll-card-view-poll-label">

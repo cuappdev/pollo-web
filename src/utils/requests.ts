@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { hostUrl } from './constants';
+import { ExportType } from '../types';
 
 /*******************************
             General
@@ -154,10 +155,14 @@ export const getAdminSessions = async () => {
     return data;
 };
 
-export const exportCsv = async (sessionId: string) => {
+export const exportCsv = async (sessionId: string, type: ExportType, dates: any[]) => {
     const response = await api.get(`/sessions/${sessionId}/csv/`, {
         headers: {
             Authorization: axios.defaults.headers.common['Authorization'],
+        },
+        params: { 
+            format: type === 'Canvas' ? 'canvas' : 'cmsx', 
+            dates,
         },
     });
     if (!response.data.success) {

@@ -65,14 +65,17 @@ class ExportApp extends React.Component<any, ExportAppState> {
     }
 
     public onExportButtonClicked = async () => {
-        const { selectedSession } = this.props;
-        const { isExporting } = this.state;
-        if (isExporting || !selectedSession) {
+        const { selectedPollDates, selectedSession } = this.props;
+        const { isExporting, selectedExportType } = this.state;
+        if (isExporting || !selectedSession || !selectedPollDates) {
             return;
         }
         this.setState({ isExporting: true });
         try {
-            const { data } = await exportCsv(selectedSession.id);
+            const dates = (selectedPollDates as PollDate[]).map((pollDate: PollDate) => {
+                return new Date(parseFloat(pollDate.date) * 1000);
+            });
+            const { data } = await exportCsv(selectedSession.id, selectedExportType, dates);
             this.setState({ csv: data, isExporting: false });
         } catch (error) {
             this.setState({ isExporting: false });
@@ -122,6 +125,7 @@ class ExportApp extends React.Component<any, ExportAppState> {
 
     public onSelectExportType = (exportType: ExportType) => {
         this.setState({
+            csv: undefined,
             selectedExportType: exportType,
             showExportDropdown: false,
         });
