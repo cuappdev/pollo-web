@@ -19,12 +19,6 @@ export interface PollChoice {
     text: string;
 }
 
-export interface PollFilter {
-    success: boolean;
-    text?: string;
-    filter?: string[];
-}
-
 export interface PollDate {
     date: string;
     polls: Poll[];
@@ -37,7 +31,7 @@ export interface Poll {
     correctAnswer?: string;
     createdAt?: string;
     id?: string;
-    pollFilter?: PollFilter;
+    isDraft?: boolean;
     state: PollState;
     text: string;
     type: QuestionType;
@@ -50,7 +44,6 @@ export interface Session {
     dates?: PollDate[];
     description?: string;
     id: string;
-    isFilterActivated?: boolean;
     isLive?: boolean;
     name: string;
     updatedAt?: string;

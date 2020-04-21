@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import GroupHeaderView from '../GroupHeaderView';
 import IconView from '../IconView';
@@ -17,6 +17,8 @@ import './styles.scss';
 
 export interface PollsViewProps {
     currentPoll?: Poll;
+    isStartingPoll: boolean;
+    onDeletePoll(poll: Poll): void;
     onEditPoll(poll: Poll): void;
     onEndPoll(poll: Poll): void;
     onPollButtonClick(poll: Poll): void;
@@ -30,6 +32,8 @@ export type PollsViewTransition = 'back' | 'forward';
 
 const PollsView: React.FunctionComponent<PollsViewProps> = ({
     currentPoll,
+    isStartingPoll,
+    onDeletePoll,
     onEditPoll,
     onEndPoll,
     onPollButtonClick,
@@ -39,6 +43,13 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     session,
 }) => {
     const [transition, setTransition] = useState<PollsViewTransition | undefined>(undefined);
+    const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (isDropdownVisible) {
+            setIsDropdownVisible(false);
+        }
+    }, [currentPoll]);
 
     const getPollIndexLabel = () => {
         if (!pollDate || !currentPoll) {
@@ -48,6 +59,15 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
             return poll.id === currentPoll.id;
         }) as number;
         return `${currentPollIndex + 1}/${pollDate.polls.length}`;
+    };
+
+    const onPollCardViewDropdownButtonClick = () => {
+        setIsDropdownVisible(!isDropdownVisible);
+    };
+
+    const onPollCardViewPollButtonClick = (poll: Poll) => {
+        setIsDropdownVisible(false);
+        onPollButtonClick(poll);
     };
 
     const onTransitionEnd = (event: React.TransitionEvent) => {
@@ -94,10 +114,12 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     };
 
     const showNextPoll = () => {
+        setIsDropdownVisible(false);
         setTransition('forward');
     };
 
     const showPreviousPoll = () => {
+        setIsDropdownVisible(false);
         setTransition('back');
     };
 
@@ -142,6 +164,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                             isCurrentPoll={false}
                             livePoll={livePoll}
                             poll={pollDate.polls[currentPollIndex - 2]}
+                            onDeletePoll={() => {}}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
                         />
@@ -159,6 +182,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                             isCurrentPoll={false}
                             livePoll={livePoll}
                             poll={pollDate.polls[currentPollIndex - 1]}
+                            onDeletePoll={() => {}}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
                         />
@@ -174,15 +198,20 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                 >
                     <PollCardView
                         isCurrentPoll={true}
+                        isDropdownVisible={isDropdownVisible}
+                        isStartingPoll={isStartingPoll}
                         livePoll={livePoll}
                         poll={currentPoll}
+                        onDeletePoll={() => onDeletePoll(currentPoll)}
+                        onDropdownButtonClick={onPollCardViewDropdownButtonClick}
                         onEditPoll={() => onEditPoll(currentPoll)}
-                        onPollButtonClick={onPollButtonClick}
+                        onPollButtonClick={onPollCardViewPollButtonClick}
                     />
                 </div>
                 {showLeftPoll && (
                     <button
                         className="previous-poll-button"
+                        disabled={isStartingPoll}
                         onClick={showPreviousPoll}
                     >
                         <IconView type="previous-poll-arrow" />
@@ -191,6 +220,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                 {showRightPoll && (
                     <button
                         className="next-poll-button"
+                        disabled={isStartingPoll}
                         onClick={showNextPoll}
                     >
                         <IconView type="next-poll-arrow" />
@@ -208,6 +238,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                             isCurrentPoll={false}
                             livePoll={livePoll}
                             poll={pollDate.polls[currentPollIndex + 1]}
+                            onDeletePoll={() => {}}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
                         />
@@ -225,6 +256,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                             isCurrentPoll={false}
                             livePoll={livePoll}
                             poll={pollDate.polls[currentPollIndex + 2]}
+                            onDeletePoll={() => {}}
                             onEditPoll={() => {}}
                             onPollButtonClick={() => {}}
                         />

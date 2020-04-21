@@ -24,6 +24,7 @@
 }
 
 .poll-card-view-question-container {
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -39,12 +40,46 @@
     margin-right: 23px;
 }
 
-.poll-card-view-edit-button {
+.poll-card-view-dropdown-button {
     background: none;
     outline: none;
     border: none;
     padding: 0;
     cursor: pointer;
+}
+
+.poll-card-view-dropdown-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: $white;
+    border-radius: 5px;
+    width: 132px;
+    box-shadow: 0px 4px 10px rgba(180, 180, 180, 0.25);
+}
+
+.poll-card-view-dropdown-item {
+    width: min-content;
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.2px;
+    color: $black;
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+
+    &.top {
+        margin-top: 17px;
+        margin-bottom: 11px;
+    }
 }
 
 .poll-card-view-header-info-container {
@@ -249,7 +284,7 @@
         margin-bottom: 24px;
     }
 
-    &.ended {
+    &.draft, &.ended {
         background-color: $polloGreen;
         margin-bottom: 84px;
     }

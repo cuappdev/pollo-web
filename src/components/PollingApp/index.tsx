@@ -34,6 +34,7 @@ import {
     adminPollStart,
     adminPollUpdates,
     connectSocket,
+    deletePoll,
     disconnectSocket,
     endPoll,
     shareResults,
@@ -116,8 +117,61 @@ class PollingApp extends React.Component<any, PollingAppState> {
         this.setState({ isComposingPoll: true });
     };
 
-    public onEditPoll = (poll: Poll) => {
+    public onDeletePoll = (poll: Poll) => {
+        const { dispatch, selectedPollDate, selectedSession } = this.props;
+        if (!selectedPollDate || !selectedSession) {
+            return;
+        }
+        let currentPoll = undefined as Poll | undefined;
+        let pollDate = selectedPollDate as PollDate;
+        let session = selectedSession as Session;
+        const currentPollIndex = pollDate.polls.findIndex((otherPoll: Poll) => {
+            if (poll.state === 'live') {
+                return otherPoll.state === 'live';
+            }
+            return otherPoll.id === poll.id;
+        });
+        const updatedPolls = pollDate.polls.filter((otherPoll: Poll) => {
+            if (poll.state === 'live') {
+                return otherPoll.state !== 'live';
+            }
+            return otherPoll.id !== poll.id;
+        });
+        pollDate = {
+            ...pollDate,
+            polls: updatedPolls,
+        };
+        if (session.dates) {
+            if (pollDate.polls.length === 0) {
+                session = {
+                    ...session,
+                    dates: session.dates.filter((otherDate: PollDate) => {
+                        return otherDate.date !== pollDate.date;
+                    }),
+                };
+            } else {
+                currentPoll = pollDate.polls[
+                    currentPollIndex === updatedPolls.length ? 
+                    currentPollIndex - 1 : currentPollIndex
+                ];
+                const dateIndex = session.dates.findIndex((otherDate: PollDate) => {
+                    return otherDate.date === pollDate.date;
+                });
+                session.dates[dateIndex] = pollDate;
+            }
+        }
+        deletePoll(poll);
+        dispatch({
+            type: 'set-selected-session',
+            currentPoll,
+            fullUpdate: true,
+            selectedPollDate: pollDate.polls.length === 0 ? undefined : pollDate,
+            selectedSession: session,
+        });
+    };
 
+    public onEditPoll = (poll: Poll) => {
+    
     };
 
     public onEndPoll = (poll: Poll) => {
@@ -147,6 +201,10 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public onPollButtonClick = (poll: Poll) => {
+        if (poll.isDraft) {
+            this.onStartPoll(poll.answerChoices, poll.correctAnswer, poll.text);
+            return;
+        }
         if (poll.state === 'live') {
             endPoll();
             return;
@@ -334,6 +392,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 selectedSession,
             });
         }
+        this.forceUpdate();
     };
 
     public render() {
@@ -393,6 +452,8 @@ class PollingApp extends React.Component<any, PollingAppState> {
                         {!isComposingGroup && !isCreatingGroup && !isComposingPoll && !isStartingPoll && (
                             <PollsView
                                 currentPoll={currentPoll}
+                                isStartingPoll={isStartingPoll}
+                                onDeletePoll={this.onDeletePoll}
                                 onEditPoll={this.onEditPoll}
                                 onEndPoll={this.onEndPoll}
                                 onPollButtonClick={this.onPollButtonClick}

@@ -40,6 +40,14 @@ export const disconnectSocket = () => {
             Server
 ****************************** */
 
+export const deletePoll = (poll: any) => {
+    if (poll.state === 'live') {
+        socket.emit('server/poll/delete/live');
+    } else {
+        socket.emit('server/poll/delete', poll.id);
+    }
+};
+
 export const startPoll = (poll: any) => {
     socket.emit('server/poll/start', poll);
 };

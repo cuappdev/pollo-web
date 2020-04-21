@@ -74,12 +74,8 @@ export default function reducer(state: AppState = initialState, action: AppActio
                 currentPoll: undefined,
                 selectedSession,
                 ...(action.fullUpdate && { 
-                    ...(action.currentPoll && {
-                        currentPoll: action.currentPoll,
-                    }),
-                    ...(action.selectedPollDate && { 
-                        selectedPollDate: action.selectedPollDate, 
-                    }),
+                    currentPoll: action.currentPoll,
+                    selectedPollDate: action.selectedPollDate,
                     sessions: state.sessions, 
                 }),
             };

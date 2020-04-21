@@ -108,23 +108,6 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
         return getDateString(session.updatedAt, true);
     };
 
-    const livePollExists = () => {
-        if (session && !pollDate) {
-            if (!session.dates) {
-                return false;
-            }
-            const liveDate = session.dates.find((date: PollDate) => {
-                const livePoll = date.polls.find((poll: Poll) => poll.state === 'live');
-                return livePoll !== undefined;
-            });
-            return liveDate !== undefined;
-        } else if (pollDate) {
-            const livePoll = pollDate.polls.find((poll: Poll) => poll.state === 'live');
-            return livePoll !== undefined;
-        }
-        return false;
-    };
-
     const renderEmptyState = () => {
         return (
             <div className="sidebar-view-empty-state-container">
@@ -248,6 +231,20 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
         });
     };
 
+    const shouldShowHeaderIconButton = () => {
+        if (session) {
+            if (!session.dates) {
+                return true;
+            }
+            const liveDate = session.dates.find((date: PollDate) => {
+                const livePoll = date.polls.find((poll: Poll) => poll.state === 'live');
+                return livePoll !== undefined;
+            });
+            return liveDate === undefined;
+        }
+        return true;
+    };
+
     return (
         <div className="sidebar-view-container">
             <div className="sidebar-view-header-container">
@@ -264,7 +261,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                         {getHeaderText()}
                     </div>
                 </div>
-                {(session || !livePollExists()) && (
+                {shouldShowHeaderIconButton() && (
                     <button 
                         className="sidebar-view-header-icon-button"
                         onClick={session ? onComposePoll : onComposeGroup}

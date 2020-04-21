@@ -10,7 +10,11 @@ import './styles.scss';
 
 export interface PollCardViewProps {
     isCurrentPoll: boolean;
+    isDropdownVisible?: boolean;
+    isStartingPoll?: boolean;
     livePoll?: Poll;
+    onDeletePoll(poll: Poll): void;
+    onDropdownButtonClick?(): void;
     onEditPoll(poll: Poll): void;
     onPollButtonClick(poll: Poll): void;
     poll: Poll;
@@ -18,7 +22,11 @@ export interface PollCardViewProps {
 
 const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     isCurrentPoll,
+    isDropdownVisible,
+    isStartingPoll,
     livePoll,
+    onDeletePoll,
+    onDropdownButtonClick,
     onEditPoll,
     onPollButtonClick,
     poll,
@@ -135,11 +143,27 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                             {poll.text === '' ? 'Untitled' : poll.text}
                         </div>
                         <button
-                            className="poll-card-view-edit-button"
-                            onClick={() => onEditPoll(poll)}
+                            className="poll-card-view-dropdown-button"
+                            onClick={onDropdownButtonClick}
                         >
                             <IconView type="ellipsis" />
                         </button>
+                        {isDropdownVisible && (
+                            <div className="poll-card-view-dropdown-container">
+                                <button
+                                    className={cx('poll-card-view-dropdown-item', 'top')}
+                                    onClick={() => onDeletePoll(poll)}
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    className="poll-card-view-dropdown-item"
+                                    onClick={() => onEditPoll(poll)}
+                                >
+                                    Edit
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <div 
                         className={cx(
@@ -188,17 +212,27 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
                 </div>
             </div>
             <div className="poll-card-view-button-container">
-                {poll.state === 'shared' ? (
-                    <div className="poll-card-view-poll-label">
-                        Results Shared
-                    </div>
-                ) : (
-                    <button 
-                        className={cx('poll-card-view-poll-button', poll.state)}
+                {poll.isDraft ? (
+                    <button
+                        className={cx('poll-card-view-poll-button', 'draft')}
+                        disabled={isStartingPoll}
                         onClick={() => onPollButtonClick(poll)}
                     >
-                        {poll.state === 'live' ? 'End Question' : 'Share Results'}
+                        {isStartingPoll ? 'Starting Question...' : 'Start Question'}
                     </button>
+                ) : (
+                    poll.state === 'shared' ? (
+                        <div className="poll-card-view-poll-label">
+                            Results Shared
+                        </div>
+                    ) : (
+                        <button 
+                            className={cx('poll-card-view-poll-button', poll.state)}
+                            onClick={() => onPollButtonClick(poll)}
+                        >
+                            {poll.state === 'live' ? 'End Question' : 'Share Results'}
+                        </button>
+                    )
                 )}
                 {poll.state === 'live' && timerText && (
                     <div className="poll-card-view-timer-label">
