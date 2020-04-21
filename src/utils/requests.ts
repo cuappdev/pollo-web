@@ -161,8 +161,8 @@ export const exportCsv = async (sessionId: string, type: ExportType, dates: any[
             Authorization: axios.defaults.headers.common['Authorization'],
         },
         params: { 
-            format: type === 'Canvas' ? 'canvas' : 'cmsx', 
             dates,
+            format: type === 'Canvas' ? 'canvas' : 'cmsx', 
         },
     });
     if (!response.data.success) {

@@ -301,7 +301,12 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 updatedAt: createdAt,
                 userAnswers: {},
             };
-            this.updatePoll(poll, true);
+            let setCurrentPoll = true;
+            const { selectedPollDate } = this.props;
+            if (selectedPollDate) {
+                setCurrentPoll = isSameDay((selectedPollDate as PollDate).date, createdAt);
+            }
+            this.updatePoll(poll, setCurrentPoll);
             this.setState({ isComposingPoll: false, isStartingPoll: false });
         } catch (error) {
             console.log(error);
@@ -388,7 +393,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 type: 'set-selected-session', 
                 currentPoll: setCurrentPoll ? poll : currentPoll,
                 fullUpdate: true, 
-                selectedPollDate,
+                selectedPollDate: date,
                 selectedSession,
             });
         }
