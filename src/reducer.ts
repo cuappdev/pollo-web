@@ -7,8 +7,8 @@ import {
 } from './types';
 
 export interface AppState {
-    currentPoll?: Poll;
-    selectedPollDate?: PollDate;
+    currentPollIndex?: number;
+    selectedPollDateIndex?: number;
     selectedPollDates: PollDate[];
     selectedSession?: Session;
     user?: User;
@@ -19,17 +19,17 @@ export interface AppState {
 export type AppAction =
     | { type: 'reset' }
     | { type: 'select-date'; date: PollDate }
-    | { type: 'set-current-poll'; currentPoll?: Poll }
-    | { type: 'set-selected-poll-date'; selectedPollDate?: PollDate }
-    | { type: 'set-selected-session'; currentPoll?: Poll; fullUpdate?: boolean; justCreatedSession?: boolean; selectedPollDate?: PollDate; selectedSession?: Session }
+    | { type: 'set-current-poll'; currentPollIndex?: number }
+    | { type: 'set-selected-poll-date'; selectedPollDateIndex?: number }
+    | { type: 'set-selected-session'; currentPollIndex?: number; selectedPollDateIndex?: number; selectedSession?: Session }
     | { type: 'set-sessions'; sessions: Session[] }
     | { type: 'set-user'; user: User }
     | { type: 'set-user-session'; userSession: UserSession }
     | { type: 'unselect-date'; date: PollDate };
 
 export const initialState: AppState = {
-    currentPoll: undefined,
-    selectedPollDate: undefined,
+    currentPollIndex: undefined,
+    selectedPollDateIndex: undefined,
     selectedPollDates: [],
     selectedSession: undefined,
     user: undefined,
@@ -47,36 +47,46 @@ export default function reducer(state: AppState = initialState, action: AppActio
                 selectedPollDates: [...state.selectedPollDates, action.date],
             };
         case 'set-current-poll':
-            return { ...state, currentPoll: action.currentPoll };
+            return { ...state, currentPollIndex: action.currentPollIndex };
         case 'set-selected-poll-date':
-            const { selectedPollDate } = action;
-            const firstPoll = 
-                selectedPollDate && selectedPollDate.polls.length > 0 ?
-                selectedPollDate.polls[0] : undefined;
+            if (!state.selectedSession || !state.selectedSession.dates) {
+                console.log('here');
+                return state;
+            }
+            const selectedPollDate = action.selectedPollDateIndex !== undefined ?
+                state.selectedSession.dates[action.selectedPollDateIndex] : undefined;
+            const firstPollIndex = selectedPollDate && selectedPollDate.polls.length > 0 ? 0 : undefined;
             return {
                 ...state,
-                currentPoll: firstPoll,
-                selectedPollDate,
+                currentPollIndex: firstPollIndex,
+                selectedPollDateIndex: action.selectedPollDateIndex,
             }
         case 'set-selected-session':
-            const { selectedSession } = action;
-            if (action.fullUpdate && selectedSession) {
+            const { currentPollIndex, selectedPollDateIndex, selectedSession } = action;
+            let shouldUpdateSessions = false;
+            if (selectedSession) {
                 const sessionIndex = state.sessions.findIndex((session: Session) => {
                     return session.id === selectedSession.id;
                 });
-                state.sessions[sessionIndex] = selectedSession;
+                if (sessionIndex >= 0) {
+                    state.sessions[sessionIndex] = selectedSession;
+                } else {
+                    state.sessions.unshift(selectedSession);
+                }
+                shouldUpdateSessions = true;
             }
-            if (action.justCreatedSession && selectedSession) {
-                state.sessions.unshift(selectedSession);
-            }
+            /* Set the indices to undefined in the case where shouldUpdateSessions
+               is false below because in this case the user has unselected a session. */
             return { 
                 ...state, 
-                currentPoll: undefined,
+                ...(currentPollIndex !== undefined && { currentPollIndex }),
+                ...(selectedPollDateIndex !== undefined && { selectedPollDateIndex }),
                 selectedSession,
-                ...(action.fullUpdate && { 
-                    currentPoll: action.currentPoll,
-                    selectedPollDate: action.selectedPollDate,
-                    sessions: state.sessions, 
+                ...(shouldUpdateSessions ? { 
+                    sessions: state.sessions 
+                } : {
+                    currentPollIndex: undefined,
+                    selectedPollDateIndex: undefined,
                 }),
             };
         case 'set-sessions':

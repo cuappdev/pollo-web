@@ -2,7 +2,7 @@ import {
     getAdminSessions,
     getPollsForSession,
 } from '../utils/requests';
-import { PollDate, Session, User } from '../types';
+import { Poll, PollDate, Session, User } from '../types';
 
 export const condenseAdminSessions = async () => {
     const adminSessions = await getAdminSessions() as Session[];
@@ -75,12 +75,31 @@ export const getCurrentUser = () => {
     return currentUser;
 };
 
+export const getCurrentPoll = (
+    currentPollIndex?: number,
+    selectedPollDateIndex?: number,
+    selectedSession?: Session,
+) => {
+    const selectedPollDate = getSelectedPollDate(selectedPollDateIndex, selectedSession) as PollDate | undefined;
+    return currentPollIndex !== undefined && selectedPollDate ? selectedPollDate.polls[currentPollIndex] : undefined;
+};
+
 export const getDateString = (timestamp: string, isShort?: boolean) => {
     const date = new Date(parseFloat(timestamp) * 1000);
     const month = date.toLocaleString('default', { month: 'long' });
     const day = date.getDate();
     const year = date.getFullYear();
     return isShort ? `${month.slice(0, 3)} ${day}` : `${month} ${day}, ${year}`;
+};
+
+export const getSelectedPollDate = (
+    selectedPollDateIndex?: number,
+    selectedSession?: Session,
+) => {
+    if (!selectedSession || !selectedSession.dates) {
+        return undefined;
+    }
+    return selectedPollDateIndex !== undefined ? selectedSession.dates[selectedPollDateIndex] : undefined;
 };
 
 export const isSameDay = (timestampOne: string, timestampTwo: string) => {

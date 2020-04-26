@@ -22,7 +22,7 @@ export interface PollsViewProps {
     onEditPoll(poll: Poll): void;
     onEndPoll(poll: Poll): void;
     onPollButtonClick(poll: Poll): void;
-    onSetCurrentPoll(poll: Poll): void;
+    onSetCurrentPoll(pollIndex: number): void;
     onShareResults(poll: Poll): void;
     pollDate?: PollDate;
     session?: Session;
@@ -76,9 +76,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
         }
         setTransition(undefined);
         const currentPollIndex = pollDate.polls.findIndex((poll: Poll) => poll.id === currentPoll.id);
-        onSetCurrentPoll(pollDate.polls[
-            transition === 'back' ? currentPollIndex - 1 : currentPollIndex + 1
-        ]);
+        onSetCurrentPoll(transition === 'back' ? currentPollIndex - 1 : currentPollIndex + 1);
     };
 
     const shouldShowHiddenLeftPoll = () => {

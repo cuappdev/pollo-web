@@ -17,8 +17,8 @@ export interface SidebarViewProps {
     onBackButtonClick(): void;
     onComposeGroup(): void;
     onComposePoll(): void;
-    onSelectPoll(poll: Poll): void;
-    onSelectPollDate(pollDate: PollDate): void;
+    onSelectPoll(pollIndex: number): void;
+    onSelectPollDate(pollDateIndex: number): void;
     onSelectSession(session: Session): void;
     pollDate?: PollDate;
     session?: Session;
@@ -171,7 +171,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
             if (!dates || dates.length === 0) {
                 return renderEmptyState();
             }
-            return dates.map((pollDate: PollDate) => {
+            return dates.map((pollDate: PollDate, pollDateIndex: number) => {
                 const pollCount = pollDate.polls.length;
                 if (pollCount === 0) {
                     return null;
@@ -181,7 +181,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                         <div className="sidebar-view-cell-text-container">
                             <button 
                                 className="sidebar-view-cell-title-text"
-                                onClick={() => onSelectPollDate(pollDate)}
+                                onClick={() => onSelectPollDate(pollDateIndex)}
                             >
                                 {getDateString(pollDate.date)}
                             </button>
@@ -199,7 +199,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
         if (pollDate.polls.length === 0) {
             return renderEmptyState();
         }
-        return pollDate.polls.map((poll: Poll) => {
+        return pollDate.polls.map((poll: Poll, pollIndex: number) => {
             return (
                 <div className="sidebar-view-cell-container">
                     <div className="sidebar-view-cell-text-container">
@@ -209,7 +209,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                                 currentPoll && currentPoll.id === poll.id && 'bold',
                                 poll.state === 'live' && 'bold',
                             )}
-                            onClick={() => onSelectPoll(poll)}
+                            onClick={() => onSelectPoll(pollIndex)}
                         >
                             {poll.text === '' ? 'Untitled' : poll.text}
                         </button>

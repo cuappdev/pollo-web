@@ -19,7 +19,9 @@ import {
     condenseAdminSessions,
     currentUserExists,
     forgetCurrentUser,
+    getCurrentPoll,
     getCurrentUser,
+    getSelectedPollDate,
     isSameDay,
     rememberCurrentUser,
 } from '../../utils/functions';
@@ -98,7 +100,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
         try {
             const { code } = await generateCode();
             const session: Session = await createSession(code, name);
-            this.onSelectSession(session, true);
+            this.onSelectSession(session);
         } catch (error) {
             console.log(error);
             this.setState({ isComposingGroup: true, isCreatingGroup: false });
@@ -118,56 +120,44 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public onDeletePoll = (poll: Poll) => {
-        const { dispatch, selectedPollDate, selectedSession } = this.props;
-        if (!selectedPollDate || !selectedSession) {
+        const { currentPollIndex, dispatch, selectedPollDateIndex, selectedSession } = this.props;
+        let session = selectedSession as Session;
+        if (selectedPollDateIndex === undefined || !session || !session.dates) {
             return;
         }
-        let currentPoll = undefined as Poll | undefined;
-        let pollDate = selectedPollDate as PollDate;
-        let session = selectedSession as Session;
-        const currentPollIndex = pollDate.polls.findIndex((otherPoll: Poll) => {
-            if (poll.state === 'live') {
-                return otherPoll.state === 'live';
-            }
-            return otherPoll.id === poll.id;
-        });
-        const updatedPolls = pollDate.polls.filter((otherPoll: Poll) => {
+        let currentPoll = undefined as number | undefined;
+        const updatedPolls = session.dates[selectedPollDateIndex].polls.filter((otherPoll: Poll) => {
             if (poll.state === 'live') {
                 return otherPoll.state !== 'live';
             }
             return otherPoll.id !== poll.id;
         });
-        pollDate = {
-            ...pollDate,
-            polls: updatedPolls,
-        };
-        if (session.dates) {
-            if (pollDate.polls.length === 0) {
-                session = {
-                    ...session,
-                    dates: session.dates.filter((otherDate: PollDate) => {
-                        return otherDate.date !== pollDate.date;
-                    }),
-                };
-            } else {
-                currentPoll = pollDate.polls[
-                    currentPollIndex === updatedPolls.length ? 
-                    currentPollIndex - 1 : currentPollIndex
-                ];
-                const dateIndex = session.dates.findIndex((otherDate: PollDate) => {
-                    return otherDate.date === pollDate.date;
-                });
-                session.dates[dateIndex] = pollDate;
-            }
+        if (updatedPolls.length === 0) {
+            session = {
+                ...session,
+                dates: session.dates.filter((_, index: number) => {
+                    return index !== selectedPollDateIndex;
+                }),
+            };
+        } else {
+            currentPoll = currentPollIndex === updatedPolls.length ?
+                currentPollIndex - 1 : currentPollIndex;
+            session.dates[selectedPollDateIndex] = {
+                ...session.dates[selectedPollDateIndex],
+                polls: updatedPolls,
+            };
         }
         deletePoll(poll);
         dispatch({
             type: 'set-selected-session',
-            currentPoll,
-            fullUpdate: true,
-            selectedPollDate: pollDate.polls.length === 0 ? undefined : pollDate,
+            currentPollIndex: currentPoll,
+            ...(updatedPolls.length === 0 && { selectedPollDateIndex }),
             selectedSession: session,
         });
+        if (updatedPolls.length === 0) {
+            dispatch({ type: 'set-selected-poll-date', selectedPollDateIndex: undefined });
+        }
+        this.forceUpdate();
     };
 
     public onEditPoll = (poll: Poll) => {
@@ -218,24 +208,23 @@ class PollingApp extends React.Component<any, PollingAppState> {
         }
     };
 
-    public onSelectPoll = (currentPoll: Poll) => {
-        this.props.dispatch({ type: 'set-current-poll', currentPoll });
+    public onSelectPoll = (currentPollIndex: number) => {
+        this.props.dispatch({ type: 'set-current-poll', currentPollIndex });
         if (this.state.isComposingPoll || this.state.isStartingPoll) {
             this.setState({ isComposingPoll: false, isStartingPoll: false });
         }
     };
 
-    public onSelectPollDate = (selectedPollDate: PollDate) => {
-        this.props.dispatch({ type: 'set-selected-poll-date', selectedPollDate });
+    public onSelectPollDate = (selectedPollDateIndex: number) => {
+        this.props.dispatch({ type: 'set-selected-poll-date', selectedPollDateIndex });
         if (this.state.isComposingPoll || this.state.isStartingPoll) {
             this.setState({ isComposingPoll: false, isStartingPoll: false });
         }
     };
 
-    public onSelectSession = (selectedSession: Session, justCreatedSession?: boolean) => {
+    public onSelectSession = (selectedSession: Session) => {
         const accessToken = localStorage.getItem('accessToken');
         disconnectSocket();
-        console.log(selectedSession);
         connectSocket(
             selectedSession.id, 
             accessToken ? accessToken : '',
@@ -246,14 +235,13 @@ class PollingApp extends React.Component<any, PollingAppState> {
         adminPollUpdates(this.updatePoll);
         this.props.dispatch({ 
             type: 'set-selected-session', 
-            justCreatedSession,
             selectedSession, 
         });
         this.setState({ isComposingGroup: false, isCreatingGroup: false });
     };
 
-    public onSetCurrentPoll = (currentPoll: Poll) => {
-        this.props.dispatch({ type: 'set-current-poll', currentPoll });
+    public onSetCurrentPoll = (currentPollIndex: number) => {
+        this.props.dispatch({ type: 'set-current-poll', currentPollIndex });
         if (this.state.isComposingPoll || this.state.isStartingPoll) {
             this.setState({ isComposingPoll: false, isStartingPoll: false });
         }
@@ -268,9 +256,9 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public onSidebarViewBackButtonClick = () => {
-        const { dispatch, selectedPollDate } = this.props;
-        if (selectedPollDate) {
-            dispatch({ type: 'set-selected-poll-date', selectedPollDate: undefined });
+        const { dispatch, selectedPollDateIndex } = this.props;
+        if (selectedPollDateIndex !== undefined) {
+            dispatch({ type: 'set-selected-poll-date', selectedPollDateIndex: undefined });
         } else {
             dispatch({ type: 'set-selected-session', selectedSession: undefined });
         }
@@ -301,12 +289,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 updatedAt: createdAt,
                 userAnswers: {},
             };
-            let setCurrentPoll = true;
-            const { selectedPollDate } = this.props;
-            if (selectedPollDate) {
-                setCurrentPoll = isSameDay((selectedPollDate as PollDate).date, createdAt);
-            }
-            this.updatePoll(poll, setCurrentPoll);
+            this.updatePoll(poll, true);
             this.setState({ isComposingPoll: false, isStartingPoll: false });
         } catch (error) {
             console.log(error);
@@ -314,86 +297,71 @@ class PollingApp extends React.Component<any, PollingAppState> {
         }
     };
 
-    public shouldUpdateCurrentPoll = (updatedPoll: Poll, currentPoll?: Poll) => {
-        if (!currentPoll) {
-            return false;
-        }
-        return updatedPoll.state === 'shared' ? currentPoll.id === updatedPoll.id : currentPoll.state === 'live';
-    };
-
-    public shouldUpdateSelectedPollDate = (updatedPoll: Poll, selectedPollDate?: PollDate) => {
-        if (!selectedPollDate) {
-            return false;
-        }
-        if (!updatedPoll.createdAt) {
-            return false;
-        }
-        return isSameDay(updatedPoll.createdAt, selectedPollDate.date);
-    };
-
-    public updatePoll = (poll: Poll, setCurrentPoll?: boolean) => {
-        console.log(poll);
-        const { currentPoll, dispatch, selectedPollDate, selectedSession } = this.props;
-        console.log(selectedSession);
+    public updatePoll = (poll: Poll, shouldFocusOnPoll?: boolean) => {
+        const { dispatch, selectedSession } = this.props;
+        const session = selectedSession as Session;
         let pollDateIndex = -1;
-        if (selectedSession.dates) {
-            pollDateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
+        if (session.dates) {
+            pollDateIndex = session.dates.findIndex((date: PollDate) => {
                 return isSameDay(date.date, poll.createdAt ? poll.createdAt : '0');
             });
         }
-        if (pollDateIndex >= 0) {
-            const polls: Poll[] = selectedSession.dates[pollDateIndex].polls;
-            const pollIndex = polls.findIndex((otherPoll: Poll) => {
+        if (pollDateIndex >= 0 && session.dates) {
+            let pollIndex = session.dates[pollDateIndex].polls.findIndex((otherPoll: Poll) => {
                 if (poll.state === 'live' || poll.state === 'ended') {
                     return otherPoll.state === 'live';
                 }
                 return poll.id === otherPoll.id;
             });
             if (pollIndex >= 0) {
-                selectedSession.dates[pollDateIndex].polls[pollIndex] = poll;
+                session.dates[pollDateIndex].polls[pollIndex] = poll;
             } else {
-                selectedSession.dates[pollDateIndex].polls.push(poll);
+                session.dates[pollDateIndex].polls.push(poll);
+                pollIndex = session.dates[pollDateIndex].polls.length - 1;
             }
             dispatch({
                 type: 'set-selected-session',
-                currentPoll: this.shouldUpdateCurrentPoll(poll, currentPoll) || setCurrentPoll ? poll : currentPoll,
-                fullUpdate: true,
-                selectedPollDate: this.shouldUpdateSelectedPollDate(poll, selectedPollDate) ?
-                    selectedSession.dates[pollDateIndex] : selectedPollDate,
+                ...(shouldFocusOnPoll && { 
+                    currentPollIndex: pollIndex, 
+                    selectedPollDateIndex: pollDateIndex, 
+                }),
                 selectedSession,
             });
         } else {
+            let didEndPollCreatedOnDifferentDay = false;
             if (poll.state === 'ended') {
                 // If the poll exists, then remove it from other poll date bc it will
                 // become a new poll date with the unshift below. Don't want duplicates.
                 let dateIndex = -1;
-                if (selectedSession.dates) {
-                    dateIndex = (selectedSession.dates as PollDate[]).findIndex((date: PollDate) => {
+                if (session.dates) {
+                    dateIndex = session.dates.findIndex((date: PollDate) => {
                         return date.polls.find((otherPoll: Poll) => {
                             return otherPoll.state === 'live';
                         }) !== undefined;
                     });
-                }
-                if (dateIndex >= 0) {
-                    const polls = (selectedSession.dates as PollDate[])[dateIndex].polls;
-                    const updatedPolls = polls.filter((otherPoll: Poll) => otherPoll.state !== 'live');
-                    (selectedSession.dates as PollDate[])[dateIndex].polls = updatedPolls;
+                    if (dateIndex >= 0) {
+                        didEndPollCreatedOnDifferentDay = true;
+                        const polls = session.dates[dateIndex].polls;
+                        const updatedPolls = polls.filter((otherPoll: Poll) => otherPoll.state !== 'live');
+                        session.dates[dateIndex].polls = updatedPolls;
+                    }
                 }
             }
             const date: PollDate = {
                 date: poll.createdAt ? poll.createdAt : '',
                 polls: [poll],
             };
-            if (selectedSession.dates) {
-                selectedSession.dates.unshift(date);
+            if (session.dates) {
+                session.dates.unshift(date);
             } else {
-                selectedSession.dates = [date];
+                session.dates = [date];
             }
             dispatch({ 
                 type: 'set-selected-session', 
-                currentPoll: setCurrentPoll ? poll : currentPoll,
-                fullUpdate: true, 
-                selectedPollDate: date,
+                ...((didEndPollCreatedOnDifferentDay || shouldFocusOnPoll) && {
+                    currentPollIndex: 0,
+                    selectedPollDateIndex: 0,
+                }),
                 selectedSession,
             });
         }
@@ -410,8 +378,11 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 />
             );
         }
-        const { currentPoll, selectedPollDate, selectedSession, sessions } = this.props;
+        const { currentPollIndex, selectedPollDateIndex, selectedSession, sessions } = this.props;
         const { isComposingGroup, isCreatingGroup, isComposingPoll, isStartingPoll } = this.state;
+        const currentPoll = getCurrentPoll(currentPollIndex, selectedPollDateIndex, selectedSession);
+        const selectedPollDate = getSelectedPollDate(selectedPollDateIndex, selectedSession);
+        
         return (
             <div className="polling-app-container">
                 <div className="polling-app-sidebar-view-container">
