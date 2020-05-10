@@ -36,6 +36,13 @@ export const condenseDates = (pollDates: PollDate[]) => {
         const condensedDateIndex = condensedDates.findIndex((condensedDate: PollDate) => {
             return isSameDay(condensedDate.date, pollDate.date);
         });
+        pollDate.polls = pollDate.polls.filter((poll: Poll) => {
+            const correctAnswer = poll.correctAnswer as any;
+            if (correctAnswer !== undefined && correctAnswer === '') {
+                return { ...poll, correctAnswer: -1 };
+            }
+            return poll;
+        });
         if (condensedDateIndex >= 0) {
             condensedDates[condensedDateIndex].polls.push(...pollDate.polls);
         } else {

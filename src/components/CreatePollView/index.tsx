@@ -12,14 +12,14 @@ import './styles.scss';
 export interface CreatePollViewProps {
     isStartingPoll: boolean;
     onDismiss(): void;
-    onStartButtonClick(answerChoices: PollAnswerChoice[], correctAnswer?: string, question?: string): void;
+    onStartButtonClick(answerChoices: PollAnswerChoice[], correctAnswer?: number, question?: string): void;
     pollDate?: PollDate;
     session?: Session;
 }
 
 export interface CreatePollViewState {
     answerChoices: PollAnswerChoice[];
-    correctAnswer?: string;
+    correctAnswer?: number;
     question?: string;
 }
 
@@ -34,12 +34,12 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
         answerChoices: [
             {
                 count: 0,
-                letter: 'A',
+                index: 0,
                 text: '',
             },
             {
                 count: 0,
-                letter: 'B',
+                index: 1,
                 text: '',
             },
         ],
@@ -47,22 +47,17 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
         question: undefined,
     });
 
-    const isCorrectAnswer = (letter: string) => {
+    const isCorrectAnswer = (choiceIndex: number) => {
         const { correctAnswer } = state;
-        return correctAnswer && correctAnswer === letter;
+        return correctAnswer !== undefined && correctAnswer === choiceIndex;
     };
 
     const onAddOptionButtonClick = () => {
         const { answerChoices } = state;
         const lastChoice = answerChoices[answerChoices.length - 1];
-        if (!lastChoice.letter) {
-            return;
-        }
-        const lastLetterCode = lastChoice.letter.charCodeAt(0);
-        const nextLetter = String.fromCharCode(lastLetterCode + 1);
         const newChoice: PollAnswerChoice = {
             count: 0,
-            letter: nextLetter,
+            index: lastChoice.index + 1,
             text: '',
         };
         setState({
@@ -72,26 +67,17 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
     };
 
     const onChoiceButtonClick = (choice: PollAnswerChoice) => {
-        if (!choice.letter) {
-            return;
-        }
         setState({
             ...state,
-            correctAnswer: isCorrectAnswer(choice.letter) ? undefined : choice.letter,
+            correctAnswer: isCorrectAnswer(choice.index) ? undefined : choice.index,
         });
     };
 
     const onChoiceInputChange = (event: React.ChangeEvent<HTMLInputElement>, choice: PollAnswerChoice) => {
         const choiceText: string = event.target.value;
         const { answerChoices } = state;
-        const choiceIndex = answerChoices.findIndex((other: PollAnswerChoice) => {
-            if (!other.letter && !choice.letter) {
-                return false;
-            }
-            return other.letter === choice.letter;
-        });
-        if (choiceIndex >= 0) {
-            answerChoices[choiceIndex].text = choiceText;
+        if (choice.index >= 0) {
+            answerChoices[choice.index].text = choiceText;
             setState({ ...state, answerChoices });
         }
     };
@@ -105,17 +91,15 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
         const { answerChoices } = state;
         for (let index = 0; index < answerChoices.length; index++) {
             const answerChoice = answerChoices[index];
-            const { letter, text } = answerChoice;
-            answerChoices[index].text = text === '' && letter ? letter : text;
+            const letter = String.fromCharCode('A'.charCodeAt(0) + answerChoice.index);
+            const { text } = answerChoice;
+            answerChoices[index].text = text === '' ? letter : text;
         }
         onStartButtonClick(answerChoices, state.correctAnswer, state.question);
     };
 
     const renderChoices = () => {
         return state.answerChoices.map((choice: PollAnswerChoice, index: number) => {
-            if (!choice.letter) {
-                return null;
-            }
             return (
                 <div 
                     className={cx(
@@ -128,13 +112,13 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
                         onClick={() => onChoiceButtonClick(choice)}
                     >
                         <IconView 
-                            type={isCorrectAnswer(choice.letter) ? 'option-selected-check' : 'option-unselected-check'}
+                            type={isCorrectAnswer(index) ? 'option-selected-check' : 'option-unselected-check'}
                         />
                     </button>
                     <input
                         className="create-poll-view-choice-input"
                         onChange={event => onChoiceInputChange(event, choice)}
-                        placeholder={`Option ${choice.letter}`}
+                        placeholder={`Option ${String.fromCharCode('A'.charCodeAt(0) + choice.index)}`}
                         type="text"
                         value={choice.text}
                     />

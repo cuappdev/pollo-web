@@ -86,11 +86,11 @@ const PollCardView: React.FunctionComponent<PollCardViewProps> = ({
     }, [poll]);
 
     const renderResponses = (responseCount: number) => {
-        return poll.answerChoices.map((answerChoice: PollAnswerChoice) => {
+        return poll.answerChoices.map((answerChoice: PollAnswerChoice, index: number) => {
             const count = answerChoice.count ? answerChoice.count : 0;
-            const letter = answerChoice.letter ? answerChoice.letter : '';
+            const letter = String.fromCharCode('A'.charCodeAt(0) + answerChoice.index);
             const text = answerChoice.text;
-            const isCorrectAnswer = poll.correctAnswer && poll.correctAnswer === answerChoice.letter;
+            const isCorrectAnswer = poll.correctAnswer !== undefined && poll.correctAnswer >= 0 && poll.correctAnswer === index;
             const responsePercentage = responseCount > 0 ? Math.floor((count / responseCount) * 100) : 0;
             return (
                 <div className="poll-card-view-result-container">

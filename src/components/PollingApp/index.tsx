@@ -164,10 +164,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
     
     };
 
-    public onEndPoll = (poll: Poll) => {
-        
-    };
-
     public onLogin = async (response: any) => {
         console.log(response);
         this.setState({ isLoading: true });
@@ -200,6 +196,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             return;
         }
         try {
+            console.log(poll.id);
             shareResults(poll.id ? poll.id : '');
             this.updatePoll({ ...poll, state: 'shared' });
         } catch (error) {
@@ -247,14 +244,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
         }
     };
 
-    public onShareResults = (poll: Poll) => {
-        try {
-            shareResults(poll.id ? poll.id : '');
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     public onSidebarViewBackButtonClick = () => {
         const { dispatch, selectedPollDateIndex } = this.props;
         if (selectedPollDateIndex !== undefined) {
@@ -267,25 +256,23 @@ class PollingApp extends React.Component<any, PollingAppState> {
         }
     };
 
-    public onStartPoll = async (answerChoices: PollAnswerChoice[], correctAnswer?: string, question?: string) => {
+    public onStartPoll = async (answerChoices: PollAnswerChoice[], correctAnswer?: number, question?: string) => {
         this.setState({ isComposingPoll: false, isStartingPoll: true });
         try {
             startPoll({
                 text: question ? question : '',
                 answerChoices,
                 state: 'live',
-                correctAnswer: correctAnswer ? correctAnswer : '',
+                correctAnswer: correctAnswer !== undefined ? correctAnswer : -1,
                 userAnswers: {},
-                type: 'multipleChoice',
             });
             const createdAt = `${(new Date()).getTime() / 1000}`;
             const poll: Poll = {
                 answerChoices,
-                correctAnswer,
+                correctAnswer: correctAnswer !== undefined ? correctAnswer : -1,
                 createdAt,
                 state: 'live',
                 text: question ? question : '',
-                type: 'multiple-choice',
                 updatedAt: createdAt,
                 userAnswers: {},
             };
@@ -298,6 +285,11 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public updatePoll = (poll: Poll, shouldFocusOnPoll?: boolean) => {
+        console.log(poll);
+        const correctAnswer = poll.correctAnswer as any;
+        if (correctAnswer !== undefined && correctAnswer === '') {
+            poll.correctAnswer = undefined;
+        }
         const { dispatch, selectedSession } = this.props;
         const session = selectedSession as Session;
         let pollDateIndex = -1;
@@ -431,10 +423,8 @@ class PollingApp extends React.Component<any, PollingAppState> {
                                 isStartingPoll={isStartingPoll}
                                 onDeletePoll={this.onDeletePoll}
                                 onEditPoll={this.onEditPoll}
-                                onEndPoll={this.onEndPoll}
                                 onPollButtonClick={this.onPollButtonClick}
                                 onSetCurrentPoll={this.onSetCurrentPoll}
-                                onShareResults={this.onShareResults}
                                 pollDate={selectedPollDate}
                                 session={selectedSession}
                             />

@@ -20,10 +20,8 @@ export interface PollsViewProps {
     isStartingPoll: boolean;
     onDeletePoll(poll: Poll): void;
     onEditPoll(poll: Poll): void;
-    onEndPoll(poll: Poll): void;
     onPollButtonClick(poll: Poll): void;
     onSetCurrentPoll(pollIndex: number): void;
-    onShareResults(poll: Poll): void;
     pollDate?: PollDate;
     session?: Session;
 }
@@ -35,10 +33,8 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     isStartingPoll,
     onDeletePoll,
     onEditPoll,
-    onEndPoll,
     onPollButtonClick,
     onSetCurrentPoll,
-    onShareResults,
     pollDate,
     session,
 }) => {
@@ -50,16 +46,6 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
             setIsDropdownVisible(false);
         }
     }, [currentPoll]);
-
-    const getPollIndexLabel = () => {
-        if (!pollDate || !currentPoll) {
-            return '';
-        }
-        const currentPollIndex = pollDate.polls.findIndex((poll: Poll) => {
-            return poll.id === currentPoll.id;
-        }) as number;
-        return `${currentPollIndex + 1}/${pollDate.polls.length}`;
-    };
 
     const onPollCardViewDropdownButtonClick = () => {
         setIsDropdownVisible(!isDropdownVisible);

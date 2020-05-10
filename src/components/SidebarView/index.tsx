@@ -40,17 +40,17 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
     showOverlay,
 }) => {
     const getDefaultAnswer = (poll: Poll) => {
-        if (poll.correctAnswer) {
-            const answerChoice = poll.answerChoices.find((answerChoice: PollAnswerChoice) => {
-                return answerChoice.letter === poll.correctAnswer;
+        if (poll.correctAnswer !== undefined && poll.correctAnswer >= 0) {
+            const answerChoice = poll.answerChoices.find((answerChoice: PollAnswerChoice, index: number) => {
+                return index === poll.correctAnswer;
             }) as PollAnswerChoice;
-            const { letter, text } = answerChoice;
-            return text === '' && letter ? letter : text;
+            const { index, text } = answerChoice;
+            const letter = String.fromCharCode('A'.charCodeAt(0) + index);
+            return text === '' ? letter : text;
         }
         const firstChoiceLetter = Object.keys(poll.answerChoices)[0];
         const text = poll.answerChoices[firstChoiceLetter].text;
-        const letter = poll.answerChoices[firstChoiceLetter].letter;
-        return text === '' && letter ? letter : text;
+        return text === '' ? firstChoiceLetter : text;
     };
 
     const getHeaderText = () => {
@@ -135,17 +135,19 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
             }
             return sessions.map((session: Session) => {
                 return (
-                    <div className="sidebar-view-cell-container">
+                    <button 
+                        className="sidebar-view-cell-container"
+                        onClick={() => onSelectSession(session)}
+                    >
                         <div className="sidebar-view-cell-text-container">
-                            <button 
+                            <div 
                                 className={cx(
                                     'sidebar-view-cell-title-text',
                                     session.isLive && 'bold',
                                 )}
-                                onClick={() => onSelectSession(session)}
                             >
                                 {session.name}
-                            </button>
+                            </div>
                             {session.isLive ? (
                                 <div className="sidebar-view-cell-live-text-container">
                                     <div className="sidebar-view-cell-live-dot" />
@@ -162,7 +164,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                         <div className="sidebar-view-cell-icon">
                             <IconView type="right-arrow" />
                         </div>
-                    </div>
+                    </button>
                 );
             });
         }
@@ -177,14 +179,14 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                     return null;
                 }
                 return (
-                    <div className="sidebar-view-cell-container">
+                    <button 
+                        className="sidebar-view-cell-container"
+                        onClick={() => onSelectPollDate(pollDateIndex)}
+                    >
                         <div className="sidebar-view-cell-text-container">
-                            <button 
-                                className="sidebar-view-cell-title-text"
-                                onClick={() => onSelectPollDate(pollDateIndex)}
-                            >
+                            <div className="sidebar-view-cell-title-text">
                                 {getDateString(pollDate.date)}
-                            </button>
+                            </div>
                             <div className="sidebar-view-cell-subtitle-text">
                                 {`${pollCount} ${pollCount === 1 ? 'Question' : 'Questions'}`}
                             </div>
@@ -192,7 +194,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                         <div className="sidebar-view-cell-icon">
                             <IconView type="right-arrow" />
                         </div>
-                    </div>
+                    </button>
                 );
             });
         }
@@ -201,18 +203,20 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
         }
         return pollDate.polls.map((poll: Poll, pollIndex: number) => {
             return (
-                <div className="sidebar-view-cell-container">
+                <button 
+                    className="sidebar-view-cell-container"
+                    onClick={() => onSelectPoll(pollIndex)}
+                >
                     <div className="sidebar-view-cell-text-container">
-                        <button 
+                        <div 
                             className={cx(
                                 'sidebar-view-cell-title-text',
                                 currentPoll && currentPoll.id === poll.id && 'bold',
                                 poll.state === 'live' && 'bold',
                             )}
-                            onClick={() => onSelectPoll(pollIndex)}
                         >
                             {poll.text === '' ? 'Untitled' : poll.text}
-                        </button>
+                        </div>
                         {poll.state === 'live' ? (
                             <div className="sidebar-view-cell-live-text-container">
                                 <div className="sidebar-view-cell-live-dot" />
@@ -226,7 +230,7 @@ const SidebarView: React.FunctionComponent<SidebarViewProps> = ({
                             </div>
                         )}
                     </div>
-                </div>
+                </button>
             );
         });
     };

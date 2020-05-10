@@ -6,11 +6,9 @@ export interface Draft {
 
 export type ExportType = 'Canvas' | 'CMS';
 
-export type QuestionType = 'multiple-choice' | 'free-response';
-
 export interface PollAnswerChoice {
     count?: number;
-    letter?: string;
+    index: number;
     text: string;
 }
 
@@ -28,15 +26,14 @@ export type PollState = 'ended' | 'live' | 'shared';
 
 export interface Poll {
     answerChoices: PollAnswerChoice[];
-    correctAnswer?: string;
+    correctAnswer?: number;
     createdAt?: string;
     id?: string;
     isDraft?: boolean;
     state: PollState;
     text: string;
-    type: QuestionType;
     updatedAt?: string;
-    userAnswers: { [googleId: string]: PollChoice };
+    userAnswers: { [googleId: string]: number[] };
 }
 
 export interface Session {
