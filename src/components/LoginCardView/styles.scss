@@ -1,6 +1,6 @@
 @import '../../colors.scss';
 
-.card {
+.login-card-view-container {
     background-color: $whiteTwo;
     display: flex;
     flex-direction: column;
@@ -8,14 +8,14 @@
     border-radius: 10px;
 }
 
-.logo-container {
+.login-card-view-logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 20px;
 }
 
-.header-text {
+.login-card-view-header-text {
     font-size: 27px;
     font-weight: 500;
     text-align: center;
@@ -24,7 +24,7 @@
     margin-top: 16px;
 }
 
-.name-text {
+.login-card-view-name-text {
     font-size: 60px;
     font-weight: bold;
     text-align: center;
@@ -33,7 +33,7 @@
     margin-bottom: 16px;
 }
 
-.pronunciation-text {
+.login-card-view-pronunciation-text {
     font-size: 18px;
     font-style: italic;
     text-align: center;
@@ -42,13 +42,13 @@
     margin-bottom: 20px;
 }
 
-.border {
+.login-card-view-border {
     width: 100%;
     height: 1px;
     background-color: $borderGray;
 }
 
-.login-button-container {
+.login-card-view-login-button-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,6 +57,6 @@
     border-bottom-right-radius: 10px;
 }
 
-.login-button {
+.login-card-view-login-button {
     margin: 22px 113px 24px 113px;
 }

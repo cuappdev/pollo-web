@@ -4,23 +4,22 @@
     width: 100vw;
     height: 100vh;
     background-color: $darkestGray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow: scroll;
 }
 
 .login-view-card-container {
-    position: absolute;
-    top: 117px;
+    margin-top: 117px;
     left: auto;
     right: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 .login-view-links-view-container {
-    position: absolute;
-    bottom: 37px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-bottom: 37px;
 }
