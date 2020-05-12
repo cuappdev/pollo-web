@@ -2,6 +2,7 @@ import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 
 import GroupHeaderView from '../GroupHeaderView';
+import GroupSettingsView from '../GroupSettingsView';
 import IconView from '../IconView';
 import LogoView from '../LogoView';
 import PollCardView from '../PollCardView';
@@ -107,7 +108,23 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
         setTransition('back');
     };
 
-    if (!currentPoll || !pollDate) {
+    if (!session) {
+        return (
+            <div className="logo-container">
+                <LogoView type="no-background" />
+            </div>
+        );
+    }
+
+    if (!pollDate) {
+        return (
+            <GroupSettingsView
+                session={session}
+            />
+        );
+    }
+
+    if (!currentPoll) {
         return (
             <div className="logo-container">
                 <LogoView type="no-background" />
@@ -124,17 +141,15 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
 
     return (
         <div className="polls-view-container">
-            {session && (
-                <GroupHeaderView
-                    type={{ 
-                        type: 'polls', 
-                        code: session.code, 
-                        currentPollIndex,
-                        pollCount: pollDate.polls.length,
-                        title: `${session.name} - ${getDateString(pollDate.date)}`, 
-                    }}
-                />
-            )}
+            <GroupHeaderView
+                type={{ 
+                    type: 'polls', 
+                    code: session.code, 
+                    currentPollIndex,
+                    pollCount: pollDate.polls.length,
+                    title: `${session.name} - ${getDateString(pollDate.date)}`, 
+                }}
+            />
             <div className="polls-view-polls-container">
                 {shouldShowHiddenLeftPoll() && (
                     <div

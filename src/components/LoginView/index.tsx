@@ -24,7 +24,9 @@ const LoginView: React.FunctionComponent<LoginViewProps> = ({
                     onLogin={onLogin} 
                 />
             </div>
-            <LinksView />
+            <div className="login-view-links-view-container">
+                <LinksView />
+            </div>
             {showLoginError && <div />}
         </div>
     );

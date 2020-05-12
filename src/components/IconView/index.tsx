@@ -5,6 +5,8 @@ export type IconViewType =
     | 'black-x'
     | 'check'
     | 'ellipsis'
+    | 'export-date-selected'
+    | 'export-date-unselected'
     | 'export-dropdown'
     | 'export-group-arrow'
     | 'export-group-back-arrow'
@@ -48,6 +50,19 @@ const IconView: React.FunctionComponent<IconViewProps> = ({
             return (
                 <svg width="18" height="4" fill="none" viewBox="0 0 18 4">
                     <path fill="#9EA7B3" fillRule="evenodd" d="M15.178 0C14.13 0 13.28.895 13.28 2s.85 2 1.898 2c1.047 0 1.897-.895 1.897-2s-.85-2-1.897-2zM8.537 0C7.49 0 6.64.895 6.64 2s.85 2 1.897 2c1.048 0 1.898-.895 1.898-2s-.85-2-1.898-2zM1.897 0C.85 0 0 .895 0 2s.85 2 1.897 2c1.048 0 1.897-.895 1.897-2s-.849-2-1.897-2z" clipRule="evenodd" />
+                </svg>
+            );
+        case 'export-date-selected':
+            return (
+                <svg width="25" height="25" viewBox="0 0 25 25" fill="none">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M12.5 25C19.4036 25 25 19.4036 25 12.5C25 5.59644 19.4036 0 12.5 0C5.59644 0 0 5.59644 0 12.5C0 19.4036 5.59644 25 12.5 25Z" fill="#29C09E"/>
+                    <path d="M7.60938 13.5871L10.8702 16.8479L17.9355 9.78271" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+            );
+        case 'export-date-unselected':
+            return (
+                <svg width="25" height="25" viewBox="0 0 25 25" fill="none">
+                    <circle cx="12.5" cy="12.5" r="12" stroke="white"/>
                 </svg>
             );
         case 'export-dropdown':
