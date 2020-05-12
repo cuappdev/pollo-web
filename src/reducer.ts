@@ -50,7 +50,6 @@ export default function reducer(state: AppState = initialState, action: AppActio
             return { ...state, currentPollIndex: action.currentPollIndex };
         case 'set-selected-poll-date':
             if (!state.selectedSession || !state.selectedSession.dates) {
-                console.log('here');
                 return state;
             }
             const selectedPollDate = action.selectedPollDateIndex !== undefined ?

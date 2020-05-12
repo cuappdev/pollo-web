@@ -6,7 +6,6 @@ import { Poll, PollDate, Session, User } from '../types';
 
 export const condenseAdminSessions = async () => {
     const adminSessions = await getAdminSessions() as Session[];
-    console.log(adminSessions);
     const pollDatesArray = await Promise.all(adminSessions.map((session: Session) => {
         return getPollsForSession(session.id);
     }));

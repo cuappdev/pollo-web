@@ -196,7 +196,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
             return;
         }
         try {
-            console.log(poll.id);
             shareResults(poll.id ? poll.id : '');
             this.updatePoll({ ...poll, state: 'shared' });
         } catch (error) {
@@ -285,7 +284,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public updatePoll = (poll: Poll, shouldFocusOnPoll?: boolean) => {
-        console.log(poll);
         const correctAnswer = poll.correctAnswer as any;
         if (correctAnswer !== undefined && correctAnswer === '') {
             poll.correctAnswer = undefined;

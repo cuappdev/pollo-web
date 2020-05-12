@@ -48,7 +48,6 @@ export const generateUserSession = async (idToken: string) => {
           Authorization: axios.defaults.headers.common['Authorization'],
       },
   }, { idToken });
-  console.log(data);
   localStorage.setItem('accessToken', data.accessToken);
 
   // Post-login, set auth header
@@ -58,7 +57,6 @@ export const generateUserSession = async (idToken: string) => {
 
 export const setAuthHeader = (token: string | null) => {
   const header = `Bearer ${token ? token : localStorage.getItem('accessToken')}`;
-  console.log(header);
   axios.defaults.headers.common['Authorization'] = header;
 };
 
