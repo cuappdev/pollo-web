@@ -1,0 +1,36 @@
+@import '../../colors.scss';
+
+.polling-app-container {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.polling-app-sidebar-view-container {
+    width: 322px;
+    height: 100%;
+}
+
+.polling-app-content-view-container {
+    width: calc(100vw - 322px);
+    height: 100%;
+    background-color: $darkestGray;
+
+    &.centered {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.polling-app-create-group-view-container {
+    width: 336px;
+}
+
+.polling-app-create-poll-view-container {
+    width: 100%;
+    height: 100%;
+}

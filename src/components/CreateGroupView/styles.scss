@@ -1,0 +1,92 @@
+@import '../../colors.scss';
+
+.create-group-view-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $white;
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+}
+
+.create-group-view-close-button-container {
+    width: 100%;
+    margin-top: 19px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.create-group-view-close-button {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    margin-right: 21px;
+}
+
+.create-group-view-name-input {
+    border: none;
+    box-shadow: none;
+    outline: none;
+    -webkit-appearance: none;
+    width: calc(100% - 134px);
+    color: $black;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: 8px;
+    margin-bottom: 6px;
+
+    &::placeholder {
+        color: $blueGray;
+    }
+
+    &:focus::placeholder {
+        color: transparent;
+    }
+}
+
+.create-group-view-name-input-border {
+    width: calc(100% - 134px);
+    height: 1px;
+    background-color: $blueGray;
+    margin-bottom: 25px;
+}
+
+.create-group-view-create-button {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    width: 148px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $blueGray;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 24px;
+
+    &.enabled {
+        background-color: $polloGreen;
+    }
+}
+
+.create-group-view-create-button-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19px;
+    text-align: center;
+    color: $white;
+}

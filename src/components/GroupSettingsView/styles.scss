@@ -1,0 +1,293 @@
+@import '../../colors.scss';
+
+.group-settings-view-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.group-settings-view-spacer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.group-settings-view-top-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.group-settings-view-bottom-container {
+    width: 100%;
+    height: calc(100% - 328px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.group-settings-view-dates-container {
+    min-width: calc(100% - 580px);
+
+    &.wide {
+        min-width: calc(100% - 98px);
+    }
+}
+
+.group-settings-view-dates-scroll-container {
+    width: 100%;
+    height: 283px;
+
+    &.scrollable {
+        overflow-y: scroll;
+    }
+}
+
+.group-settings-view-dates-empty-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: $blueGray;
+    text-align: center;
+    margin-top: -38px;
+    margin-bottom: 128.07px;
+}
+
+.group-settings-view-dates-empty-icon {
+    width: min-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.group-settings-view-select-all-dates-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.group-settings-view-select-all-dates-button {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: right;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: $polloGreen;
+}
+
+.group-settings-view-date-button {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $darkGray;
+    border-radius: 5px;
+    margin-bottom: 12px;
+
+    &.row-left {
+        margin-right: 10px;
+    }
+
+    &.row-right {
+        margin-left: 10px;
+    }
+
+    &.row-left, &.row-right {
+        width: calc(50% - 10px);
+    }
+
+    &.short, &.row-left, &.row-right {
+        height: 47px;
+    }
+
+    &.tall {
+        height: 71px;
+    }
+
+    &.short, &.tall {
+        width: 100%;
+    }
+
+    &.last {
+        margin-bottom: 0px;
+    }
+}
+
+.group-settings-view-date-text-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.group-settings-view-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background-color: $polloGreen;
+    margin-left: 17px;
+}
+
+.group-settings-view-date-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: $white;
+    text-align: left;
+    margin-left: 35px;
+    
+    &.live {
+        margin-left: 14px;
+    }
+}
+
+.group-settings-view-date-selection-icon {
+    margin-right: 34px;
+}
+
+.group-settings-view-date-row-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.group-settings-view-export-dropdown-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+.group-settings-view-export-label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: $white;
+    margin-right: 11px;
+}
+
+.group-settings-view-export-dropdown-button {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.group-settings-view-export-type {
+    width: 110.8px;
+    height: 26.8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: $white;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: $black;
+    text-align: left;
+    border: 0.6px solid $darkGray;
+    display: flex;
+    align-items: center;
+}
+
+.group-settings-view-export-dropdown-arrow-container {
+    width: 32.4px;
+    height: 28px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    background-color: $polloGreen;
+    border-top: 0.6px solid $darkGray;
+    border-bottom: 0.6px solid $darkGray;
+    border-right: 0.6px solid $darkGray;
+}
+
+.group-settings-view-export-button {
+    border: none;
+    background: none;
+    outline: none;
+    text-decoration: none;
+    padding: 0;
+    cursor: pointer;
+    width: 157px;
+    height: 44px;
+    border-radius: 22px;
+    border: 1.5px solid $polloGreen;
+    box-sizing: border-box;
+    background-color: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $polloGreen;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+
+    &.enabled {
+        background-color: $polloGreen;
+        color: $white;
+    }
+}
+
+.group-settings-view-dropdown {
+    position: absolute;
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    border-radius: 4px;
+    box-shadow: 2px 3px 4px 0 rgba(0, 0, 0, 0.18);
+    border: 0.6px solid $darkGray;
+    top: 100%;
+    right: 0;
+}
+
+.group-settings-view-dropdown-item {
+    background: none;
+    background-color: $white;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    width: calc(100% - 16px);
+    font-size: 16px;
+    text-align: left;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    color: $darkestGray;
+    margin: 5px 8px;
+}
