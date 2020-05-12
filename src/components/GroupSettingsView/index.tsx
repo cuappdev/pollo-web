@@ -173,7 +173,11 @@ const GroupSettingsView: React.FunctionComponent<GroupSettingsViewProps> = ({
     };
 
     const toggleExportDropdown = () => {
-        setState({ ...state, isExportDropdownVisible: !state.isExportDropdownVisible });
+        setState({ 
+            ...state, 
+            csv: undefined, 
+            isExportDropdownVisible: !state.isExportDropdownVisible, 
+        });
     };
 
     return (
