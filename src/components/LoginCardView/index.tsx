@@ -15,6 +15,7 @@ const LoginCardView: React.FunctionComponent<LoginCardViewProps> = ({
     isLoading,
     onLogin,
 }) => {
+    console.log(googleClientId);
     return (
         <div className="card">
             <div className="logo-container">
