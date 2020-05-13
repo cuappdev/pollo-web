@@ -21,6 +21,7 @@ export interface PollsViewProps {
     isStartingPoll: boolean;
     onDeletePoll(poll: Poll): void;
     onEditPoll(poll: Poll): void;
+    onLogoutButtonClick(): void;
     onPollButtonClick(poll: Poll): void;
     onSetCurrentPoll(pollIndex: number): void;
     pollDate?: PollDate;
@@ -34,6 +35,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     isStartingPoll,
     onDeletePoll,
     onEditPoll,
+    onLogoutButtonClick,
     onPollButtonClick,
     onSetCurrentPoll,
     pollDate,
@@ -119,6 +121,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     if (!pollDate) {
         return (
             <GroupSettingsView
+                onLogoutButtonClick={onLogoutButtonClick}
                 session={session}
             />
         );

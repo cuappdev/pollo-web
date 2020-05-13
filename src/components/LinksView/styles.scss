@@ -14,9 +14,9 @@
     color: $mediumGrayTwo;
     font-weight: 600;
     text-decoration: none;
+    margin-right: 21px;
 
-    &.center {
-        margin-left: 21px;
-        margin-right: 21px;
+    &.rightmost {
+        margin-right: 0px;
     }
 }

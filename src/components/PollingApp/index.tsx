@@ -88,6 +88,11 @@ class PollingApp extends React.Component<any, PollingAppState> {
         console.log(error);
     };
 
+    public logOut = () => {
+        forgetCurrentUser();
+        this.props.dispatch({ type: 'reset' });
+    };
+
     public onComposeGroup = () => {
         this.setState({ isComposingGroup: true });
     };
@@ -421,6 +426,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                                 isStartingPoll={isStartingPoll}
                                 onDeletePoll={this.onDeletePoll}
                                 onEditPoll={this.onEditPoll}
+                                onLogoutButtonClick={this.logOut}
                                 onPollButtonClick={this.onPollButtonClick}
                                 onSetCurrentPoll={this.onSetCurrentPoll}
                                 pollDate={selectedPollDate}

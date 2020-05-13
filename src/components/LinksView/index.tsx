@@ -13,16 +13,22 @@ const LinksView: React.FunctionComponent = () => {
                 Download Pollo
             </a>
             <a 
-                className={cx('links-view-link', 'center')} 
+                className="links-view-link"
                 href="https://www.cornellappdev.com"
             >
                 Cornell AppDev
             </a>
             <a 
                 className="links-view-link" 
-                href="mailto:cornellappdev@gmail.com"
+                href="https://forms.gle/HvT5srEt7ZXbdieaA"
             >
-                Contact
+                Feedback
+            </a>
+            <a 
+                className={cx('links-view-link', 'rightmost')}
+                href="https://www.cornellappdev.com/privacy/policies/pollo/"
+            >
+                Privacy Policy
             </a>
         </div>
     );

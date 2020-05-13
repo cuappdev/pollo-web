@@ -14,6 +14,7 @@ import { exportCsv } from '../../utils/requests';
 import './styles.scss';
 
 export interface GroupSettingsViewProps {
+    onLogoutButtonClick(): void;
     session: Session;
 }
 
@@ -26,6 +27,7 @@ interface GroupSettingsViewState {
 }
 
 const GroupSettingsView: React.FunctionComponent<GroupSettingsViewProps> = ({
+    onLogoutButtonClick,
     session,
 }) => {
     const [state, setState] = useState<GroupSettingsViewState>({
@@ -80,7 +82,10 @@ const GroupSettingsView: React.FunctionComponent<GroupSettingsViewProps> = ({
         if (!session.dates) {
             return;
         }
-        setState({ ...state, selectedDates: session.dates });
+        setState({ 
+            ...state, 
+            selectedDates: state.selectedDates.length === session.dates.length ? [] : session.dates,
+        });
     };
 
     const onSelectExportType = (exportType: ExportType) => {
@@ -187,6 +192,7 @@ const GroupSettingsView: React.FunctionComponent<GroupSettingsViewProps> = ({
                     type: 'group-settings',
                     code: session.code,
                     title: session.name,
+                    onLogoutButtonClick,
                 }}
             />
             <div className="group-settings-view-spacer">
@@ -198,16 +204,14 @@ const GroupSettingsView: React.FunctionComponent<GroupSettingsViewProps> = ({
                                 session.dates.length > 5 && 'wide',
                             )}
                         >
-                            {state.selectedDates.length !== session.dates.length && (
-                                <div className="group-settings-view-select-all-dates-button-container">
-                                    <button 
-                                        className="group-settings-view-select-all-dates-button"
-                                        onClick={onSelectAllDatesButtonClick}
-                                    >
-                                        Select All
-                                    </button>
-                                </div>
-                            )}
+                            <div className="group-settings-view-select-all-dates-button-container">
+                                <button 
+                                    className="group-settings-view-select-all-dates-button"
+                                    onClick={onSelectAllDatesButtonClick}
+                                >
+                                    {state.selectedDates.length === session.dates.length ? 'Unselect' : 'Select'} All
+                                </button>
+                            </div>
                             <div
                                 className={cx(
                                     'group-settings-view-dates-scroll-container',
