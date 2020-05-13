@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import GroupHeaderView from '../GroupHeaderView';
 import GroupSettingsView from '../GroupSettingsView';
 import IconView from '../IconView';
+import LinksView from '../LinksView';
+import LogoutButton from '../LogoutButton';
 import LogoView from '../LogoView';
 import PollCardView from '../PollCardView';
 
@@ -112,8 +114,16 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
 
     if (!session) {
         return (
-            <div className="logo-container">
+            <div 
+                className={cx('polls-view-logo-container', 'spaced')}
+            >
+                <div className="polls-view-logout-button-container">
+                    <LogoutButton onClick={onLogoutButtonClick} />
+                </div>
                 <LogoView type="no-background" />
+                <div className="polls-view-links-view-container">
+                    <LinksView />
+                </div>
             </div>
         );
     }
@@ -129,7 +139,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
 
     if (!currentPoll) {
         return (
-            <div className="logo-container">
+            <div className="polls-view-logo-container">
                 <LogoView type="no-background" />
             </div>
         );

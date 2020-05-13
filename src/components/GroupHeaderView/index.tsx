@@ -2,6 +2,8 @@ import cx from 'classnames';
 import React from 'react';
 import { GoogleLogout } from 'react-google-login';
 
+import LogoutButton from '../LogoutButton';
+
 import { googleClientId } from '../../utils/constants';
 
 import './styles.scss';
@@ -47,23 +49,9 @@ const GroupHeaderView: React.FunctionComponent<GroupHeaderViewProps> = ({
                     <div className="group-header-view-attendance-label">
                         Attendance
                     </div>
-                    <GoogleLogout
-                        className="group-header-view-log-out-button"
-                        clientId={googleClientId}
-                        buttonText=""
-                        onLogoutSuccess={type.onLogoutButtonClick}
-                        render={renderProps => {
-                            return (
-                                <button 
-                                    className="group-header-view-logout-button"
-                                    disabled={renderProps.disabled}
-                                    onClick={renderProps.onClick}
-                                >
-                                    Log Out
-                                </button>
-                            );
-                        }}
-                    />
+                    <div className="group-header-view-logout-button-container">
+                        <LogoutButton onClick={type.onLogoutButtonClick} />
+                    </div>
                 </>
             )}
         </div>

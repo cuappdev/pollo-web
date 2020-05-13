@@ -8,12 +8,29 @@
     align-items: center;
 }
 
-.logo-container {
+.polls-view-logo-container {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &.spaced {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.polls-view-logout-button-container {
+    width: calc(100% - 72px);
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 42px;
+}
+
+.polls-view-links-view-container {
+    margin-bottom: 37px;
 }
 
 .polls-view-title {
