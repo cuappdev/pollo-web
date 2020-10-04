@@ -24,15 +24,23 @@ const LoginCardView: React.FunctionComponent<LoginCardViewProps> = ({
             <div className="login-card-view-name-text">Pollo</div>
             <div className="login-card-view-pronunciation-text">"Poh-loh"</div>
             <div className="login-card-view-border" />
-            <div className="login-card-view-login-button-container">
-                <GoogleLogin
-                    buttonText="Sign In with Google"
-                    className="login-card-view-login-button"
-                    clientId={googleClientId}
-                    disabled={isLoading}
-                    onFailure={onLogin}
-                    onSuccess={onLogin}
-                />
+            <div className="login-card-view-login-button-container-section">
+                <div className="login-card-view-login-button-container">
+                    <img width="206px"
+                        height="58px"
+                        src={require('../../images/cornellsso.png')}
+                    />
+                </div>
+                <div className="login-card-view-login-button-container">
+                    <GoogleLogin
+                        buttonText="Sign In with Google"
+                        className="login-card-view-login-button"
+                        clientId={googleClientId}
+                        disabled={isLoading}
+                        onFailure={onLogin}
+                        onSuccess={onLogin}
+                    />
+                </div>
             </div>
         </div>
     );
