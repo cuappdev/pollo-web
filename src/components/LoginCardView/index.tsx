@@ -8,13 +8,16 @@ import './styles.scss';
 
 export interface LoginCardViewProps {
     isLoading: boolean;
+    onCornellLogin(): void;
     onLogin(response: any): void;
 }
 
 const LoginCardView: React.FunctionComponent<LoginCardViewProps> = ({
     isLoading,
+    onCornellLogin,
     onLogin,
 }) => {
+
     return (
         <div className="login-card-view-container">
             <div className="login-card-view-logo-container">
@@ -26,9 +29,12 @@ const LoginCardView: React.FunctionComponent<LoginCardViewProps> = ({
             <div className="login-card-view-border" />
             <div className="login-card-view-login-button-container-section">
                 <div className="login-card-view-login-button-container">
-                    <img width="206px"
+                    <img 
+                        className="login-card-view-cornell-sso-button"
+                        width="206px"
                         height="58px"
                         src={require('../../images/cornellsso.png')}
+                        onClick={onCornellLogin}
                     />
                 </div>
                 <div className="login-card-view-login-button-container">

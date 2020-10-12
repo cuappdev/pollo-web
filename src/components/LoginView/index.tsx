@@ -7,12 +7,14 @@ import './styles.scss';
 
 export interface LoginViewProps {
     isLoading: boolean;
+    onCornellLogin(): void;
     onLogin(response: any): void;
     showLoginError: boolean;
 }
 
 const LoginView: React.FunctionComponent<LoginViewProps> = ({
     isLoading,
+    onCornellLogin,
     onLogin,
     showLoginError,
 }) => {
@@ -21,6 +23,7 @@ const LoginView: React.FunctionComponent<LoginViewProps> = ({
             <div className="login-view-card-container">
                 <LoginCardView
                     isLoading={isLoading}
+                    onCornellLogin={onCornellLogin}
                     onLogin={onLogin} 
                 />
             </div>
