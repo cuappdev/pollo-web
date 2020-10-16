@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 
 import CreateGroupView from '../CreateGroupView';
 import CreatePollView from '../CreatePollView';
@@ -31,6 +31,7 @@ import {
     generateCode,
     generateUserSession,
     setAuthHeader,
+    getCurrentUser as getCurrentUserRequest,
 } from '../../utils/requests';
 import {
     adminPollEnded,
@@ -91,6 +92,29 @@ class PollingApp extends React.Component<any, PollingAppState> {
         // the socket (talk to design).
         console.log(error);
     };
+
+    public getUser = async () => {
+        console.log(getCurrentUser());
+        console.log(currentUserExists());
+        if (!currentUserExists) {
+            try {
+                const user = await getCurrentUserRequest();
+                console.log(user);
+                const currentUser = {
+                    id: user["id"],
+                    name: user["name"],
+                    netId: user["netID"],
+                };
+                rememberCurrentUser(currentUser);
+                this.props.dispatch({ type: 'set-user', user: currentUser });
+                this.setState({ isLoading: false });
+            } catch (error) {
+                console.log(error);
+                forgetCurrentUser();
+                this.setState({ isLoading: false, showLoginError: true });
+            }
+        }
+    }
 
     public logOut = () => {
         forgetCurrentUser();
@@ -372,10 +396,13 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public render() {
+        this.getUser();
         if (this.state.shouldRedirect) {
-            return (
-                <Redirect to={cornellSSOUrl} push />
-            )
+            window.location.href = cornellSSOUrl;
+            // return (
+            //     // <Route exact path={cornellSSOUrl} />
+            //     <Redirect to={cornellSSOUrl} push />
+            // )
         }
         if (!this.props.user) {
             return (
