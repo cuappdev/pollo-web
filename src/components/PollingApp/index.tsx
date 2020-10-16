@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from "react-router-dom";
 
 import CreateGroupView from '../CreateGroupView';
 import CreatePollView from '../CreatePollView';
@@ -44,6 +45,7 @@ import {
 } from '../../utils/sockets';
 
 import './styles.scss';
+import { cornellSSOUrl } from '../../utils/constants';
 
 export interface PollingAppState {
     isComposingGroup: boolean;
@@ -51,6 +53,7 @@ export interface PollingAppState {
     isComposingPoll: boolean;
     isStartingPoll: boolean;
     isLoading: boolean;
+    shouldRedirect: boolean;
     showLoginError: boolean;
 }
 
@@ -63,6 +66,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             isComposingPoll: false,
             isStartingPoll: false,
             isLoading: currentUserExists(),
+            shouldRedirect: false,
             showLoginError: false,
         };
     }
@@ -168,6 +172,10 @@ class PollingApp extends React.Component<any, PollingAppState> {
     public onEditPoll = (poll: Poll) => {
     
     };
+
+    public onCornellLogin = () => {
+        this.setState({ shouldRedirect: true });
+    }
 
     public onLogin = async (response: any) => {
         console.log(response);
@@ -364,10 +372,16 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public render() {
+        if (this.state.shouldRedirect) {
+            return (
+                <Redirect to={cornellSSOUrl} push />
+            )
+        }
         if (!this.props.user) {
             return (
                 <LoginView
                     isLoading={this.state.isLoading}
+                    onCornellLogin={this.onCornellLogin}
                     onLogin={this.onLogin}
                     showLoginError={this.state.showLoginError}
                 />
