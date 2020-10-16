@@ -20,7 +20,7 @@ import {
     currentUserExists,
     forgetCurrentUser,
     getCurrentPoll,
-    getCurrentUser,
+    getCurrentUser as getCurrentUserLocal,
     getSelectedPollDate,
     isSameDay,
     rememberCurrentUser,
@@ -77,7 +77,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             try {
                 const adminSessions = await condenseAdminSessions();
                 this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
-                this.props.dispatch({ type: 'set-user', user: getCurrentUser() });
+                this.props.dispatch({ type: 'set-user', user: getCurrentUserLocal() });
                 this.setState({ isLoading: false });
             } catch {
                 this.setState({ isLoading: false, showLoginError: true });
@@ -92,7 +92,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
         console.log(error);
     };
 
-    public getUser = async () => {
+    public getCurrentUser = async () => {
         if (!currentUserExists()) {
             try {
                 const user = await getCurrentUserRequest();
@@ -111,7 +111,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 this.setState({ isLoading: false, showLoginError: true });
             }
         }
-        console.log(getCurrentUser());
+        console.log(getCurrentUserLocal());
     }
 
     public logOut = () => {
@@ -209,7 +209,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 await generateUserSession(response.tokenId);
                 const adminSessions = await condenseAdminSessions();
                 this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
-                const currentUser = getCurrentUser();
+                const currentUser = getCurrentUserLocal();
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser });
                 this.setState({ isLoading: false });
@@ -394,7 +394,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public render() {
-        this.getUser();
+        this.getCurrentUser();
         if (this.state.shouldRedirect) {
             window.location.href = cornellSSOUrl;
         }
