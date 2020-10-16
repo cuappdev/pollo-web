@@ -54,7 +54,7 @@ export interface PollingAppState {
     isComposingPoll: boolean;
     isStartingPoll: boolean;
     isLoading: boolean;
-    shouldRedirect: boolean,
+    shouldRedirect: boolean;
     showLoginError: boolean;
 }
 
