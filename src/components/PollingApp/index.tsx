@@ -1,7 +1,6 @@
 import cx from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, Route } from "react-router-dom";
 
 import CreateGroupView from '../CreateGroupView';
 import CreatePollView from '../CreatePollView';
@@ -94,9 +93,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public getUser = async () => {
-        console.log(getCurrentUser());
-        console.log(currentUserExists());
-        if (!currentUserExists) {
+        if (!currentUserExists()) {
             try {
                 const user = await getCurrentUserRequest();
                 console.log(user);
@@ -114,6 +111,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 this.setState({ isLoading: false, showLoginError: true });
             }
         }
+        console.log(getCurrentUser());
     }
 
     public logOut = () => {
@@ -399,10 +397,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
         this.getUser();
         if (this.state.shouldRedirect) {
             window.location.href = cornellSSOUrl;
-            // return (
-            //     // <Route exact path={cornellSSOUrl} />
-            //     <Redirect to={cornellSSOUrl} push />
-            // )
         }
         if (!this.props.user) {
             return (
