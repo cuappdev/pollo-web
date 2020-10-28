@@ -11,6 +11,7 @@ import './styles.scss';
 
 export interface CreatePollViewProps {
     isStartingPoll: boolean;
+    isSSO: boolean;
     onDismiss(): void;
     onStartButtonClick(answerChoices: PollAnswerChoice[], correctAnswer?: number, question?: string): void;
     pollDate?: PollDate;
@@ -25,6 +26,7 @@ export interface CreatePollViewState {
 
 const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
     isStartingPoll,
+    isSSO,
     onDismiss,
     onStartButtonClick,
     pollDate,
@@ -131,6 +133,7 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
         <div className="create-poll-view-container">
             {session && (
                 <GroupHeaderView 
+                    isSSO={isSSO}
                     type={{ 
                         type: 'plain', 
                         code: session.code, 

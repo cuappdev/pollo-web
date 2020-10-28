@@ -31,6 +31,7 @@ import {
     generateUserSession,
     setAuthHeader,
     getCurrentUser as getCurrentUserRequest,
+    logoutCurrentUser,
 } from '../../utils/requests';
 import {
     adminPollEnded,
@@ -52,6 +53,7 @@ export interface PollingAppState {
     isCreatingGroup: boolean;
     isComposingPoll: boolean;
     isStartingPoll: boolean;
+    isSSO: boolean;
     isLoading: boolean;
     shouldRedirect: boolean;
     showLoginError: boolean;
@@ -65,6 +67,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             isCreatingGroup: false,
             isComposingPoll: false,
             isStartingPoll: false,
+            isSSO: false,
             isLoading: currentUserExists(),
             shouldRedirect: false,
             showLoginError: false,
@@ -93,6 +96,9 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public getCurrentUser = async () => {
+        // console.log("here")
+        // console.log(this.state.isSSO);
+        // console.log(currentUserExists());
         if (!currentUserExists()) {
             try {
                 const user = await getCurrentUserRequest();
@@ -103,16 +109,22 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 };
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser });
-                this.setState({ isLoading: false });
+                this.setState({ isLoading: false, isSSO: true });
             } catch (error) {
                 console.log(error);
                 forgetCurrentUser();
-                this.setState({ isLoading: false, showLoginError: true });
+                this.setState({ isLoading: false, showLoginError: true, isSSO: false });
             }
         }
     }
 
     public logOut = () => {
+        console.log("at logout");
+        try {
+            logoutCurrentUser();
+        } catch(error) {
+            console.log(error);
+        }
         forgetCurrentUser();
         this.props.dispatch({ type: 'reset' });
     };
@@ -210,7 +222,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 const currentUser = getCurrentLocalUser();
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser });
-                this.setState({ isLoading: false });
+                this.setState({ isLoading: false, isSSO: false });
             } catch (error) {
                 console.log(error);
                 forgetCurrentUser();
@@ -447,6 +459,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                             <div className="polling-app-create-poll-view-container">
                                 <CreatePollView
                                     isStartingPoll={isStartingPoll}
+                                    isSSO={this.state.isSSO}
                                     onDismiss={this.onCreatePollViewDismiss}
                                     onStartButtonClick={this.onStartPoll}
                                     session={selectedSession}
@@ -457,6 +470,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                             <PollsView
                                 currentPoll={currentPoll}
                                 isStartingPoll={isStartingPoll}
+                                isSSO={this.state.isSSO}
                                 onDeletePoll={this.onDeletePoll}
                                 onEditPoll={this.onEditPoll}
                                 onLogoutButtonClick={this.logOut}

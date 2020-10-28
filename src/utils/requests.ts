@@ -66,6 +66,11 @@ export const getCurrentUser = async () => {
   return data;
 };
 
+export const logoutCurrentUser = async () => {
+  const data = await get('/auth/web/logout/');
+  return data;
+};
+
 /*******************************
             Roles
 *******************************/
