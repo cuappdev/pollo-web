@@ -20,7 +20,7 @@ import {
     currentUserExists,
     forgetCurrentUser,
     getCurrentPoll,
-    getCurrentUser as getCurrentUserLocal,
+    getCurrentUser as getCurrentLocalUser,
     getSelectedPollDate,
     isSameDay,
     rememberCurrentUser,
@@ -77,7 +77,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             try {
                 const adminSessions = await condenseAdminSessions();
                 this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
-                this.props.dispatch({ type: 'set-user', user: getCurrentUserLocal() });
+                this.props.dispatch({ type: 'set-user', user: getCurrentLocalUser() });
                 this.setState({ isLoading: false });
             } catch {
                 this.setState({ isLoading: false, showLoginError: true });
@@ -96,11 +96,10 @@ class PollingApp extends React.Component<any, PollingAppState> {
         if (!currentUserExists()) {
             try {
                 const user = await getCurrentUserRequest();
-                console.log(user);
                 const currentUser = {
-                    id: user["id"],
-                    name: user["name"],
-                    netId: user["netID"],
+                    id: user.id,
+                    name: user.name,
+                    netId: user.netID,
                 };
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser });
@@ -111,7 +110,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 this.setState({ isLoading: false, showLoginError: true });
             }
         }
-        console.log(getCurrentUserLocal());
     }
 
     public logOut = () => {
@@ -209,7 +207,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 await generateUserSession(response.tokenId);
                 const adminSessions = await condenseAdminSessions();
                 this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
-                const currentUser = getCurrentUserLocal();
+                const currentUser = getCurrentLocalUser();
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser });
                 this.setState({ isLoading: false });
