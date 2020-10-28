@@ -1,7 +1,6 @@
 import cx from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from "react-router-dom";
 
 import CreateGroupView from '../CreateGroupView';
 import CreatePollView from '../CreatePollView';
@@ -21,7 +20,7 @@ import {
     currentUserExists,
     forgetCurrentUser,
     getCurrentPoll,
-    getCurrentUser,
+    getCurrentUser as getCurrentLocalUser,
     getSelectedPollDate,
     isSameDay,
     rememberCurrentUser,
@@ -31,6 +30,7 @@ import {
     generateCode,
     generateUserSession,
     setAuthHeader,
+    getCurrentUser as getCurrentUserRequest,
 } from '../../utils/requests';
 import {
     adminPollEnded,
@@ -77,7 +77,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             try {
                 const adminSessions = await condenseAdminSessions();
                 this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
-                this.props.dispatch({ type: 'set-user', user: getCurrentUser() });
+                this.props.dispatch({ type: 'set-user', user: getCurrentLocalUser() });
                 this.setState({ isLoading: false });
             } catch {
                 this.setState({ isLoading: false, showLoginError: true });
@@ -91,6 +91,26 @@ class PollingApp extends React.Component<any, PollingAppState> {
         // the socket (talk to design).
         console.log(error);
     };
+
+    public getCurrentUser = async () => {
+        if (!currentUserExists()) {
+            try {
+                const user = await getCurrentUserRequest();
+                const currentUser = {
+                    id: user.id,
+                    name: user.name,
+                    netId: user.netID,
+                };
+                rememberCurrentUser(currentUser);
+                this.props.dispatch({ type: 'set-user', user: currentUser });
+                this.setState({ isLoading: false });
+            } catch (error) {
+                console.log(error);
+                forgetCurrentUser();
+                this.setState({ isLoading: false, showLoginError: true });
+            }
+        }
+    }
 
     public logOut = () => {
         forgetCurrentUser();
@@ -187,7 +207,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 await generateUserSession(response.tokenId);
                 const adminSessions = await condenseAdminSessions();
                 this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
-                const currentUser = getCurrentUser();
+                const currentUser = getCurrentLocalUser();
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser });
                 this.setState({ isLoading: false });
@@ -372,10 +392,9 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public render() {
+        this.getCurrentUser();
         if (this.state.shouldRedirect) {
-            return (
-                <Redirect to={cornellSSOUrl} push />
-            )
+            window.location.href = cornellSSOUrl;
         }
         if (!this.props.user) {
             return (

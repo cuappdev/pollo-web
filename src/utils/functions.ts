@@ -61,6 +61,7 @@ export const forgetCurrentUser = () => {
     localStorage.removeItem('givenName');
     localStorage.removeItem('googleId');
     localStorage.removeItem('name');
+    localStorage.removeItem('netId');
 };
 
 export const getCurrentUser = () => {
@@ -69,7 +70,7 @@ export const getCurrentUser = () => {
     const givenName = localStorage.getItem('givenName');
     const id = localStorage.getItem('googleId') as string;
     const name = localStorage.getItem('name') as string;
-    const netId = email ? email.split('@')[0] : '';
+    const netId = localStorage.getItem('netId') as string;
     const currentUser: User = {
         email: email ? email : undefined,
         familyName: familyName ? familyName : undefined,
@@ -122,6 +123,7 @@ export const rememberCurrentUser = (currentUser: User) => {
     localStorage.setItem('givenName', currentUser.givenName as string);
     localStorage.setItem('googleId', currentUser.id);
     localStorage.setItem('name', currentUser.name);
+    localStorage.setItem('netId', currentUser.netId);
 };
 
 export const secondsBetween = (one: Date, two: Date) => {
