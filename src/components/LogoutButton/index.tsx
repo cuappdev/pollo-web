@@ -22,7 +22,6 @@ const LogoutButton: React.FunctionComponent<LogoutButtonProps> = ({
             </button>
         )
     } else {
-        console.log(googleClientId)
         console.log("using google")
         return (
             <GoogleLogout
