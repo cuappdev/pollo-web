@@ -107,6 +107,8 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 };
                 rememberCurrentUser(currentUser);
                 this.props.dispatch({ type: 'set-user', user: currentUser, shouldGetUser: true });
+                const adminSessions = await condenseAdminSessions();
+                this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
                 this.setState({ isLoading: false });
             } catch (error) {
                 console.log(error);
