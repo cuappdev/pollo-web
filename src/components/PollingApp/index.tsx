@@ -100,7 +100,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
         if (!currentUserExists()) {
             try {
                 const user = await getCurrentUserRequest();
-                console.log(user);
                 const currentUser = {
                     id: user.id,
                     name: user.name,
@@ -118,10 +117,8 @@ class PollingApp extends React.Component<any, PollingAppState> {
     }
 
     public logOut = async () => {
-        console.log("at logout");
         try {
             const response = await logoutCurrentUser();
-            console.log(response);
             forgetCurrentUser();
             this.props.dispatch({ type: 'reset' });
         } catch(error) {
@@ -405,7 +402,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
 
     public render() {
         if (this.state.shouldGetUser) {
-            console.log("getting user");
             this.getCurrentUser();
         }
         if (this.state.shouldRedirect) {

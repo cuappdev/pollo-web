@@ -15,14 +15,12 @@ const LogoutButton: React.FunctionComponent<LogoutButtonProps> = ({
     onClick,
 }) => {
     if (isSSO) {
-        console.log("using sso")
         return(
             <button className="logout-button" onClick={onClick}>
                 Log Out
             </button>
         )
     } else {
-        console.log("using google")
         return (
             <GoogleLogout
                 className="logout-button"
