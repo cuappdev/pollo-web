@@ -64,10 +64,6 @@ export const forgetCurrentUser = () => {
     localStorage.removeItem('netId');
 };
 
-export const isSSO = () => {
-    return localStorage.getItem('netId') != undefined;
-}
-
 export const getCurrentUser = () => {
     const email = localStorage.getItem('email');
     const familyName = localStorage.getItem('familyName');

@@ -14,12 +14,10 @@ export type GroupHeaderViewType =
     | { type: 'polls'; code: string; currentPollIndex: number; pollCount: number; title: string };
 
 export interface GroupHeaderViewProps {
-    isSSO: boolean,
     type: GroupHeaderViewType;
 }
 
 const GroupHeaderView: React.FunctionComponent<GroupHeaderViewProps> = ({
-    isSSO,
     type,
 }) => {
     return (
@@ -52,7 +50,7 @@ const GroupHeaderView: React.FunctionComponent<GroupHeaderViewProps> = ({
                         Attendance
                     </div>
                     <div className="group-header-view-logout-button-container">
-                        <LogoutButton onClick={type.onLogoutButtonClick} isSSO={isSSO} />
+                        <LogoutButton onClick={type.onLogoutButtonClick} />
                     </div>
                 </>
             )}

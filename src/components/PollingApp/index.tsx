@@ -23,7 +23,6 @@ import {
     getCurrentUser as getCurrentLocalUser,
     getSelectedPollDate,
     isSameDay,
-    isSSO,
     rememberCurrentUser,
 } from '../../utils/functions';
 import {
@@ -207,28 +206,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
     public onCornellLogin = () => {
         this.setState({ shouldRedirect: true });
     }
-
-    public onLogin = async (response: any) => {
-        console.log(response);
-        this.setState({ isLoading: true });
-        if (response.error) {
-            this.setState({ isLoading: false, showLoginError: true });
-        } else {
-            try {
-                await generateUserSession(response.tokenId);
-                const adminSessions = await condenseAdminSessions();
-                this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
-                const currentUser = getCurrentLocalUser();
-                rememberCurrentUser(currentUser);
-                this.props.dispatch({ type: 'set-user', user: currentUser });
-                this.setState({ isLoading: false });
-            } catch (error) {
-                console.log(error);
-                forgetCurrentUser();
-                this.setState({ isLoading: false, showLoginError: true });
-            }
-        }
-    };
 
     public onPollButtonClick = (poll: Poll) => {
         if (poll.isDraft) {
@@ -414,7 +391,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 <LoginView
                     isLoading={this.state.isLoading}
                     onCornellLogin={this.onCornellLogin}
-                    onLogin={this.onLogin}
                     showLoginError={this.state.showLoginError}
                 />
             );
@@ -460,7 +436,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
                             <div className="polling-app-create-poll-view-container">
                                 <CreatePollView
                                     isStartingPoll={isStartingPoll}
-                                    isSSO={isSSO()}
                                     onDismiss={this.onCreatePollViewDismiss}
                                     onStartButtonClick={this.onStartPoll}
                                     session={selectedSession}
@@ -471,7 +446,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
                             <PollsView
                                 currentPoll={currentPoll}
                                 isStartingPoll={isStartingPoll}
-                                isSSO={isSSO()}
                                 onDeletePoll={this.onDeletePoll}
                                 onEditPoll={this.onEditPoll}
                                 onLogoutButtonClick={this.logOut}

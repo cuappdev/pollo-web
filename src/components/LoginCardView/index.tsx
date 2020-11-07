@@ -7,7 +7,6 @@ import './styles.scss';
 export interface LoginCardViewProps {
     isLoading: boolean;
     onCornellLogin(): void;
-    onLogin(response: any): void;
 }
 
 const LoginCardView: React.FunctionComponent<LoginCardViewProps> = ({

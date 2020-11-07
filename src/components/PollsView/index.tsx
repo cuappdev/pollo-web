@@ -21,7 +21,6 @@ import './styles.scss';
 export interface PollsViewProps {
     currentPoll?: Poll;
     isStartingPoll: boolean;
-    isSSO: boolean,
     onDeletePoll(poll: Poll): void;
     onEditPoll(poll: Poll): void;
     onLogoutButtonClick(): void;
@@ -36,7 +35,6 @@ export type PollsViewTransition = 'back' | 'forward';
 const PollsView: React.FunctionComponent<PollsViewProps> = ({
     currentPoll,
     isStartingPoll,
-    isSSO,
     onDeletePoll,
     onEditPoll,
     onLogoutButtonClick,
@@ -120,7 +118,7 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
                 className={cx('polls-view-logo-container', 'spaced')}
             >
                 <div className="polls-view-logout-button-container">
-                    <LogoutButton onClick={onLogoutButtonClick} isSSO={isSSO}/>
+                    <LogoutButton onClick={onLogoutButtonClick} />
                 </div>
                 <LogoView type="no-background" />
                 <div className="polls-view-links-view-container">
@@ -133,7 +131,6 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     if (!pollDate) {
         return (
             <GroupSettingsView
-                isSSO={isSSO}
                 onLogoutButtonClick={onLogoutButtonClick}
                 session={session}
             />
@@ -158,7 +155,6 @@ const PollsView: React.FunctionComponent<PollsViewProps> = ({
     return (
         <div className="polls-view-container">
             <GroupHeaderView
-                isSSO={isSSO}
                 type={{ 
                     type: 'polls', 
                     code: session.code, 

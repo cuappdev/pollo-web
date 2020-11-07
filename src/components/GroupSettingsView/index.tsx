@@ -14,7 +14,6 @@ import { exportCsv } from '../../utils/requests';
 import './styles.scss';
 
 export interface GroupSettingsViewProps {
-    isSSO: boolean,
     onLogoutButtonClick(): void;
     session: Session;
 }
@@ -28,7 +27,6 @@ interface GroupSettingsViewState {
 }
 
 const GroupSettingsView: React.FunctionComponent<GroupSettingsViewProps> = ({
-    isSSO,
     onLogoutButtonClick,
     session,
 }) => {
@@ -190,7 +188,6 @@ const GroupSettingsView: React.FunctionComponent<GroupSettingsViewProps> = ({
     return (
         <div className="group-settings-view-container">
             <GroupHeaderView
-                isSSO={isSSO}
                 type={{
                     type: 'group-settings',
                     code: session.code,
