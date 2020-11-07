@@ -1,7 +1,5 @@
 import React from 'react';
-import GoogleLogin from 'react-google-login';
 
-import { googleClientId } from '../../utils/constants';
 import LogoView from '../LogoView';
 
 import './styles.scss';
@@ -13,11 +11,8 @@ export interface LoginCardViewProps {
 }
 
 const LoginCardView: React.FunctionComponent<LoginCardViewProps> = ({
-    isLoading,
     onCornellLogin,
-    onLogin,
 }) => {
-
     return (
         <div className="login-card-view-container">
             <div className="login-card-view-logo-container">
@@ -35,16 +30,6 @@ const LoginCardView: React.FunctionComponent<LoginCardViewProps> = ({
                         height="58px"
                         src={require('../../images/cornellsso.png')}
                         onClick={onCornellLogin}
-                    />
-                </div>
-                <div className="login-card-view-login-button-container">
-                    <GoogleLogin
-                        buttonText="Sign In with Google"
-                        className="login-card-view-login-button"
-                        clientId={googleClientId}
-                        disabled={isLoading}
-                        onFailure={onLogin}
-                        onSuccess={onLogin}
                     />
                 </div>
             </div>
