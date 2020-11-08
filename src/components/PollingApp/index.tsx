@@ -31,6 +31,7 @@ import {
     generateUserSession,
     setAuthHeader,
     getCurrentUser as getCurrentUserRequest,
+    logoutCurrentUser,
 } from '../../utils/requests';
 import {
     adminPollEnded,
@@ -53,6 +54,7 @@ export interface PollingAppState {
     isComposingPoll: boolean;
     isStartingPoll: boolean;
     isLoading: boolean;
+    shouldGetUser: boolean,
     shouldRedirect: boolean;
     showLoginError: boolean;
 }
@@ -66,6 +68,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             isComposingPoll: false,
             isStartingPoll: false,
             isLoading: currentUserExists(),
+            shouldGetUser: true,
             shouldRedirect: false,
             showLoginError: false,
         };
@@ -102,19 +105,26 @@ class PollingApp extends React.Component<any, PollingAppState> {
                     netId: user.netID,
                 };
                 rememberCurrentUser(currentUser);
-                this.props.dispatch({ type: 'set-user', user: currentUser });
+                this.props.dispatch({ type: 'set-user', user: currentUser, shouldGetUser: true });
+                const adminSessions = await condenseAdminSessions();
+                this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
                 this.setState({ isLoading: false });
             } catch (error) {
                 console.log(error);
                 forgetCurrentUser();
-                this.setState({ isLoading: false, showLoginError: true });
+                this.setState({ isLoading: false, showLoginError: true, shouldGetUser: false });
             }
         }
     }
 
-    public logOut = () => {
-        forgetCurrentUser();
-        this.props.dispatch({ type: 'reset' });
+    public logOut = async () => {
+        try {
+            const response = await logoutCurrentUser();
+            forgetCurrentUser();
+            this.props.dispatch({ type: 'reset' });
+        } catch(error) {
+            console.log(error);
+        }
     };
 
     public onComposeGroup = () => {
@@ -196,28 +206,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
     public onCornellLogin = () => {
         this.setState({ shouldRedirect: true });
     }
-
-    public onLogin = async (response: any) => {
-        console.log(response);
-        this.setState({ isLoading: true });
-        if (response.error) {
-            this.setState({ isLoading: false, showLoginError: true });
-        } else {
-            try {
-                await generateUserSession(response.tokenId);
-                const adminSessions = await condenseAdminSessions();
-                this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
-                const currentUser = getCurrentLocalUser();
-                rememberCurrentUser(currentUser);
-                this.props.dispatch({ type: 'set-user', user: currentUser });
-                this.setState({ isLoading: false });
-            } catch (error) {
-                console.log(error);
-                forgetCurrentUser();
-                this.setState({ isLoading: false, showLoginError: true });
-            }
-        }
-    };
 
     public onPollButtonClick = (poll: Poll) => {
         if (poll.isDraft) {
@@ -392,7 +380,9 @@ class PollingApp extends React.Component<any, PollingAppState> {
     };
 
     public render() {
-        this.getCurrentUser();
+        if (this.state.shouldGetUser) {
+            this.getCurrentUser();
+        }
         if (this.state.shouldRedirect) {
             window.location.href = cornellSSOUrl;
         }
@@ -401,7 +391,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
                 <LoginView
                     isLoading={this.state.isLoading}
                     onCornellLogin={this.onCornellLogin}
-                    onLogin={this.onLogin}
                     showLoginError={this.state.showLoginError}
                 />
             );

@@ -130,7 +130,7 @@ const CreatePollView: React.FunctionComponent<CreatePollViewProps> = ({
     return (
         <div className="create-poll-view-container">
             {session && (
-                <GroupHeaderView 
+                <GroupHeaderView
                     type={{ 
                         type: 'plain', 
                         code: session.code, 

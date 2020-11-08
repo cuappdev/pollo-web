@@ -13,23 +13,10 @@ const LogoutButton: React.FunctionComponent<LogoutButtonProps> = ({
     onClick,
 }) => {
     return (
-        <GoogleLogout
-            className="logout-button"
-            clientId={googleClientId}
-            buttonText=""
-            onLogoutSuccess={onClick}
-            render={renderProps => {
-                return (
-                    <button
-                        className="logout-button"
-                        onClick={renderProps.onClick}
-                    >
-                        Log Out
-                    </button>
-                );
-            }}
-        />
-    );
+        <button className="logout-button" onClick={onClick}>
+            Log Out
+        </button>
+    )
 };
 
 export default LogoutButton;
