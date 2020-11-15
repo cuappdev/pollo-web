@@ -1,0 +1,18 @@
+language: node_js
+node-js:
+- 14
+env:
+  global:
+  - REACT_APP_BACKEND_HOST_URL: pollo.cornellappdev.com
+  - secure: XdUbiu+hZkfTPGVkoRMITwuuKwOGM050Bxt2A9FAykyTYp70Dz0PnE0eJZcI02c2mwAep7D4rKV8yqyPGg1ig+F3gF98WD5Mz8PUgskIdX4hK7+cxfPZbpmz/3b5TMCb5M/r2LQuCm1TjDtINv5cP2uX7bFNW7OQcyxW+FmyqywuYKkx3YGvgjpiyZLqOKFB94c/fKYuPk1qCqoAgM8xrxvzeib0MBCqXR+e/DrmliTdTN5wBS4lxdmzDGb/EvmAKghpvRdp0gLKBI3U+ZbNOfxI9bI8chUKH5n7af+vmao9vq29mmTxeEZQb2Rnic5T370K8zqosNbigGwU6CWrSMvPl1LFq0luiSqWsmT312Q9QeNNamXvfhJ+1B2Eok+B8QcP16iT7VUn4U5OxAVfdjYXY6hM68/rcp794rJhKRRiHVragts6clQuJoSa9IRnEuX2KJPyvwM21GMrr/PJhn+3pnjTxAbhzVS07Yee4FyNd9FCg1HJQZ2+iHC2Dmfw81iFW+yL+rYclxFmh/396mC+UCXncGSF/suAQ0xYSCNFkHLYjtPakht17iutAsmaWgSxt40nbuXOPXZbCGplGvRxu+UnHQz7LyP2GZFv8VT1zqso5fsy8ne3TLYIJ61uscacXs0GPf1iU7QGPBK/dIUhcDtRW6GqUf9vitTcn5I=
+script:
+- npm build
+deploy:
+  local_dir: "./build"
+  provider: pages
+  skip_cleanup: true
+  github_token: "$GITHUB_TOKEN"
+  keep_history: true
+  target: gh-pages
+  on:
+    branch: master
