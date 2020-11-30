@@ -7,7 +7,7 @@ import { ExportType } from '../types';
 *******************************/
 
 const api = axios.create({
-  baseURL: 'http://' + hostUrl + '/api/v2',
+  baseURL: 'https://' + hostUrl + '/api/v2',
   withCredentials: true
 });
 
