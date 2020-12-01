@@ -384,6 +384,7 @@ class PollingApp extends React.Component<any, PollingAppState> {
             this.getCurrentUser();
         }
         if (this.state.shouldRedirect) {
+            this.setState({ shouldRedirect: false });
             window.location.href = cornellSSOUrl;
         }
         if (!this.props.user) {
