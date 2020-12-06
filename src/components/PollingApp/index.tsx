@@ -27,9 +27,8 @@ import {
 } from '../../utils/functions';
 import {
     createSession,
+    joinSession,
     generateCode,
-    generateUserSession,
-    setAuthHeader,
     getCurrentUser as getCurrentUserRequest,
     logoutCurrentUser,
 } from '../../utils/requests';
@@ -76,7 +75,6 @@ class PollingApp extends React.Component<any, PollingAppState> {
 
     public async componentDidMount() {
         if (currentUserExists()) {
-            setAuthHeader(null);
             try {
                 const adminSessions = await condenseAdminSessions();
                 this.props.dispatch({ type: 'set-sessions', sessions: adminSessions });
@@ -239,12 +237,12 @@ class PollingApp extends React.Component<any, PollingAppState> {
         }
     };
 
-    public onSelectSession = (selectedSession: Session) => {
-        const accessToken = localStorage.getItem('accessToken');
+    public onSelectSession = async (selectedSession: Session) => {
         disconnectSocket();
+        console.log(selectedSession);
+        await joinSession(selectedSession.code);
         connectSocket(
-            selectedSession.id, 
-            accessToken ? accessToken : '',
+            selectedSession.id,
             this.handleSocketConnectionError,
         );
         adminPollEnded(this.updatePoll);

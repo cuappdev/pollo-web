@@ -8,16 +8,14 @@ let socket;
 
 export const connectSocket = (
     sessionId: string, 
-    accessToken: string, 
     handleConnectionError: (error?: any) => void,
 ) => {
+    console.log(sessionId);
     try {
         socket = io.connect(
             `${hostUrl}/${sessionId}`,
             {
-                query: {
-                    accessToken,
-                },
+                query: {},
                 reconnection: true,
             },
         );

@@ -7,7 +7,7 @@ import { ExportType } from '../types';
 *******************************/
 
 const api = axios.create({
-  baseURL: 'https://' + hostUrl + '/api/v2',
+  baseURL: hostUrl + '/api/v2',
   withCredentials: true
 });
 
@@ -43,23 +43,23 @@ const del = async (url: string) => {
             User
 *******************************/
 
-export const generateUserSession = async (idToken: string) => {
-  const data = await post('/auth/mobile/', {
-      headers: {
-          Authorization: axios.defaults.headers.common['Authorization'],
-      },
-  }, { idToken });
-  localStorage.setItem('accessToken', data.accessToken);
+// export const generateUserSession = async (idToken: string) => {
+//   const data = await post('/auth/mobile/', {
+//       headers: {
+//           Authorization: axios.defaults.headers.common['Authorization'],
+//       },
+//   }, { idToken });
+//   localStorage.setItem('accessToken', data.accessToken);
 
-  // Post-login, set auth header
-  setAuthHeader(data.accessToken);
-  return data;
-};
+//   // Post-login, set auth header
+//   setAuthHeader(data.accessToken);
+//   return data;
+// };
 
-export const setAuthHeader = (token: string | null) => {
-  const header = `Bearer ${token ? token : localStorage.getItem('accessToken')}`;
-  axios.defaults.headers.common['Authorization'] = header;
-};
+// export const setAuthHeader = (token: string | null) => {
+//   const header = `Bearer ${token ? token : localStorage.getItem('accessToken')}`;
+//   axios.defaults.headers.common['Authorization'] = header;
+// };
 
 export const getCurrentUser = async () => {
   const data = await get('/users/');
@@ -86,7 +86,7 @@ export const getAdmins = async (sessionId: string) => {
 };
 
 export const addMembers = async (sessionId: string, memberIds: string[]) => {
-  const data = await post(`/sessions/${sessionId}/members/`, { memberIds });
+  const data = await post(`/sessions/${sessionId}/members/`, {}, { memberIds });
   return data;
 };
 
@@ -96,7 +96,7 @@ export const removeMembers = async (sessionId: string, memberIds: string[]) => {
 };
 
 export const addAdmins = async (sessionId: string, adminIds: string[]) => {
-  const data = await post(`/sessions/${sessionId}/admins/`, { adminIds });
+  const data = await post(`/sessions/${sessionId}/admins/`, {}, { adminIds });
   return data;
 };
 
@@ -123,7 +123,7 @@ export const createSession = async (code: string, name: string) => {
 };
 
 export const createNewSession = async (code: string) => {
-  const data = await post('/sessions/', { name: null, code: code });
+  const data = await post('/sessions/', {}, { name: null, code: code });
   return data.node;
 };
 
@@ -193,12 +193,12 @@ export const updateSession = async (sessionId: string, name: string, code: strin
 // TODO: Throw error if session code is invalid
 export const joinSession = async (code: string) => {
   // const group= await get(`/groups/${code}`);
-  const data = await post('/join/session/', { code: code });
+  const data = await post('/join/session/', {}, { code: code });
   return data.node;
 };
 
 export const endSession = async (sessionId: string, shouldSave: boolean) => {
-  const data = await post(`/session/${sessionId}/end/`, { save: shouldSave });
+  const data = await post(`/session/${sessionId}/end/`, {}, { save: shouldSave });
   return data;
 };
 
@@ -214,7 +214,7 @@ export const createPoll = async (sessionID, text, results, type, shared) => {
     shared: shared
   };
 
-  const data = await post(`/sessions/${sessionID}/polls/`, body);
+  const data = await post(`/sessions/${sessionID}/polls/`, {}, body);
   return data;
 };
 
@@ -252,7 +252,7 @@ export const getDrafts = async () => {
 };
 
 export const createDraft = async (text, options) => {
-  const data = await post('/drafts/', { text: text, options: options });
+  const data = await post('/drafts/', {}, { text: text, options: options });
   return data.node;
 };
 
